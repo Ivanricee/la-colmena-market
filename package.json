@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@libsql/client": "^0.15.15",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.5",
     "prettier-plugin-tailwindcss": "^0.7.1",
