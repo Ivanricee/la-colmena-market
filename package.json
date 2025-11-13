@@ -9,10 +9,20 @@
     "astro": "astro",
     "format": "prettier --write ."
   },
+  "imports": {
+    "#components": "./src/components",
+    "#layouts": "./src/layouts",
+    "#pages": "./src/pages",
+    "#lib": "./src/lib",
+    "#assets": "./src/assets",
+    "#scripts": "./src/scripts",
+    "#styles": "./src/styles",
+    "#utils": "./src/utils"
+  },
   "dependencies": {
-    "@libsql/client": "^0.15.15",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.5",
+    "graphql-request": "^7.3.3",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4.1.17"
   },
