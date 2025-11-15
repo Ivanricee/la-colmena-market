@@ -1,0 +1,28 @@
+---
+import { getProducts } from './products.api'
+
+const { productos, errorMessage } = await getProducts()
+---
+
+{
+  errorMessage ? (
+    <section>
+      <h1>Error</h1>
+      <p>{errorMessage}</p>
+    </section>
+  ) : (
+    <section>
+      <h1>Productos</h1>
+      <ul>
+        {productos.map((product) => (
+          <li>
+            <div>
+              <a href="/" />
+              {product.id}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
