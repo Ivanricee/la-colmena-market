@@ -9,7 +9,7 @@ export const getProducts = async (): Promise<productResponse> => {
   try {
     const { productos } = await hygraphClient.request(gql`
       {
-        productos {
+        productos(first: 500) {
           id
           title
         }

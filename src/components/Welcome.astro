@@ -1,9 +1,11 @@
 ---
+import Products from '@/features/products/Products.astro'
 import astroLogo from '../assets/astro.svg'
 import background from '../assets/background.svg'
 ---
 
 <div id="container">
+  <Products />
   <img id="background" src={background.src} alt="" fetchpriority="high" />
   <main>
     <section id="hero">

@@ -2,6 +2,7 @@
 import { getProducts } from './products.api'
 
 const { productos, errorMessage } = await getProducts()
+console.log({ productos, errorMessage })
 ---
 
 {
@@ -17,6 +18,7 @@ const { productos, errorMessage } = await getProducts()
         {productos.map((product) => (
           <li>
             <div>
+              <h2>{product.title}</h2>
               <a href="/" />
               {product.id}
             </div>
@@ -26,3 +28,4 @@ const { productos, errorMessage } = await getProducts()
     </section>
   )
 }
+<h4>deberian aparecer los productos aquji</h4>
