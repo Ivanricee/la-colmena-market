@@ -9,15 +9,18 @@
     "astro": "astro",
     "format": "prettier --write ."
   },
-
   "dependencies": {
+    "@hygraph/utils": "^1.2.1",
     "@tailwindcss/vite": "^4.1.17",
+    "@upstash/qstash": "^2.8.4",
+    "@upstash/redis": "^1.35.6",
     "astro": "^5.15.5",
     "graphql-request": "^7.3.3",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
+    "@astrojs/vercel": "^9.0.1",
     "@typescript-eslint/parser": "^8.46.4",
     "eslint": "^9.39.1",
     "eslint-plugin-astro": "^1.5.0",
