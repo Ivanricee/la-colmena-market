@@ -1,0 +1,35 @@
+---
+interface Props {
+  href?: string
+  target?: string
+  class?: string
+}
+const { class: className, href, target } = Astro.props
+const Wrapper = href ? 'a' : 'div'
+const wrapperProps = href ? { href, target } : {}
+---
+
+<div class={`my-4 bg-yellow-950 p-8 rounded-xl ${className}`}>
+  <Wrapper {...wrapperProps} class="flex flex-col">
+    <!-- Header section -->
+    <div class="flex w-full flex-nowrap bg-amber-400">
+      <div class="flex flex-1 flex-col">
+        <slot name="card-header-title" />
+        <slot name="card-header-title-description" />
+      </div>
+      <div class="flex items-start">
+        <slot name="card-header-action" />
+      </div>
+    </div>
+    <div>
+      <!-- Main content -->
+      <div class="flex-1">
+        <slot />
+      </div>
+    </div>
+    <!-- Footer -->
+    <div>
+      <slot name="card-footer" />
+    </div>
+  </Wrapper>
+</div>
