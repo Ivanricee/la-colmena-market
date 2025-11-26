@@ -1,4 +1,44 @@
 export interface Product {
   id: string;
   title: string;
+  description: string;
+  image: Image[] | [];
+}
+/**
+ * cloudinary image
+ */
+interface DerivedTransformation {
+  url: string;
+  secure_url: string;
+  raw_transformation: string;
+}
+
+interface UserInfo {
+  id: string;
+  type: "accesskey" | "user";
+}
+
+export interface Image {
+  id: string;
+  url: string;
+  tags: string[];
+  type: string;
+  bytes: number;
+  width: number;
+  folder: string;
+  format: string;
+  height: number;
+  derived: DerivedTransformation[];
+  version: number;
+  duration: number | null;
+  metadata: Record<string, any>;
+  folder_id: string;
+  public_id: string;
+  created_at: string;
+  created_by: UserInfo;
+  secure_url: string;
+  access_mode: string;
+  uploaded_by: UserInfo;
+  resource_type: string;
+  access_control: any[];
 }
