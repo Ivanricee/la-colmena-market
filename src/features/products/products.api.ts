@@ -12,6 +12,8 @@ export const getProducts = async (): Promise<productResponse> => {
         productos(first: 500) {
           id
           title
+          description
+          image
         }
       }
     `);
