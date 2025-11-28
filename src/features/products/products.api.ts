@@ -12,8 +12,24 @@ export const getProducts = async (): Promise<productResponse> => {
         productos(first: 500) {
           id
           title
-          description
+          description {
+            html
+          }
           image
+          price
+          previousPrice
+          stock
+          specifications
+          brand
+          productStatus
+          weight
+          tags
+          featured
+          category {
+            slug
+          }
+          contenidoNeto
+          unidad
         }
       }
     `);

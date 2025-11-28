@@ -1,8 +1,27 @@
+type Description = {
+  html: string;
+};
+type ProductStatus = "active" | "inactive" | "out_of_stock";
+type Category = {
+  slug: string;
+};
 export interface Product {
   id: string;
   title: string;
-  description: string;
+  description: Description;
   image: Image[] | [];
+  price: number;
+  previousPrice: number;
+  stock: number;
+  brand: string;
+  productStatus: ProductStatus;
+  featured: boolean;
+  weight: number;
+  specifications: string[];
+  tags: string[];
+  category: Category;
+  contenidoNeto: number;
+  unidad: string;
 }
 /**
  * cloudinary image
