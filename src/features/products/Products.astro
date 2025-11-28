@@ -1,8 +1,12 @@
 ---
 import Card from '@/components/ui/Card.astro'
 import { getProducts } from './products.api'
+import type { Product } from './products.model'
 
-const { productos, errorMessage } = await getProducts()
+const { productos, errorMessage } = (await getProducts()) as {
+  productos: Product[]
+  errorMessage: string
+}
 console.log({ productos, errorMessage })
 ---
 
@@ -15,55 +19,44 @@ console.log({ productos, errorMessage })
   ) : (
     <section>
       <h1>Productos</h1>
-      <ul>
+      <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {productos.map((product) => (
-          <li>
-            <Card>
-              <h2 slot="card-header-title">{product.title}</h2>
-
-              <button slot="card-header-action">close</button>
-
-              <div>
-                <p>{product.id}</p>
-                {product.image.map((image) => (
-                  <img
-                    class="rounded-base mb-4 h-64 w-full object-cover md:mb-0 md:h-auto md:w-48"
-                    src={image.url}
-                    alt=""
-                  />
-                ))}
-                <div class="flex flex-col justify-between leading-normal md:p-4">
-                  <h5 class="text-heading mb-2 text-2xl font-bold tracking-tight">
-                    Streamlining your design process today.
-                  </h5>
-                  <p class="text-body mb-6">
-                    In today’s fast-paced digital landscape, fostering seamless collaboration among
-                    Developers and IT Operations.
-                  </p>
+          <li class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
+            <Card
+              class="from-card flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
+              href={`/product/${product.id}`}
+            >
+              <div class="h-full flex-1">
+                <div class="h-7/12 bg-blue-400 @3xs:bg-yellow-300">
+                  {product.image.map((image) => (
+                    <img
+                      class="drop-shadow-honey-dark/20 group-hover:drop-shadow-honey-dark/30 relative h-full w-full object-cover drop-shadow-xl transition-[shadow_transform] duration-700 group-hover:scale-105 group-hover:drop-shadow-2xl"
+                      src={image.url}
+                      alt=""
+                    />
+                  ))}
+                </div>
+                <div class="flex h-5/12 flex-col justify-between space-y-3 overflow-hidden pt-8 leading-normal">
                   <div>
-                    <button
-                      type="button"
-                      class="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary rounded-base box-border inline-flex w-auto items-center border px-4 py-2.5 text-sm leading-5 font-medium shadow-xs focus:ring-4 focus:outline-none"
-                    >
-                      Read more
-                      <svg
-                        class="ms-1.5 -me-0.5 h-4 w-4 rtl:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 12H5m14 0-4 4m4-4-4-4"
-                        />
-                      </svg>
-                    </button>
+                    <h4 class="text-foreground mb-2 line-clamp-1 text-lg font-semibold">
+                      {product.title}
+                    </h4>
+                    <div
+                      class="text-muted-foreground line-clamp-3 text-sm text-pretty @sm:text-balance"
+                      set:html={product.description.html}
+                    />
+                  </div>
+                  <div class="flex flex-nowrap">
+                    <p class="flex items-baseline gap-2">
+                      <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-2xl font-bold text-transparent">
+                        ${product.price}
+                      </span>
+                      {product.previousPrice && (
+                        <span class="text-muted-foreground text-sm line-through">
+                          ${product.previousPrice}
+                        </span>
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>
