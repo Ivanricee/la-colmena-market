@@ -9,8 +9,8 @@ const Wrapper = href ? 'a' : 'div'
 const wrapperProps = href ? { href, target } : {}
 ---
 
-<div class={`my-4 bg-yellow-950 p-8 rounded-xl ${className}`}>
-  <Wrapper {...wrapperProps} class="flex flex-col">
+<div class={` p-6 rounded-lg border border-border  ${className}`}>
+  <Wrapper {...wrapperProps} class="flex h-full w-full flex-col">
     <!-- Header section -->
     <div class="flex w-full flex-nowrap bg-amber-400">
       <div class="flex flex-1 flex-col">
@@ -21,12 +21,11 @@ const wrapperProps = href ? { href, target } : {}
         <slot name="card-header-action" />
       </div>
     </div>
-    <div>
-      <!-- Main content -->
-      <div class="flex-1">
-        <slot />
-      </div>
-    </div>
+
+    <!-- Main content -->
+
+    <slot />
+
     <!-- Footer -->
     <div>
       <slot name="card-footer" />
