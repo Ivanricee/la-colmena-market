@@ -3,16 +3,21 @@ import { defineConfig, envField } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
 
+import icon from "astro-icon";
+
 // https://astro.build/config
 export default defineConfig({
   output: "static",
+
   adapter:
     vercel(/*{
     webAnalytics: { enabled: true },
   }*/),
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   env: {
     schema: {
       HYGRAPH_TOKEN: envField.string({
@@ -82,4 +87,6 @@ export default defineConfig({
       }),
     },
   },
+
+  integrations: [icon()],
 });
