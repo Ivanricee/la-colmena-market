@@ -1,0 +1,19 @@
+---
+const { type = 'primary' } = Astro.params
+
+const badges: Record<string, { bg: string; text: string }> = {
+  primary: { bg: 'bg-secondary', text: 'text-secondary-foreground' },
+  secondary: { bg: 'bg-neutral-secondary-soft', text: 'text-fg-neutral-secondary' },
+  danger: { bg: 'bg-danger-soft', text: 'text-fg-danger-strong' },
+  success: { bg: 'bg-success-soft', text: 'text-fg-success-strong' },
+  warning: { bg: 'bg-warning-soft', text: 'text-fg-warning' },
+}
+
+const badge = badges[type] || badges.primary
+---
+
+<span
+  class={`${badge.bg} ${badge.text} text-xs px-2.5 py-0.5  rounded-full  text-center font-semibold  focus:ring-ring focus:ring-offset-2`}
+>
+  <slot />
+</span>
