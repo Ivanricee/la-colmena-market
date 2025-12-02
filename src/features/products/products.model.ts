@@ -1,4 +1,4 @@
-type Description = {
+type htmlString = {
   html: string;
 };
 type ProductStatus = "active" | "inactive" | "out_of_stock";
@@ -8,7 +8,7 @@ type Category = {
 export interface Product {
   id: string;
   title: string;
-  description: Description;
+  description: htmlString;
   image: Image[] | [];
   price: number;
   previousPrice: number;
@@ -17,7 +17,8 @@ export interface Product {
   productStatus: ProductStatus;
   featured: boolean;
   weight: number;
-  specifications: string[];
+  specifications: htmlString;
+  benefits: string[];
   tags: string[];
   category: Category;
   contenidoNeto: number;

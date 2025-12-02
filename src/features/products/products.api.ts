@@ -19,7 +19,10 @@ export const getProducts = async (): Promise<productResponse> => {
           price
           previousPrice
           stock
-          specifications
+          specifications {
+            html
+          }
+          benefits
           brand
           productStatus
           weight
