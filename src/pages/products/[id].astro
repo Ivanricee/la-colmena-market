@@ -1,5 +1,6 @@
 ---
 import { getProducts } from '@/features/products/products.api'
+import Layout from '@/layouts/Layout.astro'
 export async function getStaticPaths() {
   const { productos, errorMessage } = await getProducts()
   return productos.map((product) => ({
@@ -11,7 +12,9 @@ const { product } = Astro.props
 const { id, title } = product
 ---
 
-<section>
-  <h1>Item: {id}</h1>
-  <p>Titulo: {title}</p>
-</section>
+<Layout title={title}>
+  <section>
+    <h1>Item: {id}</h1>
+    <p>Titulo: {title}</p>
+  </section>
+</Layout>
