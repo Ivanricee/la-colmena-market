@@ -1,11 +1,27 @@
 ---
+import { getCategories } from '@/features/categories/categories.api'
 import Layout from '../layouts/Layout.astro'
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import type { Category } from '@/features/categories/categories.api'
+const { categories, errorMessage } = (await getCategories()) as {
+  categories: Category[]
+  errorMessage: string
+}
 ---
 
 <Layout title="La Colmena Market">
-  <h1>landing page</h1>
-  <a href="/products">Go to products</a>
+  {
+    errorMessage ? (
+      <section>
+        <h1>Error</h1>
+        <p>{errorMessage}</p>
+      </section>
+    ) : (
+      <section>
+        <h1>landing page</h1>
+        {categories.map((category) => (
+          <a href={`/product/${category.slug}`}>{category.name}</a>
+        ))}
+      </section>
+    )
+  }
 </Layout>
