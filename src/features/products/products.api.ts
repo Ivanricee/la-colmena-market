@@ -28,8 +28,9 @@ export const getProducts = async (): Promise<productResponse> => {
           weight
           tags
           featured
-          category {
+          categoryid {
             slug
+            id
           }
           contenidoNeto
           unidad

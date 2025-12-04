@@ -4,6 +4,7 @@ type htmlString = {
 type ProductStatus = "active" | "inactive" | "out_of_stock";
 type Category = {
   slug: string;
+  id: string;
 };
 export interface Product {
   id: string;
@@ -20,7 +21,7 @@ export interface Product {
   specifications: htmlString;
   benefits: string[];
   tags: string[];
-  category: Category;
+  categoryid: Category;
   contenidoNeto: number;
   unidad: string;
 }

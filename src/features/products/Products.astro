@@ -9,7 +9,6 @@ const { productos, errorMessage } = (await getProducts()) as {
   productos: Product[]
   errorMessage: string
 }
-console.log({ productos, errorMessage })
 ---
 
 {
@@ -25,7 +24,7 @@ console.log({ productos, errorMessage })
         {productos.map((product) => (
           <li class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
             <Card
-              href={`/products/${product.id}`}
+              href={`/product/${product.categoryid?.slug || 'uncategorized'}/${product.id}`}
               class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
             >
               <div class="h-full flex-1">
