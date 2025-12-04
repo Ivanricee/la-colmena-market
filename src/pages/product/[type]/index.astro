@@ -1,0 +1,24 @@
+---
+import Products from '@/features/products/Products.astro'
+import ProductsLayout from '@/layouts/ProductsLayout.astro'
+import { getCategories } from '@/features/categories/categories.api'
+export async function getStaticPaths() {
+  const { categories, errorMessage } = await getCategories()
+  return categories.map((category) => ({
+    params: { type: category.slug },
+    props: { category },
+  }))
+}
+const { category } = Astro.props
+const { slug, name, description } = category
+---
+
+<ProductsLayout title={name}>
+  <header>
+    <h1>{name}</h1>
+    <p set:html={description.html} />
+  </header>
+  <main>
+    <Products />
+  </main>
+</ProductsLayout>
