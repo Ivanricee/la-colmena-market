@@ -1,6 +1,9 @@
 ---
+import Card from '@/components/ui/Card.astro'
+import Tags from '@/features/products/components/Tags.astro'
 import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
+import { Icon } from 'astro-icon/components'
 export async function getStaticPaths() {
   const { productos, errorMessage } = await getProducts()
   return productos.map((product) => ({
@@ -13,8 +16,70 @@ const { id, title } = product
 ---
 
 <Layout title={title}>
-  <section>
-    <h1>Item: {id}</h1>
-    <p>Titulo: {title}</p>
+  <section class="relative flex h-fit flex-col sm:h-96 sm:flex-row">
+    <Card class="from-card mx-auto h-full bg-linear-to-t to-transparent sm:max-w-3xl">
+      <div class="h-5/12 w-full">
+        <div class="relative h-56 sm:h-full">
+          <div
+            class="bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12"
+          >
+          </div>
+
+          <div
+            class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700"
+          >
+          </div>
+
+          {
+            product.image.map((image) => (
+              <img
+                class="drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3 object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl"
+                src={image.url}
+                alt=""
+              />
+            ))
+          }
+        </div>
+      </div>
+      <div class="flex h-7/12 flex-col justify-between leading-normal">
+        <div>
+          <div class="mt-5 mb-2">
+            <Tags tags={product.tags} />
+          </div>
+          <h4 class="text-foreground mb-2 line-clamp-1 text-2xl font-semibold sm:text-4xl">
+            {product.title}
+          </h4>
+          <p class="my-3 flex items-baseline gap-2">
+            <span
+              class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-4xl font-bold text-transparent"
+            >
+              ${product.price}
+            </span>
+            {
+              product.previousPrice && (
+                <span class="text-muted-foreground text-sm line-through">
+                  ${product.previousPrice}
+                </span>
+              )
+            }
+          </p>
+          <h3 class="text-foreground mb-1.5 line-clamp-1 text-lg">Sobre este producto</h3>
+          <div
+            class="text-muted-foreground mb-3 text-sm text-pretty @sm:text-balance"
+            set:html={product.description.html}
+          />
+          <h3 class="text-foreground mb-2 line-clamp-1 text-lg">Beneficios</h3>
+          <ul>
+            {
+              product.benefits.map((benefit) => (
+                <li class="mb-2">
+                  <p class="text-muted-foreground text-sm">{benefit}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Card>
   </section>
 </Layout>
