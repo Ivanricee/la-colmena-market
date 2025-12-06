@@ -1,4 +1,5 @@
 ---
+import BuyWidget from '@/components/BuyWidget.astro'
 import Card from '@/components/ui/Card.astro'
 import Tags from '@/features/products/components/Tags.astro'
 import { getProducts } from '@/features/products/products.api'
@@ -17,7 +18,7 @@ const { id, title } = product
 
 <Layout title={title}>
   <section class="relative flex h-fit flex-col sm:h-96 sm:flex-row">
-    <Card class="from-card mx-auto h-full bg-linear-to-t to-transparent sm:max-w-3xl">
+    <Card class="from-card mx-auto mb-6 h-full bg-linear-to-t to-transparent sm:max-w-3xl">
       <div class="h-5/12 w-full">
         <div class="relative h-56 sm:h-full">
           <div
@@ -65,19 +66,28 @@ const { id, title } = product
           </p>
           <h3 class="text-foreground mb-1.5 line-clamp-1 text-lg">Sobre este producto</h3>
           <div
-            class="text-muted-foreground mb-3 text-sm text-pretty @sm:text-balance"
+            class="text-muted-foreground text-sm text-pretty @sm:text-balance"
             set:html={product.description.html}
           />
-          <h3 class="text-foreground mb-2 line-clamp-1 text-lg">Beneficios</h3>
+          <h3 class="text-foreground mt-3 mb-2 line-clamp-1 text-lg">Beneficios</h3>
           <ul>
             {
               product.benefits.map((benefit) => (
-                <li class="mb-2">
+                <li class="mb-2 flex flex-nowrap items-center gap-2">
+                  <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
+                    <Icon
+                      name="lucide:check"
+                      size={13}
+                      class="transition-[scale] duration-300 group-hover:scale-110"
+                    />
+                  </span>
                   <p class="text-muted-foreground text-sm">{benefit}</p>
                 </li>
               ))
             }
           </ul>
+
+          <BuyWidget product={product} />
         </div>
       </div>
     </Card>
