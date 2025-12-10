@@ -1,4 +1,4 @@
-import eslintPluginAstro from "eslint-plugin-astro";
+import eslintPluginAstro from 'eslint-plugin-astro'
 export default [
   // add more generic rule sets here, such as:
   // js.configs.recommended,
@@ -9,4 +9,4 @@ export default [
       // "astro/no-set-html-directive": "error"
     },
   },
-];
+]

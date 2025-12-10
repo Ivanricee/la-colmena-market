@@ -59,7 +59,12 @@ const { title } = product
       />
       <label
         for="hosting-small"
-        class="text-muted-foreground bg-input/20 border-border rounded-base peer-checked:border-honey-dark peer-checked:bg-primary peer-checked:text-card group hover:bg-secondary/50 peer-checked:hover:bg-primary/90 inline-flex w-full cursor-pointer items-center justify-between border p-5 transition-colors peer-checked:[&_svg]:scale-100 peer-checked:[&_svg]:opacity-100"
+        class:list={[
+          'text-muted-foreground bg-input/20 border-border rounded-base peer-checked:border-honey-dark',
+          'peer-checked:bg-primary peer-checked:text-card group hover:bg-secondary/50 peer-checked:hover:bg-primary/90',
+          'inline-flex w-full cursor-pointer items-center justify-between border p-5 transition-colors',
+          'peer-checked:[&_svg]:scale-100 peer-checked:[&_svg]:opacity-100',
+        ]}
       >
         <div class="block">
           <div class="w-full font-semibold">Birria</div>
