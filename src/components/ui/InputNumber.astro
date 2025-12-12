@@ -1,0 +1,41 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<div class="bg-secondary/30 rounded-base relative flex max-w-36 items-center shadow-xs">
+  <button
+    type="button"
+    id="decrement-button"
+    data-input-counter-decrement="quantity-input"
+    class="ring-offset-background text-foreground border-border/10 hover:bg-accent/80 hover:text-accent-foreground focus:ring-ring rounded-s-base box-border h-10 border px-3 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+  >
+    <Icon name="lucide:minus" size={16} />
+  </button>
+  <input
+    type="text"
+    id="quantity-input"
+    data-input-counter
+    aria-describedby="helper-text-explanation"
+    class="placeholder:text-foreground border-border/10 ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center"
+    placeholder="1"
+    required
+  />
+  <button
+    type="button"
+    id="increment-button"
+    data-input-counter-increment="quantity-input"
+    class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-3 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+  >
+    <Icon name="lucide:plus" size={16} />
+  </button>
+</div>
+
+<script>
+  import { initInputNumber } from '@/lib/scripts/inputNumber'
+  const setupInputNumber = () => {
+    initInputNumber()
+  }
+  document.addEventListener('DOMContentLoaded', setupInputNumber)
+  document.addEventListener('astro:after-swap', setupInputNumber)
+  setupInputNumber()
+</script>
