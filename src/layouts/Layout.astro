@@ -18,41 +18,21 @@ const { title = 'La Colmena Market' } = Astro.props
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <!-- Script para prevenir FOUC - SE EJECUTA UNA SOLA VEZ -->
+    <ClientRouter />
     <script is:inline>
-      // Este script SOLO se ejecuta en la carga inicial
-      if (
-        localStorage.getItem('color-theme') === 'dark' ||
-        (!localStorage.getItem('color-theme') &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-
-      // Establecer default si no existe
-      if (!localStorage.getItem('color-theme')) {
-        localStorage.setItem('color-theme', 'dark')
-      }
-    </script>
-
-    <!-- CRÍTICO: Script para re-aplicar dark mode después de cada navegación -->
-    <script is:inline>
-      document.addEventListener('astro:after-swap', () => {
-        // Re-aplicar el tema después de cada transición
-        if (
-          localStorage.getItem('color-theme') === 'dark' ||
-          (!localStorage.getItem('color-theme') &&
-            window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ) {
+      const applyTheme = () => {
+        const stored = localStorage.getItem('color-theme')
+        const theme = stored === 'dark' || stored === 'light' ? stored : 'dark'
+        if (theme === 'dark') {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
         }
-      })
+      }
+
+      applyTheme()
+      document.addEventListener('astro:after-swap', applyTheme)
     </script>
-    <ClientRouter />
   </head>
 
   <body>
@@ -107,13 +87,6 @@ const { title = 'La Colmena Market' } = Astro.props
 </style>
 
 <script>
-  import toggleDarkMode from '../lib/scripts/toggle-darkmode'
-
-  // Ejecutar en carga inicial
-  toggleDarkMode()
-
-  // CRÍTICO: Re-ejecutar después de cada navegación
-  document.addEventListener('astro:page-load', () => {
-    toggleDarkMode()
-  })
+  import initClientUI from '../lib/scripts/client-init'
+  initClientUI()
 </script>
