@@ -1,0 +1,139 @@
+---
+import { Icon } from 'astro-icon/components'
+import { Product } from '../products.model'
+interface Props {
+  product: Product
+}
+const { product } = Astro.props
+const { title, benefits, description } = product
+---
+
+<div id="accordion-card" data-accordion="collapse">
+  <h2 id="accordion-card-heading-1 text-foreground mt-3 mb-1 line-clamp-1 text-lg">
+    <button
+      type="button"
+      class:list={[
+        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-5 py-4 shadow-xs transition-colors duration-300 rtl:text-right',
+        "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
+        'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
+      ]}
+      data-accordion-target="#accordion-card-body-1"
+      aria-expanded="true"
+      aria-controls="accordion-card-body-1"
+    >
+      <span> ¿Cómo comprar? Es fácil</span>
+      <Icon name="lucide:chevron-down" size={20} class="transition-[rotate] duration-300" />
+    </button>
+  </h2>
+  <div
+    id="accordion-card-body-1"
+    class="border-border/25 rounded-b-base shadow-honey-dark/5 hidden border border-t-0 shadow-md transition-all duration-1000"
+    aria-labelledby="accordion-card-heading-1"
+  >
+    <div class="p-4 transition-all duration-1000 md:p-5">
+      <small class="text-muted-foreground mb-3 block">
+        Sigue estos 3 pasos sencillos para tener tu {title}
+      </small>
+      <ul class="text-muted-foreground sá space-y-2 text-sm">
+        <li class="flex flex-nowrap items-center-safe gap-2">
+          <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
+            <Icon
+              name="lucide:location-edit"
+              size={13}
+              class="transition-[scale] duration-300 group-hover:scale-110"
+            />
+          </span><p>
+            <strong>Elige un punto:</strong> Selecciona abajo dónde nos vemos.
+          </p>
+        </li>
+        <li class="flex flex-nowrap items-center-safe gap-2">
+          <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
+            <Icon
+              name="lucide:message-square-more"
+              size={13}
+              class="transition-[scale] duration-300 group-hover:scale-110"
+            />
+          </span>
+          <p>
+            <strong>Manda mensaje:</strong> El botón abrirá tu WhatsApp con el pedido.
+          </p>
+        </li>
+        <li class="flex flex-nowrap items-center-safe gap-2">
+          <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
+            <Icon
+              name="lucide:handshake"
+              size={13}
+              class="transition-[scale] duration-300 group-hover:scale-110"
+            />
+          </span>
+          <p>
+            <strong>Paga al recibir:</strong> No necesitas tarjeta, pagas en persona.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h2 id="accordion-card-heading-2" class="mt-4">
+    <button
+      type="button"
+      class:list={[
+        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-5 py-4 shadow-xs transition-colors duration-300 rtl:text-right',
+        "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
+        'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
+      ]}
+      data-accordion-target="#accordion-card-body-2"
+      aria-expanded="false"
+      aria-controls="accordion-card-body-2"
+    >
+      <span>Beneficios</span>
+      <Icon name="lucide:chevron-down" size={20} class="transition-[rotate] duration-300" />
+    </button>
+  </h2>
+  <div
+    id="accordion-card-body-2"
+    class="border-border/25 rounded-b-base shadow-honey-dark/5 hidden border border-t-0 shadow-md"
+    aria-labelledby="accordion-card-heading-2"
+  >
+    <div class="p-4 md:p-5">
+      <ul>
+        {
+          benefits.map((benefit) => (
+            <li class="mb-2 flex flex-nowrap items-center gap-2">
+              <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
+                <Icon
+                  name="lucide:check"
+                  size={13}
+                  class="transition-[scale] duration-300 group-hover:scale-110"
+                />
+              </span>
+              <p class="text-muted-foreground text-sm">{benefit}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <h2 id="accordion-card-heading-3" class="mt-4">
+    <button
+      type="button"
+      class:list={[
+        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-5 py-4 shadow-xs transition-colors duration-300 rtl:text-right',
+        "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
+        'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
+      ]}
+      data-accordion-target="#accordion-card-body-3"
+      aria-expanded="false"
+      aria-controls="accordion-card-body-3"
+    >
+      <span>Acerca de este artículo</span>
+      <Icon name="lucide:chevron-down" size={20} class="transition-[rotate] duration-300" />
+    </button>
+  </h2>
+  <div
+    id="accordion-card-body-3"
+    class="border-border/25 rounded-b-base shadow-honey-dark/5 hidden border border-t-0 shadow-md"
+    aria-labelledby="accordion-card-heading-3"
+  >
+    <div class="text-muted-foreground p-4 text-sm md:p-5" set:html={description.html} />
+  </div>
+</div>

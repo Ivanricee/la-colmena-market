@@ -1,6 +1,9 @@
 ---
 import BuyWidget from '@/components/BuyWidget.astro'
+import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
+import InputNumber from '@/components/ui/InputNumber.astro'
+import ProductDetails from '@/features/products/components/ProductDetails.astro'
 import Tags from '@/features/products/components/Tags.astro'
 import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
@@ -17,15 +20,19 @@ const { id, title } = product
 ---
 
 <Layout title={title}>
-  <section class="relative flex h-fit flex-col sm:h-96 sm:flex-row">
-    <Card class="from-card mx-auto mb-6 h-full bg-linear-to-t to-transparent sm:max-w-3xl">
-      <div class="h-5/12 w-full">
-        <div class="relative h-56 sm:h-full">
+  <Card
+    class="from-card relative mx-auto h-full w-full flex-1 bg-linear-to-t to-transparent md:max-w-4xl"
+  >
+    <main class="flex flex-col md:flex-row md:flex-nowrap">
+      <div class="grid h-8/12 w-full bg-blue-800 md:h-full md:w-6/12">
+        <div class="relative h-56 md:h-64">
           <div
-            class="bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12"
+            class:list={[
+              'bg-honey-dark/50 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto',
+              'h-[calc(100%+0.8rem)] w-5/12 rounded-b-full bg-linear-to-t md:h-full',
+            ]}
           >
           </div>
-
           <div
             class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700"
           >
@@ -34,7 +41,11 @@ const { id, title } = product
           {
             product.image.map((image) => (
               <img
-                class="drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3 object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl"
+                class:list={[
+                  'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative',
+                  'h-full w-full -translate-y-3 object-contain object-top drop-shadow-lg',
+                  'transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
+                ]}
                 src={image.url}
                 alt=""
               />
@@ -42,12 +53,12 @@ const { id, title } = product
           }
         </div>
       </div>
-      <div class="flex h-7/12 flex-col justify-between leading-normal">
+      <div class="flex h-7/12 flex-col justify-between leading-normal md:h-full md:w-6/12">
         <div>
-          <div class="mt-5 mb-2">
+          <div class="mt-5 md:mt-0">
             <Tags tags={product.tags} />
           </div>
-          <h4 class="text-foreground mb-2 line-clamp-1 text-2xl font-semibold sm:text-4xl">
+          <h4 class="text-foreground mb-2 line-clamp-1 py-2 text-2xl font-semibold sm:text-4xl">
             {product.title}
           </h4>
           <p class="my-3 flex items-baseline gap-2">
@@ -64,32 +75,19 @@ const { id, title } = product
               )
             }
           </p>
-          <h3 class="text-foreground mb-1.5 line-clamp-1 text-lg">Sobre este producto</h3>
-          <div
-            class="text-muted-foreground text-sm text-pretty @sm:text-balance"
-            set:html={product.description.html}
-          />
-          <h3 class="text-foreground mt-3 mb-2 line-clamp-1 text-lg">Beneficios</h3>
-          <ul>
-            {
-              product.benefits.map((benefit) => (
-                <li class="mb-2 flex flex-nowrap items-center gap-2">
-                  <span class="bg-honey-dark/70 text-honey-light rounded-full p-1">
-                    <Icon
-                      name="lucide:check"
-                      size={13}
-                      class="transition-[scale] duration-300 group-hover:scale-110"
-                    />
-                  </span>
-                  <p class="text-muted-foreground text-sm">{benefit}</p>
-                </li>
-              ))
-            }
-          </ul>
-
+          <div class="my-8 flex flex-nowrap gap-6">
+            <InputNumber />
+            <Button className="w-full">
+              <>
+                <Icon name="lucide:shopping-cart" size={18} />
+                <span class="text-base">Agregar al carrito</span>
+              </>
+            </Button>
+          </div>
           <BuyWidget product={product} />
+          <ProductDetails product={product} />
         </div>
       </div>
-    </Card>
-  </section>
+    </main>
+  </Card>
 </Layout>
