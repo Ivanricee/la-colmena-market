@@ -24,12 +24,12 @@ const { id, title } = product
     class="from-card relative mx-auto h-full w-full flex-1 bg-linear-to-t to-transparent md:max-w-4xl"
   >
     <main class="flex flex-col md:flex-row md:flex-nowrap">
-      <div class="grid h-8/12 w-full bg-blue-800 md:h-full md:w-6/12">
-        <div class="relative h-56 md:h-64">
+      <div class="grid h-8/12 w-full md:h-full md:w-6/12">
+        <div class="relative h-56 md:h-9/12">
           <div
             class:list={[
               'bg-honey-dark/50 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto',
-              'h-[calc(100%+0.8rem)] w-5/12 rounded-b-full bg-linear-to-t md:h-full',
+              'h-[calc(100%+0.8rem)] w-3/6 rounded-b-full bg-linear-to-t sm:w-2/6 md:h-full md:w-8/12',
             ]}
           >
           </div>
@@ -37,7 +37,6 @@ const { id, title } = product
             class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700"
           >
           </div>
-
           {
             product.image.map((image) => (
               <img
@@ -75,12 +74,14 @@ const { id, title } = product
               )
             }
           </p>
-          <div class="my-8 flex flex-nowrap gap-6">
+          <div class="my-8 flex flex-col gap-6 sm:flex-row sm:flex-nowrap">
             <InputNumber />
             <Button className="w-full">
               <>
                 <Icon name="lucide:shopping-cart" size={18} />
-                <span class="text-base">Agregar al carrito</span>
+                <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
+                  >Agregar al carrito</span
+                >
               </>
             </Button>
           </div>
