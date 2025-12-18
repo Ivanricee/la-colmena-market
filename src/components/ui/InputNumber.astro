@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components'
 ---
 
-<div class="bg-secondary/30 rounded-base relative flex max-w-36 items-center shadow-xs">
+<div class="bg-secondary/30 rounded-base relative flex w-full items-center shadow-xs sm:max-w-32">
   <button
     type="button"
     id="decrement-button"
@@ -24,7 +24,7 @@ import { Icon } from 'astro-icon/components'
     type="button"
     id="increment-button"
     data-input-counter-increment="quantity-input"
-    class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-3 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+    class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-3 text-sm leading-5 transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold"
   >
     <Icon name="lucide:plus" size={16} />
   </button>
