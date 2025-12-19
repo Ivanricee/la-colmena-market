@@ -1,13 +1,21 @@
 ---
+import { Icon } from 'astro-icon/components'
 import { Image } from '../products.model'
 
 interface Props {
   images: Image[] | []
 }
 const { images } = Astro.props
+console.log(images)
+const getImg = (image: Image) => {
+  const {version, public_id, format} = image
+const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto/v${version}/${public_id}.${format}`
+return url
+//https://res.cloudinary.com/ivanrice-c/image/upload/v1764367765/Frontend/la%20colmena%20market/raw_honey_zra8zn.png
+}
 ---
 
-<div id="indicators-carousel" class="relative w-full h-full overflow-hidden" data-carousel="static">
+<div id="indicators-carousel" class="relative w-full h-full overflow-hidden -top-3" data-carousel="static">
   <!-- Carousel wrapper -->
   <div class="rounded-base relative h-full">
     {
@@ -15,10 +23,10 @@ const { images } = Astro.props
         images.map((image, index) => (
           <div class="hidden duration-700 ease-in-out" data-carousel-item={index === 0 ? "active" : ""}>
             <img
-              src={image.secure_url}
+              src={getImg(image)}
               class:list={[
                   'drop-shadow-honey-dark/50 h-full w-full',
-                  '-translate-y-3t object-contain object-top drop-shadow-lg',
+                  'md:-translate-y-6 -translate-y-3 md:pb-6 object-contain object-top drop-shadow-lg',
                 ]}
               alt={`Product image ${index + 1}`}
             />
@@ -39,13 +47,15 @@ const { images } = Astro.props
     }
   </div>
   <!-- Slider indicators -->
-  <div class="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse">
+  <div class="absolute md:bottom-5 bottom-0.5 left-1/2 z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse md:bg-secondary/50 bg-secondary/80 p-2 px-4 rounded-full border border-border/30">
     {
       images.length > 0 ? (
         images.map((_, index) => (
           <button
             type="button"
-            class="rounded-base h-3 w-3"
+            class:list={["rounded-base h-3 w-3 md:h-3.5 md:w-3.5 transition-colors",
+            "aria-current:bg-muted-foreground ",
+            "aria-[current=false]:bg-background/75 aria-[current=false]:hover:bg-muted-foreground/50"]}
             aria-current={index === 0 ? "true" : "false"}
             aria-label={`Slide ${index + 1}`}
             data-carousel-slide-to={index}></button>
@@ -53,7 +63,9 @@ const { images } = Astro.props
       ) : (
         <button
           type="button"
-          class="rounded-base h-3 w-3"
+          class:list={["rounded-base h-3 w-3 md:h-3.5 md:w-3.5 transition-colors",
+            "aria-current:bg-muted-foreground ",
+            "aria-[current=false]:bg-background/75 aria-[current=false]:hover:bg-muted-foreground/50"]}
           aria-current="true"
           aria-label="Slide 1"
           data-carousel-slide-to="0"></button>
@@ -68,24 +80,10 @@ const { images } = Astro.props
     data-carousel-prev
   >
     <span
-      class="rounded-base inline-flex h-10 w-10 items-center justify-center bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70"
+      class="rounded-base inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary group-focus:ring-4 group-focus:ring-ring group-focus:outline-none border border-border/50"
     >
-      <svg
-        class="h-5 w-5 text-white rtl:rotate-180"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        viewBox="0 0 24 24"
-        ><path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="m15 19-7-7 7-7"></path></svg
-      >
-      <span class="sr-only">Previous</span>
+      <Icon name="lucide:chevron-left" size={24} />
+      <span class="sr-only">Anterior</span>
     </span>
   </button>
   <button
@@ -94,24 +92,10 @@ const { images } = Astro.props
     data-carousel-next
   >
     <span
-      class="rounded-base inline-flex h-10 w-10 items-center justify-center bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70"
+      class="rounded-base inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary group-focus:ring-4 group-focus:ring-ring group-focus:outline-none border border-border/50"
     >
-      <svg
-        class="h-5 w-5 text-white rtl:rotate-180"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        viewBox="0 0 24 24"
-        ><path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="m9 5 7 7-7 7"></path></svg
-      >
-      <span class="sr-only">Next</span>
+      <Icon name="lucide:chevron-right" size={24} />
+      <span class="sr-only">Siguiente</span>
     </span>
   </button>
 </div>
