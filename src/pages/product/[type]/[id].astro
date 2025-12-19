@@ -3,6 +3,7 @@ import BuyWidget from '@/components/BuyWidget.astro'
 import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
 import InputNumber from '@/components/ui/InputNumber.astro'
+import Carousel from '@/features/products/components/Carousel.astro'
 import ProductDetails from '@/features/products/components/ProductDetails.astro'
 import Tags from '@/features/products/components/Tags.astro'
 import { getProducts } from '@/features/products/products.api'
@@ -24,32 +25,24 @@ const { id, title } = product
     class="from-card relative mx-auto h-full w-full flex-1 bg-linear-to-t to-transparent md:max-w-4xl"
   >
     <main class="flex flex-col md:flex-row md:flex-nowrap">
-      <div class="grid h-8/12 w-full md:h-full md:w-6/12">
-        <div class="relative h-56 md:h-9/12">
+      <div class="h-8/12 w-full md:h-[30rem] md:w-6/12">
+        <div class="relative mx-auto aspect-[3/4] h-56 w-full md:h-full md:w-auto">
           <div
             class:list={[
               'bg-honey-dark/50 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto',
-              'h-[calc(100%+0.8rem)] w-3/6 rounded-b-full bg-linear-to-t sm:w-2/6 md:h-full md:w-8/12',
+              'h-[calc(100%+0.8rem)] w-3/6 rounded-b-full bg-linear-to-t sm:w-2/6 md:h-11/12 md:w-8/12',
             ]}
           >
           </div>
           <div
-            class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700"
+            class:list={[
+              'bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 md:bottom-20',
+              'mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700',
+            ]}
           >
           </div>
-          {
-            product.image.map((image) => (
-              <img
-                class:list={[
-                  'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative',
-                  'h-full w-full -translate-y-3 object-contain object-top drop-shadow-lg',
-                  'transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
-                ]}
-                src={image.url}
-                alt=""
-              />
-            ))
-          }
+
+          <Carousel images={product.image} />
         </div>
       </div>
       <div class="flex h-7/12 flex-col justify-between leading-normal md:h-full md:w-6/12">
