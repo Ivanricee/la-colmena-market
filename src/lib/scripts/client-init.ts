@@ -1,38 +1,20 @@
-import initAccordion from './accordion'
 import toggleDarkMode from './toggle-darkmode'
-
-type DestroyFn = () => void
-
-const ACCORDION_SELECTOR = '[data-accordion="collapse"]'
-
-let accordionDestroyFns: DestroyFn[] = []
-
-const destroyAllAccordions = () => {
-  accordionDestroyFns.forEach((destroy) => destroy())
-  accordionDestroyFns = []
-}
-
-const setupAllAccordions = () => {
-  destroyAllAccordions()
-  document.querySelectorAll<HTMLElement>(ACCORDION_SELECTOR).forEach((accordionEl) => {
-    const destroy = initAccordion(accordionEl)
-    if (destroy) accordionDestroyFns.push(destroy)
-  })
-}
+import { initFlowbite } from 'flowbite'
 
 export default function initClientUI(): void {
   const setup = () => {
     toggleDarkMode()
-    setupAllAccordions()
+    initFlowbite()
   }
 
+  // Avoid running setup twice on the initial load because `astro:page-load`
+  // is also fired on first load when using View Transitions.
+  let lastUrl = window.location.href
   setup()
 
-  document.addEventListener('astro:before-swap', () => {
-    destroyAllAccordions()
-  })
-
   document.addEventListener('astro:page-load', () => {
+    if (window.location.href === lastUrl) return
+    lastUrl = window.location.href
     setup()
   })
 }
