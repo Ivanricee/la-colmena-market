@@ -1,5 +1,6 @@
 ---
 import BuyWidget from '@/components/BuyWidget.astro'
+import CartDrawer from '@/components/CartDrawer.astro'
 import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
 import InputNumber from '@/components/ui/InputNumber.astro'
@@ -21,6 +22,8 @@ const { id, title } = product
 ---
 
 <Layout title={title}>
+  <!-- drawer init and toggle -->
+  <CartDrawer />
   <Card
     class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl"
   >
@@ -68,18 +71,44 @@ const { id, title } = product
           </p>
           <div class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8">
             <InputNumber />
-            <Button className="w-full md:px-2">
-              <>
-                <Icon name="lucide:shopping-cart" size={17} />
-                <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
-                  >Agregar al carrito</span
-                >
-              </>
+            <Button
+              className="hidden w-full md:inline-flex md:px-2"
+              type="button"
+              data-drawer-target="drawer-swipe-desktop"
+              data-drawer-show="drawer-swipe-desktop"
+              data-drawer-placement="left"
+              data-drawer-backdrop="false"
+              data-drawer-body-scrolling="true"
+              data-drawer-edge="true"
+              data-drawer-edge-offset="left-[60px]"
+              aria-controls="drawer-swipe-desktop"
+            >
+              <Icon name="lucide:shopping-cart" size={17} />
+              <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
+                >Agregar al carrito</span
+              >
+            </Button>
+            <Button
+              className="inline-flex w-full md:hidden md:px-2"
+              type="button"
+              data-drawer-target="drawer-swipe-mobile"
+              data-drawer-show="drawer-swipe-mobile"
+              data-drawer-placement="bottom"
+              data-drawer-backdrop="false"
+              data-drawer-body-scrolling="true"
+              data-drawer-edge="true"
+              data-drawer-edge-offset="bottom-[60px]"
+              aria-controls="drawer-swipe-mobile"
+            >
+              <Icon name="lucide:shopping-cart" size={17} />
+              <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
+                >Agregar al carrito</span
+              >
             </Button>
           </div>
-          <BuyWidget product={product} />
-          <ProductDetails product={product} />
         </div>
+        <BuyWidget product={product} />
+        <ProductDetails product={product} />
       </div>
     </main>
   </Card>
