@@ -1,13 +1,18 @@
 ---
 import Card from '@/components/ui/Card.astro'
 import { getProducts } from './products.api'
-import type { Product } from './products.model'
+import type { Image, Product } from './products.model'
 import Tags from './components/Tags.astro'
 import { Icon } from 'astro-icon/components'
 
 const { productos, errorMessage } = (await getProducts()) as {
   productos: Product[]
   errorMessage: string
+}
+const getImg = (image: Image) => {
+  const { version, public_id } = image
+  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_300/v${version}/${public_id}.webp`
+  return url
 }
 ---
 
@@ -32,13 +37,14 @@ const { productos, errorMessage } = (await getProducts()) as {
                   <div class="relative h-full">
                     <div class="bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12" />
                     <div class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700" />
-                    {product.image.map((image) => (
-                      <img
-                        class="drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3 object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl"
-                        src={image.url}
-                        alt=""
-                      />
-                    ))}
+                    <img
+                      class:list={[
+                        'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3',
+                        'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
+                      ]}
+                      src={getImg(product.image[0])}
+                      alt={product.title}
+                    />
                   </div>
                 </div>
                 <div class="flex h-5/12 flex-col justify-between overflow-hidden leading-normal">
