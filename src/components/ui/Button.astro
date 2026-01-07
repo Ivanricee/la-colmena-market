@@ -4,9 +4,10 @@ type ButtonVariant = 'default' | 'secondary' | 'success' | 'danger' | 'warning' 
 interface Props {
   variant?: ButtonVariant
   className?: string
+  [key: string]: any
 }
 
-const { variant = 'default', className = '' } = Astro.props
+const { variant = 'default', className = '', ...props } = Astro.props
 const buttonClass: Record<ButtonVariant, string> = {
   default:
     'bg-primary hover:bg-primary/90 focus:ring-honey-dark rounded-base border border-transparent px-4 py-2.5 text-sm leading-5 text-secondary hover:shadow-honey-medium/20',
@@ -26,6 +27,7 @@ const variantClass = buttonClass[variant]
 ---
 
 <button
+  {...props}
   type="button"
   class={`${variantClass} transition-all duration-300 gap-2 px-3 py-2 text-sm justify-center font-semibold flex flex-nowrap items-center hover:shadow-lg ${className}`}
 >
