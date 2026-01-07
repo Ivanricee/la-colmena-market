@@ -6,12 +6,10 @@ interface Props {
   images: Image[] | []
 }
 const { images } = Astro.props
-console.log(images)
 const getImg = (image: Image) => {
-  const {version, public_id, format} = image
-const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto/v${version}/${public_id}.${format}`
-return url
-//https://res.cloudinary.com/ivanrice-c/image/upload/v1764367765/Frontend/la%20colmena%20market/raw_honey_zra8zn.png
+  const {version, public_id} = image
+  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_700/v${version}/${public_id}.webp`
+  return url
 }
 ---
 
