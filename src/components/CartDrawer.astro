@@ -1,0 +1,80 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<!-- drawer desktop -->
+<div
+  id="drawer-swipe-desktop"
+  class="border-border bg-card fixed top-0 left-0 z-40 hidden h-screen w-80 -translate-x-full border-r p-4 transition-transform md:block"
+  tabindex="-1"
+  aria-labelledby="drawer-swipe-label"
+>
+  <div>
+    <div class="border-border flex items-center border-b pb-4">
+      <a href="https://flowbite.com/" class="flex items-center space-x-2 rtl:space-x-reverse">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 w-6" alt="Flowbite Logo" />
+        <span class="text-heading self-center text-lg font-semibold whitespace-nowrap"
+          >Flowbite</span
+        >
+      </a>
+    </div>
+  </div>
+  <div
+    class:list={[
+      'group bg-card border-border/50 hover:border-border absolute top-[50%] -right-[60px] -z-10 flex h-52 w-[60px]',
+      '-translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl border border-s-0 transition-colors duration-500',
+    ]}
+    data-drawer-toggle="drawer-swipe-desktop"
+  >
+    <span
+      class="bg-foreground/50 group-hover:bg-foreground h-12 w-1.5 rounded-full transition-colors duration-500"
+    ></span>
+    <h5 id="drawer-swipe-mobile-label" class="sr-only">Menu</h5>
+  </div>
+</div>
+<!-- drawer mobile -->
+<div
+  id="drawer-swipe-mobile"
+  class="bg-card border-border rounded-t-base fixed right-0 bottom-[60px] left-0 z-40 w-full translate-y-full overflow-y-auto border-t transition-transform md:hidden"
+  tabindex="-1"
+  aria-labelledby="drawer-swipe-mobile-label"
+>
+  <div class="group cursor-pointer p-4" data-drawer-toggle="drawer-swipe-mobile">
+    <span
+      class="bg-foreground/50 group-hover:bg-foreground absolute top-3 left-1/2 h-1 w-8 -translate-x-1/2 rounded-lg transition-colors duration-500"
+    ></span>
+    <h5
+      id="drawer-swipe-mobile-label"
+      class="text-foreground/50 group-hover:text-foreground inline-flex flex-nowrap items-center gap-2 text-base font-medium transition-colors duration-500"
+    >
+      <Icon name="lucide:shopping-cart" size={17} />
+      <span>Ver Carrito</span>
+    </h5>
+  </div>
+  <div class="grid grid-cols-3 gap-4 p-4 lg:grid-cols-4">
+    <div
+      class="rounded-base bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium cursor-pointer border p-4"
+    >
+      <div
+        class="bg-neutral-primary-strong border-default-strong mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full border p-2"
+      >
+        <svg
+          class="text-body inline h-7 w-7"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          ><path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="2"
+            d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"
+          ></path></svg
+        >
+      </div>
+      <div class="text-body text-center font-medium">Custom</div>
+    </div>
+  </div>
+</div>
