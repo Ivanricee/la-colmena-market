@@ -1,5 +1,19 @@
 ---
 import { Icon } from 'astro-icon/components'
+import { randomUUID } from 'node:crypto'
+
+interface Props {
+  id?: string
+  min?: number
+  max?: number
+  value?: number
+  kind?: string
+}
+
+const { id, min = 1, max = 10, value = 1, kind } = Astro.props
+const inputId = id ?? `quantity-input-${randomUUID()}`
+const decrementButtonId = `${inputId}-decrement`
+const incrementButtonId = `${inputId}-increment`
 ---
 
 <div
@@ -7,37 +21,31 @@ import { Icon } from 'astro-icon/components'
 >
   <button
     type="button"
-    id="decrement-button"
-    data-input-counter-decrement="quantity-input"
+    id={decrementButtonId}
+    data-input-counter-decrement={inputId}
     class="ring-offset-background text-foreground border-border/10 hover:bg-accent/80 hover:text-accent-foreground focus:ring-ring rounded-s-base box-border h-10 border px-3 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
   >
     <Icon name="lucide:minus" size={16} />
   </button>
   <input
     type="text"
-    id="quantity-input"
+    id={inputId}
     data-input-counter
+    data-input-number-kind={kind}
     aria-describedby="helper-text-explanation"
     class="placeholder:text-foreground border-border/10 ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center"
     placeholder="1"
+    data-input-counter-min={String(min)}
+    data-input-counter-max={String(max)}
+    value={String(value)}
     required
   />
   <button
     type="button"
-    id="increment-button"
-    data-input-counter-increment="quantity-input"
+    id={incrementButtonId}
+    data-input-counter-increment={inputId}
     class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-3 text-sm leading-5 transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold"
   >
     <Icon name="lucide:plus" size={16} />
   </button>
 </div>
-
-<script>
-  import { initInputNumber } from '@/lib/scripts/inputNumber'
-  const setupInputNumber = () => {
-    initInputNumber()
-  }
-  document.addEventListener('DOMContentLoaded', setupInputNumber)
-  document.addEventListener('astro:after-swap', setupInputNumber)
-  setupInputNumber()
-</script>
