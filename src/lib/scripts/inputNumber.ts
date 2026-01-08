@@ -1,60 +1,57 @@
-import { InputCounter } from 'flowbite'
-import type { InputCounterOptions, InputCounterInterface } from 'flowbite'
-import type { InstanceOptions } from 'flowbite'
-
 export function initInputNumber(root: Document | ParentNode = document) {
-  const $targetEl = root.querySelector<HTMLInputElement>('[data-input-counter]')
+  const doc = (root as Document).ownerDocument ?? (root as Document)
+  const markerEl = doc.documentElement
 
-  if (!$targetEl) {
-    console.warn('InputCounter: target input not found')
+  if (markerEl.dataset.inputNumberDelegated === 'true') {
     return
   }
 
-  if (!$targetEl.id) {
-    console.warn('InputCounter: target input requires an id')
-    return
+  const emit = (
+    $targetEl: HTMLInputElement,
+    action: 'increment' | 'decrement' | 'input'
+  ) => {
+    $targetEl.dispatchEvent(
+      new CustomEvent('input-number:change', {
+        detail: {
+          action,
+          value: Number($targetEl.value),
+          id: $targetEl.id,
+          kind: $targetEl.dataset.inputNumberKind,
+        },
+        bubbles: true,
+      })
+    )
   }
 
-  const $incrementEl = root.querySelector<HTMLElement>(
-    `[data-input-counter-increment="${$targetEl.id}"]`
-  )
+  doc.addEventListener('click', (evt) => {
+    const el = evt.target as Element | null
+    if (!el) return
 
-  const $decrementEl = root.querySelector<HTMLElement>(
-    `[data-input-counter-decrement="${$targetEl.id}"]`
-  )
+    const inc = el.closest<HTMLElement>('[data-input-counter-increment]')
+    const dec = el.closest<HTMLElement>('[data-input-counter-decrement]')
 
-  // optional options with default values and callback functions
-  const options: InputCounterOptions = {
-    minValue: 0,
-    maxValue: null, // infinite
-    onIncrement: () => {
-      console.log('input field value has been incremented')
-    },
-    onDecrement: () => {
-      console.log('input field value has been decremented')
-    },
-  }
+    const inputId = inc?.getAttribute('data-input-counter-increment')
+      ?? dec?.getAttribute('data-input-counter-decrement')
 
-  // instance options object
-  const instanceOptions: InstanceOptions = {
-    id: 'counter-input-example',
-    override: true,
-  }
+    if (!inputId) return
 
-  /*
-   * $targetEl: required
-   * $incrementEl: optional
-   * $decrementEl: optional
-   * options: optional
-   * instanceOptions: optional
-   */
-  const counterInput: InputCounterInterface = new InputCounter(
-    $targetEl,
-    $incrementEl,
-    $decrementEl,
-    options,
-    instanceOptions
-  )
+    const $targetEl = doc.getElementById(inputId)
+    if (!($targetEl instanceof HTMLInputElement)) return
 
-  return counterInput
+    const action: 'increment' | 'decrement' = inc ? 'increment' : 'decrement'
+
+    requestAnimationFrame(() => {
+      emit($targetEl, action)
+    })
+  })
+
+  doc.addEventListener('input', (evt) => {
+    const el = evt.target as Element | null
+    if (!(el instanceof HTMLInputElement)) return
+    if (!el.matches('[data-input-counter]')) return
+    emit(el, 'input')
+  })
+
+  markerEl.dataset.inputNumberDelegated = 'true'
+  return
 }
