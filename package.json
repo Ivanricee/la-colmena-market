@@ -19,6 +19,7 @@
     "astro-icon": "^1.1.5",
     "flowbite": "^4.0.1",
     "graphql-request": "^7.3.3",
+    "nanostores": "^1.1.0",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4.1.17"
   },
