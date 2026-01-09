@@ -1,43 +1,63 @@
-import { map } from "nanostores";
-
+//import { map } from 'nanostores'
+import { persistentMap } from '@nanostores/persistent'
 //types
-type CartItem<> = {    
-    title: string;
-    price: number;
-    quantity: number;
+export type CartItem = {
+  title: string
+  price: number
+  quantity: number
 }
 interface Cart {
-    items: Record<string,CartItem>
-    total: number;
+  items: Record<string, CartItem>
+  total: number
 }
 // state
-export const $cart = map<Cart>({items: {}, total: 0});
-
+export const $cart = persistentMap<Cart>(
+  'cart:',
+  { items: {}, total: 0 },
+  {
+    encode: JSON.stringify,
+    decode: JSON.parse,
+  }
+)
 // actions
-export function addItem(id:string, item?: CartItem){
-    const cart = $cart.get()
-    const itemInCart = cart.items[id]
-    const updatedItems = {
-        ...cart.items,
-        [id]: !itemInCart && item
-            ? {...item}
-            : {...itemInCart, quantity: itemInCart.quantity + 1}
-    }
-    const total = Object.values(updatedItems)
-    .reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-    $cart.set({
-        items: updatedItems,
-        total
-    });
+type AddItemType = {
+  id: string
+  item?: CartItem
+  quantity?: number
 }
-export function removeItem(id: string){
-    const cart = $cart.get()
-    const updatedItems = {...cart.items}
-    delete updatedItems[id]
-    const total = Object.values(cart.total).reduce((sum, item) => sum + (item.price * item.quantity), 0)
-    $cart.set({
-        items: updatedItems,
-        total
-    })
+export function addItem({ id, item, quantity }: AddItemType) {
+  const cart = $cart.get()
+  console.log(cart)
+  const itemInCart = cart.items[id]
+  const quantityToAdd = quantity ?? 1
+
+  const updatedItems = {
+    ...cart.items,
+    [id]:
+      !itemInCart && item
+        ? { ...item }
+        : { ...itemInCart, quantity: (itemInCart?.quantity ?? 0) + quantityToAdd },
+  }
+  const total = Object.values(updatedItems).reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
+
+  $cart.set({
+    items: updatedItems,
+    total,
+  })
+}
+export function removeItem(id: string) {
+  const cart = $cart.get()
+  const updatedItems = { ...cart.items }
+  delete updatedItems[id]
+  const total = Object.values(cart.total).reduce((sum, item) => sum + item.price * item.quantity, 0)
+  $cart.set({
+    items: updatedItems,
+    total,
+  })
+}
+export function clearCart() {
+  $cart.set({ items: {}, total: 0 })
 }
