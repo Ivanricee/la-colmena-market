@@ -6,10 +6,7 @@ export function initInputNumber(root: Document | ParentNode = document) {
     return
   }
 
-  const emit = (
-    $targetEl: HTMLInputElement,
-    action: 'increment' | 'decrement' | 'input'
-  ) => {
+  const emit = ($targetEl: HTMLInputElement, action: 'increment' | 'decrement' | 'input') => {
     $targetEl.dispatchEvent(
       new CustomEvent('input-number:change', {
         detail: {
@@ -30,8 +27,9 @@ export function initInputNumber(root: Document | ParentNode = document) {
     const inc = el.closest<HTMLElement>('[data-input-counter-increment]')
     const dec = el.closest<HTMLElement>('[data-input-counter-decrement]')
 
-    const inputId = inc?.getAttribute('data-input-counter-increment')
-      ?? dec?.getAttribute('data-input-counter-decrement')
+    const inputId =
+      inc?.getAttribute('data-input-counter-increment') ??
+      dec?.getAttribute('data-input-counter-decrement')
 
     if (!inputId) return
 
