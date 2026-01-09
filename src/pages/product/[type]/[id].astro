@@ -3,6 +3,7 @@ import BuyWidget from '@/components/BuyWidget.astro'
 import CartDrawer from '@/components/CartDrawer.astro'
 import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
+import Dropdown from '@/components/ui/Dropdown.astro'
 import InputNumber from '@/components/ui/InputNumber.astro'
 import Carousel from '@/features/products/components/Carousel.astro'
 import ProductDetails from '@/features/products/components/ProductDetails.astro'
@@ -18,7 +19,7 @@ export async function getStaticPaths() {
   }))
 }
 const { product } = Astro.props
-const { id, title } = product
+const { id, title, price } = product
 ---
 
 <Layout title={title}>
@@ -69,11 +70,22 @@ const { id, title } = product
               )
             }
           </p>
-          <div class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8">
-            <InputNumber />
+
+          <form
+            id="product-form"
+            class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8"
+            data-id={id}
+            data-title={title}
+            data-price={price}
+          >
+            {
+              //<InputNumber id={product.id} />
+            }
+            <Dropdown cantidad={5} />
             <Button
               className="hidden w-full md:inline-flex md:px-2"
               type="button"
+              data-action="add"
               data-drawer-target="drawer-swipe-desktop"
               data-drawer-show="drawer-swipe-desktop"
               data-drawer-placement="left"
@@ -88,9 +100,11 @@ const { id, title } = product
                 >Agregar al carrito</span
               >
             </Button>
+
             <Button
               className="inline-flex w-full md:hidden md:px-2"
               type="button"
+              data-action="add"
               data-drawer-target="drawer-swipe-mobile"
               data-drawer-show="drawer-swipe-mobile"
               data-drawer-placement="bottom"
@@ -105,7 +119,7 @@ const { id, title } = product
                 >Agregar al carrito</span
               >
             </Button>
-          </div>
+          </form>
         </div>
         <BuyWidget product={product} />
         <ProductDetails product={product} />
@@ -113,3 +127,35 @@ const { id, title } = product
     </main>
   </Card>
 </Layout>
+<script>
+  import { addItem } from '../../../store/cartStore.ts'
+
+  const formEl = document.getElementById('product-form') as HTMLFormElement
+
+  // Seleccionamos específicamente los botones que abren el drawer
+  const buyButtons = formEl?.querySelectorAll('[data-action="add"]')
+
+  // Definimos la lógica de negocio de forma aislada
+  const handleAddToCart = () => {
+    const { id, title, price } = formEl.dataset
+    const formData = new FormData(formEl)
+    const quantity = Number(formData.get('input-number')) || 1
+    console.log(quantity)
+    addItem({
+      id: id ?? '',
+      item: {
+        title: title ?? '',
+        price: Number(price ?? 0),
+        quantity,
+      },
+      quantity,
+    })
+
+    console.log('Agregado con precisión')
+  }
+
+  // Asignamos el evento SOLO a los botones, nada más.
+  buyButtons?.forEach((btn) => {
+    btn.addEventListener('click', handleAddToCart)
+  })
+</script>
