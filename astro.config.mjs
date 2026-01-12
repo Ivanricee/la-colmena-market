@@ -5,6 +5,8 @@ import vercel from '@astrojs/vercel'
 
 import icon from 'astro-icon'
 
+import alpinejs from '@astrojs/alpinejs'
+
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
@@ -88,5 +90,5 @@ export default defineConfig({
     },
   },
 
-  integrations: [icon()],
+  integrations: [icon(), alpinejs()],
 })
