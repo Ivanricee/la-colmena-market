@@ -3,6 +3,7 @@
   "include": [".astro/types.d.ts", "**/*", "src/**/*.ts*"],
   "exclude": ["node_modules", "dist", "lib"],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
@@ -15,7 +16,7 @@
     "module": "commonjs",
     "target": "es5",
     "allowJs": true,
-    "moduleResolution": "node",
-    "verbatimModuleSyntax": false,
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": false
   }
 }
