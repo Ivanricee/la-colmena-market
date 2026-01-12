@@ -1,11 +1,9 @@
-import toggleDarkMode from './toggle-darkmode'
-import { initFlowbite } from 'flowbite'
+
 import { initInputNumber } from './inputNumber'
 
 export default function initClientUI(): void {
   const setup = () => {
-    toggleDarkMode()
-    initFlowbite()
+    
     initInputNumber()
   }
 

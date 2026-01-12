@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
+import { Icon } from 'astro-icon/components'
 
 interface Props {
   title: string
@@ -20,51 +21,33 @@ const { title = 'La Colmena Market' } = Astro.props
 
     <ClientRouter />
     <script is:inline>
-      const applyTheme = () => {
+      const getTheme = () => {
         const stored = localStorage.getItem('color-theme')
-        const theme = stored === 'dark' || stored === 'light' ? stored : 'dark'
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
+        if (stored) return stored
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
       }
-
-      applyTheme()
-      document.addEventListener('astro:after-swap', applyTheme)
+      const setDarkMode = () => {
+        const theme = getTheme()
+        document.documentElement.classList.toggle('dark', theme === 'dark')
+      }
+      setDarkMode()
+      document.addEventListener('astro:after-swap', setDarkMode)
     </script>
   </head>
 
   <body>
-    <div class="flex min-h-dvh w-full flex-col p-2 sm:p-8">
+    <div class="bg-background flex min-h-dvh w-full flex-col p-2 sm:p-8">
       <section class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col">
         <header class="bg-secondary/15">
           <button
             id="theme-toggle"
+            x-data
+            @click="$store.themeStore.set($store.themeStore.get() === 'light' ? 'dark': 'light')"
             type="button"
             class="rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
           >
-            <svg
-              id="theme-toggle-dark-icon"
-              class="hidden h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-            </svg>
-            <svg
-              id="theme-toggle-light-icon"
-              class="hidden h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                fill-rule="evenodd"
-                clip-rule="evenodd"></path>
-            </svg>
+            <Icon x-show="$store.themeStore.get() === 'light'" name="lucide:moon" size={17} />
+            <Icon x-show="$store.themeStore.get() === 'dark'" name="lucide:sun" size={17} />
           </button>
         </header>
         <slot />
@@ -87,6 +70,16 @@ const { title = 'La Colmena Market' } = Astro.props
 </style>
 
 <script>
-  import initClientUI from '../lib/scripts/client-init'
-  initClientUI()
+  import { $themeStore } from '@/store/themeStore.ts'
+import Alpine from 'alpinejs'
+  document.addEventListener('alpine:init',() => {
+    Alpine.store('themeStore', $themeStore)
+  })
+  $themeStore.subscribe((value) => {
+    if(value === 'dark'){
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  })
 </script>
