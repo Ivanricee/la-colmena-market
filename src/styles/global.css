@@ -138,6 +138,9 @@
 @layer base {
   * {
     @apply border-border;
+    [x-cloak] {
+        display: none !important;
+    }
   }
   body {
     @apply bg-background text-foreground;
