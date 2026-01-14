@@ -70,13 +70,16 @@ const { title = 'La Colmena Market' } = Astro.props
 </style>
 
 <script>
+  import initClientUI from '@/lib/scripts/client-init'
   import { $themeStore } from '@/store/themeStore.ts'
-import Alpine from 'alpinejs'
-  document.addEventListener('alpine:init',() => {
+  import Alpine from 'alpinejs'
+
+  initClientUI()
+  document.addEventListener('alpine:init', () => {
     Alpine.store('themeStore', $themeStore)
   })
   $themeStore.subscribe((value) => {
-    if(value === 'dark'){
+    if (value === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')
