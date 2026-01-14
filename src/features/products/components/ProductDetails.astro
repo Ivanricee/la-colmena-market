@@ -14,7 +14,7 @@ const { title, benefits, description } = product
       type="button"
       @click="active = (active === 1 ? null : 1)"
       class:list={[
-        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
+        'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
         "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
         'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
       ]}
@@ -27,7 +27,8 @@ const { title, benefits, description } = product
   <div
     x-show="active === 1"
     x-collapse.duration.250ms
-    class="border-border/25 rounded-b-base shadow-honey-dark/5 border border-t-0 shadow-md"
+    x-cloak
+    class="border-border/25 shadow-honey-dark/5 rounded-b-md border border-t-0 shadow-md"
     aria-labelledby="accordion-card-heading-1"
   >
     <div class="text-muted-foreground p-4 text-sm md:p-5" set:html={description.html} />
@@ -37,7 +38,7 @@ const { title, benefits, description } = product
       type="button"
       @click="active = (active === 2 ? null : 2)"
       class:list={[
-        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
+        'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
         "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
         'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
       ]}
@@ -50,7 +51,8 @@ const { title, benefits, description } = product
   <div
     x-show="active === 2"
     x-collapse.duration.250ms
-    class="border-border/25 rounded-b-base shadow-honey-dark/5 border border-t-0 shadow-md"
+    x-cloak
+    class="border-border/25 shadow-honey-dark/5 rounded-b-md border border-t-0 shadow-md"
     aria-labelledby="accordion-card-heading-2"
   >
     <div class="p-4 md:p-5">
@@ -77,7 +79,7 @@ const { title, benefits, description } = product
       type="button"
       @click="active = (active === 3 ? null : 3)"
       class:list={[
-        'text-foreground rounded-base border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
+        'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
         "aria-[expanded=false]:bg-secondary/25 aria-[expanded=false]:hover:text-foreground aria-[expanded=false]:hover:bg-secondary/70 [&[aria-expanded='false']_svg]:rotate-0",
         'aria-expanded:bg-muted-foreground/95 aria-expanded:text-background aria-expanded:rounded-b-none aria-expanded:font-semibold aria-expanded:shadow-none aria-expanded:[&_svg]:rotate-180',
       ]}
@@ -91,7 +93,8 @@ const { title, benefits, description } = product
     id="accordion-card-body-3"
     x-show="active === 3"
     x-collapse.duration.250ms
-    class="border-border/25 rounded-b-base shadow-honey-dark/5 border border-t-0 shadow-md"
+    x-cloak
+    class="border-border/25 shadow-honey-dark/5 rounded-b-md border border-t-0 shadow-md"
     aria-labelledby="accordion-card-heading-3"
   >
     <div class="p-4 md:p-5">
@@ -101,12 +104,3 @@ const { title, benefits, description } = product
     </div>
   </div>
 </div>
-<script>
-  import Alpine from 'alpinejs'
-  import collapse from '@alpinejs/collapse'
-
-  if (!window.AlpineInstanceRegistered) {
-    Alpine.plugin(collapse)
-    window.AlpineInstanceRegistered = true
-  }
-</script>
