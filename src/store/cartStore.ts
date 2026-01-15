@@ -5,6 +5,7 @@ export type CartItem = {
   title: string
   price: number
   quantity: number
+  imgUrl: string
 }
 interface Cart {
   items: Record<string, CartItem>
@@ -27,7 +28,6 @@ type AddItemType = {
 }
 export function addItem({ id, item, quantity }: AddItemType) {
   const cart = $cart.get()
-  console.log(cart)
   const itemInCart = cart.items[id]
   const quantityToAdd = quantity ?? 1
 
