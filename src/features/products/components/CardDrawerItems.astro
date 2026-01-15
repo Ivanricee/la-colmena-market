@@ -1,0 +1,41 @@
+---
+interface Props {
+  slot: 'vertical' | 'horizontal'
+}
+const { slot } = Astro.props
+---
+
+<div x-data>
+  <ul
+    class:list={[
+      'flex flex-col gap-4 w-full items-center p-4',
+      '[&>li]:p-2 [&>li]:border [&>li]:rounded-md [&>li]:w-28 [&>li]:aspect-3/4 [&>li]:flex [&>li]:flex-col',
+    ]}
+  >
+    <template x-for="[id, product] in Object.entries($store.cartStore.data.items)" :key="id">
+      <li>
+        <div class="flex-1 bg-teal-600/5">
+          <img x-bind:src="product.imgUrl" x-bind:alt="product.title" />
+        </div>
+        <div class="h-4/12 bg-red-800/5"><span x-text="product.quantity"></span></div>
+      </li>
+    </template>
+  </ul>
+</div>
+
+<script>
+  import { $cart } from '@/store/cartStore'
+  import Alpine from 'alpinejs'
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('cartStore', {
+      data: $cart.get(),
+      init() {
+        $cart.subscribe((newProducto) => {
+          this.data = { ...newProducto }
+          console.log('nuevos items', this.data)
+        })
+      },
+    })
+  })
+</script>
