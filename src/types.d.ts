@@ -17,8 +17,3 @@ interface CartStoreType {
   data: Cart
   init(): void
 }
-
-declare module '@alpinejs/collapse' {
-  function collapse(): void
-  export default collapse
-}
