@@ -1,6 +1,6 @@
 ---
 import BuyWidget from '@/components/BuyWidget.astro'
-import CartDrawer from '@/components/CartDrawer.astro'
+import Drawer from '@/components/ui/Drawer.astro'
 import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
 import Dropdown from '@/components/ui/Dropdown.astro'
@@ -11,6 +11,7 @@ import Tags from '@/features/products/components/Tags.astro'
 import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
+import CardDrawerItems from '@/features/products/components/CardDrawerItems.astro'
 export async function getStaticPaths() {
   const { productos, errorMessage } = await getProducts()
   return productos.map((product) => ({
@@ -19,12 +20,15 @@ export async function getStaticPaths() {
   }))
 }
 const { product } = Astro.props
-const { id, title, price } = product
+const { id, title, price, image } = product
 ---
 
-<Layout title={title}>
+<Layout {title}>
   <!-- drawer init and toggle -->
-  <CartDrawer />
+  <Drawer>
+    <span x-data slot="headerDrawer" x-text="$store.cartStore.data.total"></span>
+    <CardDrawerItems slot="vertical" />
+  </Drawer>
   <Card
     class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl"
   >
@@ -77,42 +81,20 @@ const { id, title, price } = product
             data-id={id}
             data-title={title}
             data-price={price}
+            data-imagepublicid={image?.[0].public_id ?? ''}
+            data-imageversion={image?.[0].version ?? ''}
           >
             {
               //<InputNumber id={product.id} />
             }
             <Dropdown cantidad={5} />
             <Button
-              className="hidden w-full md:inline-flex md:px-2"
+              id="cart-add-button"
+              className="w-full rounded-md inline-flex md:px-2"
               type="button"
-              data-action="add"
-              data-drawer-target="drawer-swipe-desktop"
-              data-drawer-show="drawer-swipe-desktop"
-              data-drawer-placement="left"
-              data-drawer-backdrop="false"
-              data-drawer-body-scrolling="true"
-              data-drawer-edge="true"
-              data-drawer-edge-offset="left-[60px]"
               aria-controls="drawer-swipe-desktop"
-            >
-              <Icon name="lucide:shopping-cart" size={17} />
-              <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
-                >Agregar al carrito</span
-              >
-            </Button>
-
-            <Button
-              className="inline-flex w-full md:hidden md:px-2"
-              type="button"
-              data-action="add"
-              data-drawer-target="drawer-swipe-mobile"
-              data-drawer-show="drawer-swipe-mobile"
-              data-drawer-placement="bottom"
-              data-drawer-backdrop="false"
-              data-drawer-body-scrolling="true"
-              data-drawer-edge="true"
-              data-drawer-edge-offset="bottom-[60px]"
-              aria-controls="drawer-swipe-mobile"
+              x-data
+              @click="$dispatch('open-cart')"
             >
               <Icon name="lucide:shopping-cart" size={17} />
               <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
@@ -121,31 +103,36 @@ const { id, title, price } = product
             </Button>
           </form>
         </div>
-        <BuyWidget product={product} />
-        <ProductDetails product={product} />
+        <BuyWidget {product} />
+        <ProductDetails {product} />
       </div>
     </main>
   </Card>
 </Layout>
 <script>
   import { addItem } from '../../../store/cartStore.ts'
-
+  const getImg = (publicid: string, version: string): string => {
+    const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_100/v${version}/${publicid}.webp`
+    return url
+  }
   const formEl = document.getElementById('product-form') as HTMLFormElement
 
-  // Seleccionamos específicamente los botones que abren el drawer
-  const buyButtons = formEl?.querySelectorAll('[data-action="add"]')
+  //botones que abren el drawer
+  const buyButton = document.getElementById('cart-add-button')
 
-  // Definimos la lógica de negocio de forma aislada
   const handleAddToCart = () => {
-    const { id, title, price } = formEl.dataset
+    const { id, title, price, imagepublicid, imageversion } = formEl.dataset
+    console.log({ imagepublicid, imageversion })
+
     const formData = new FormData(formEl)
-    const quantity = Number(formData.get('input-number')) || 1
+    const quantity = Number(formData.get('cantidad')) || 1
     console.log(quantity)
     addItem({
       id: id ?? '',
       item: {
         title: title ?? '',
         price: Number(price ?? 0),
+        imgUrl: getImg(imagepublicid ?? '', imageversion ?? ''),
         quantity,
       },
       quantity,
@@ -154,8 +141,5 @@ const { id, title, price } = product
     console.log('Agregado con precisión')
   }
 
-  // Asignamos el evento SOLO a los botones, nada más.
-  buyButtons?.forEach((btn) => {
-    btn.addEventListener('click', handleAddToCart)
-  })
+  buyButton?.addEventListener('click', handleAddToCart)
 </script>
