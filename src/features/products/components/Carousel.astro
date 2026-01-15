@@ -7,14 +7,22 @@ interface Props {
 }
 const { images } = Astro.props
 const getImg = (image: Image) => {
-  const {version, public_id} = image
+  const { version, public_id } = image
   const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_700/v${version}/${public_id}.webp`
   return url
+}
+const getImageClass = (index: number) => {
+  return `{
+    'translate-x-0 z-30': active === ${index},
+    '-translate-x-full z-10': active > ${index},
+    'translate-x-full z-10': active < ${index},
+    'hidden': Math.abs(active - ${index}) > 1 && !(active === 0 && ${index} === total - 1) && !(active === total - 1 && ${index} === 0)
+  }`
 }
 ---
 
 <div
-x-data={`{
+  x-data={`{
   active: 0,
   total: ${images.length},
   next() { this.active = (this.active + 1) % this.total },
@@ -27,18 +35,15 @@ x-data={`{
     }
   }
 }`}
-class="relative w-full h-full overflow-hidden -top-3">
+  class="relative w-full h-full overflow-hidden -top-3"
+>
   <!-- Carousel wrapper -->
   <div class="rounded-md relative h-full">
-    {images.map((image, index) => (
+    {
+      images.map((image, index) => (
       <div
         class="absolute inset-0 w-full h-full transition-transform duration-700 ease-in-out"
-        :class={`{
-          'translate-x-0 z-30': active === ${index},
-          '-translate-x-full z-10': active > ${index},
-          'translate-x-full z-10': active < ${index},
-          'hidden': Math.abs(active - ${index}) > 1 && !(active === 0 && ${index} === total - 1) && !(active === total - 1 && ${index} === 0)
-        }`}
+        :class={getImageClass(index)}
       >
         <img
           src={getImg(image)}
@@ -46,33 +51,39 @@ class="relative w-full h-full overflow-hidden -top-3">
           alt={`Product image ${index + 1}`}
         />
       </div>
-    ))}
+      ))
+    }
   </div>
   {
     images.length > 1 && (
       <>
-    //<!-- Slider indicators -->
-    <div class="absolute md:bottom-5 bottom-0.5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 md:bg-secondary/50 bg-secondary/80 p-2 px-4 rounded-full border border-border/30">
-      {images.map((_, index) => (
+        <div class="absolute md:bottom-5 bottom-0.5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 md:bg-secondary/50 bg-secondary/80 p-2 px-4 rounded-full border border-border/30">
+          {images.map((_, index) => (
+          <button
+            type="button"
+            @click={`active = ${index}`}
+            class="rounded-md h-3 w-3 md:h-3.5 md:w-3.5 transition-colors"
+            :class={`active === ${index} ? 'bg-muted-foreground' : 'bg-background/75 hover:bg-muted-foreground/50'`}
+          ></button>
+          ))}
+        </div>
+
         <button
-          type="button"
-          @click={`active = ${index}`}
-          class="rounded-md h-3 w-3 md:h-3.5 md:w-3.5 transition-colors"
-          :class={`active === ${index} ? 'bg-muted-foreground' : 'bg-background/75 hover:bg-muted-foreground/50'`}
-        ></button>
-      ))}
-    </div>
-    //<!-- Slider controls -->
-    <button @click="prev()" class="absolute start-0 top-0 z-40 h-full px-4 group focus:outline-none">
-      <span class="rounded-md inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary border border-border/50">
-        <Icon name="lucide:chevron-left" size={24} />
-      </span>
-    </button>
-    <button @click="next()" class="absolute end-0 top-0 z-40 h-full px-4 group focus:outline-none">
-      <span class="rounded-md inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary border border-border/50">
-        <Icon name="lucide:chevron-right" size={24} />
-      </span>
-    </button>
+          @click="prev()"
+          class="absolute start-0 top-0 z-40 h-full px-4 group focus:outline-none"
+        >
+          <span class="rounded-md inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary border border-border/50">
+            <Icon name="lucide:chevron-left" size={24} />
+          </span>
+        </button>
+        <button
+          @click="next()"
+          class="absolute end-0 top-0 z-40 h-full px-4 group focus:outline-none"
+        >
+          <span class="rounded-md inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center bg-secondary/50 group-hover:bg-secondary border border-border/50">
+            <Icon name="lucide:chevron-right" size={24} />
+          </span>
+        </button>
       </>
     )
   }
