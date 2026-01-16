@@ -9,11 +9,13 @@ declare global {
 declare module 'alpinejs' {
   interface Alpine {
     store(name: 'cartStore', value: CartStoreType): void
+    store(name: 'cartStore'): CartStoreType
     store(name: string): any
   }
 }
 
 interface CartStoreType {
   data: Cart
+  handleAddToCart(product?: any): void
   init(): void
 }
