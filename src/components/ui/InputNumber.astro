@@ -4,47 +4,37 @@ import { randomUUID } from 'node:crypto'
 
 interface Props {
   id?: string
-  min?: number
-  max?: number
   value?: number
-  kind?: string
+  [key: string]: any
 }
 
-const { id, min = 1, max = 10, value = 1, kind } = Astro.props
-const inputId = id ?? `quantity-input-${randomUUID()}`
-const decrementButtonId = `${inputId}-decrement`
-const incrementButtonId = `${inputId}-increment`
+const { id, value = 1, ...rest } = Astro.props
+const quantityId = id ?? `quantity-input-${randomUUID()}`
+const decrementButtonId = `${quantityId}-decrement`
+const incrementButtonId = `${quantityId}-increment`
 ---
 
-<div
-  class="bg-secondary/30 rounded-base relative flex w-full min-w-[7.8rem] items-center shadow-xs sm:max-w-32"
->
+<div class="bg-secondary/30 rounded-base relative flex w-full items-center shadow-xs">
   <button
     type="button"
     id={decrementButtonId}
-    data-input-counter-decrement={inputId}
-    class="ring-offset-background text-foreground border-border/10 hover:bg-accent/80 hover:text-accent-foreground focus:ring-ring rounded-s-base box-border h-10 border px-3 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+    data-input-counter-decrement={quantityId}
+    class="ring-offset-background text-foreground border-border/10 hover:bg-accent/80 hover:text-accent-foreground focus:ring-ring rounded-s-base box-border h-10 border px-2 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+    @click="$store.cartStore.handleAddToCart({ id: id, quantity:  -1 })"
   >
     <Icon name="lucide:minus" size={16} />
   </button>
-  <input
-    type="text"
-    id={inputId}
-    data-input-counter
-    data-input-number-kind={kind}
-    aria-describedby="helper-text-explanation"
-    class="placeholder:text-foreground border-border/10 ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center"
-    placeholder="1"
-    data-input-counter-min={String(min)}
-    data-input-counter-max={String(max)}
-    value={String(value)}
-    required
-  />
+  <span
+    id={quantityId}
+    class="placeholder:text-foreground border-border/10 flex-1 ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center"
+    {...rest}>{value}</span
+  >
   <button
     type="button"
     id={incrementButtonId}
-    data-input-counter-increment={inputId}
-    class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-3 text-sm leading-5 transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold"
+    data-input-counter-increment={quantityId}
+    class="ring-offset-background text-foreground hover:text-accent-foreground border-border/10 hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border h-10 border px-2 text-sm leading-5 transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold"
+    @click="$store.cartStore.handleAddToCart({ id: id, quantity:  1 })"
   >
     <Icon name="lucide:plus" size={16} />
   </button>
