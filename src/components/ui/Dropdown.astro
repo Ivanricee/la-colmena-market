@@ -4,22 +4,24 @@ import Button from './Button.astro'
 interface Props {
   cantidad: number
 }
-const { cantidad } = Astro.props
+const { cantidad, ...rest } = Astro.props
 ---
 
 <div
   class="w-full"
   x-data="{
     open: false,
-    selected: 1,
+    internalSelected: 1,
     close() {
       this.open = false
       this.$refs.button.focus()
     }
   }"
   @keydown.escape.prevent.stop="close()"
+  x-modelable="internalSelected"
+  {...rest}
 >
-  <input type="hidden" name="cantidad" x-model="selected" />
+  <input type="hidden" name="cantidad" />
   <Button
     variant="default"
     x-ref="button"
@@ -36,7 +38,7 @@ const { cantidad } = Astro.props
     type="button"
   >
     Cantidad {` `}
-    <span class="px-1 pr-2" x-text="selected"></span>
+    <span class="px-1 pr-2" x-text="internalSelected"></span>
     <Icon
       :class="open ? 'rotate-180' : 'rotate-0'"
       class="transition-transform duration-300"
@@ -64,7 +66,7 @@ const { cantidad } = Astro.props
           <li class="hover:bg-secondary/70 text-muted-foreground transition-colors duration-300">
             <button
               type="button"
-              @click={`selected = ${i + 1}; close()`}
+              @click={`internalSelected = ${i + 1}; close()`}
               class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
             >
               Cantidad: {i + 1}

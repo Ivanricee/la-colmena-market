@@ -26,7 +26,7 @@ const { id, title, price, image } = product
 <Layout {title}>
   <!-- drawer init and toggle -->
   <Drawer>
-    <span x-data slot="headerDrawer" x-text="$store.cartStore.data.total"></span>
+    <span x-data slot="headerDrawer" x-text="$store.cartStore?.data?.total ?? ''"></span>
     <CardDrawerItems slot="vertical" />
   </Drawer>
   <Card
@@ -78,23 +78,23 @@ const { id, title, price, image } = product
           <form
             id="product-form"
             class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8"
+            x-data={`{
+              selected:1,
+              itemData: ${JSON.stringify(product)}
+            }`}
             data-id={id}
             data-title={title}
             data-price={price}
             data-imagepublicid={image?.[0].public_id ?? ''}
             data-imageversion={image?.[0].version ?? ''}
           >
-            {
-              //<InputNumber id={product.id} />
-            }
-            <Dropdown cantidad={5} />
+            <Dropdown cantidad={5} x-model="selected" />
             <Button
               id="cart-add-button"
               className="w-full rounded-md inline-flex md:px-2"
               type="button"
               aria-controls="drawer-swipe-desktop"
-              x-data
-              @click="$dispatch('open-cart')"
+              @click="$dispatch('open-cart'); $store.cartStore.handleAddToCart({...itemData, quantity: selected})"
             >
               <Icon name="lucide:shopping-cart" size={17} />
               <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
@@ -109,37 +109,3 @@ const { id, title, price, image } = product
     </main>
   </Card>
 </Layout>
-<script>
-  import { addItem } from '../../../store/cartStore.ts'
-  const getImg = (publicid: string, version: string): string => {
-    const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_100/v${version}/${publicid}.webp`
-    return url
-  }
-  const formEl = document.getElementById('product-form') as HTMLFormElement
-
-  //botones que abren el drawer
-  const buyButton = document.getElementById('cart-add-button')
-
-  const handleAddToCart = () => {
-    const { id, title, price, imagepublicid, imageversion } = formEl.dataset
-    console.log({ imagepublicid, imageversion })
-
-    const formData = new FormData(formEl)
-    const quantity = Number(formData.get('cantidad')) || 1
-    console.log(quantity)
-    addItem({
-      id: id ?? '',
-      item: {
-        title: title ?? '',
-        price: Number(price ?? 0),
-        imgUrl: getImg(imagepublicid ?? '', imageversion ?? ''),
-        quantity,
-      },
-      quantity,
-    })
-
-    console.log('Agregado con precisión')
-  }
-
-  buyButton?.addEventListener('click', handleAddToCart)
-</script>
