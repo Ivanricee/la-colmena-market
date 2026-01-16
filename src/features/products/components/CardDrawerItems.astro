@@ -1,4 +1,6 @@
 ---
+import InputNumber from '@/components/ui/InputNumber.astro'
+
 interface Props {
   slot: 'vertical' | 'horizontal'
 }
@@ -12,30 +14,27 @@ const { slot } = Astro.props
       '[&>li]:p-2 [&>li]:border [&>li]:rounded-md [&>li]:w-28 [&>li]:aspect-3/4 [&>li]:flex [&>li]:flex-col',
     ]}
   >
-    <template x-for="[id, product] in Object.entries($store.cartStore.data.items)" :key="id">
+    <template
+      x-for="[id, product] in Object.entries($store.cartStore?.data?.items ?? {})"
+      :key="id"
+    >
       <li>
-        <div class="flex-1 bg-teal-600/5">
-          <img x-bind:src="product.imgUrl" x-bind:alt="product.title" />
+        <div class="flex-1">
+          <img
+            x-bind:src="product.imgUrl"
+            x-bind:alt="product.title"
+            class="object-contain object-top h-20 w-full scale-125"
+          />
         </div>
-        <div class="h-4/12 bg-red-800/5"><span x-text="product.quantity"></span></div>
+        <div class="text-foreground text-sm font-semibold text-center w-full">
+          <label>$</label>
+          <label x-text="product.price"></label>
+          <label>.00</label>
+        </div>
+        <div class="h-4/12 bg-red-800/5">
+          <InputNumber x-text="product.quantity" :id="id" />
+        </div>
       </li>
     </template>
   </ul>
 </div>
-
-<script>
-  import { $cart } from '@/store/cartStore'
-  import Alpine from 'alpinejs'
-
-  document.addEventListener('alpine:init', () => {
-    Alpine.store('cartStore', {
-      data: $cart.get(),
-      init() {
-        $cart.subscribe((newProducto) => {
-          this.data = { ...newProducto }
-          console.log('nuevos items', this.data)
-        })
-      },
-    })
-  })
-</script>
