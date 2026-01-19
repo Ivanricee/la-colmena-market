@@ -17,5 +17,6 @@ declare module 'alpinejs' {
 interface CartStoreType {
   data: Cart
   handleAddToCart(product?: any): void
+  handleRemoveFromCart(id: string): void
   init(): void
 }

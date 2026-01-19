@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
-import { $cart, addItem } from '@/store/cartStore'
+import { $cart, addItem, removeItem } from '@/store/cartStore'
 import { Image, Product } from '@/features/products/products.model'
 
 export default function initClientUI(): void {
@@ -18,8 +18,8 @@ const addToCartStore = (product?: RawProduct) => {
   const { id, title, price, image, quantity } = product ?? {}
   const { version, public_id } = image?.[0] ?? {}
 
-  console.log({ version, public_id, id, title, price, image, quantity })
   //ad new product
+
   if (title || price || image) {
     addItem({
       id: id ?? '',
@@ -34,7 +34,7 @@ const addToCartStore = (product?: RawProduct) => {
     return
   }
   //increment | decrement
-  addItem({ id: '', quantity })
+  addItem({ id: id ?? '', quantity: quantity ?? 1 })
 }
 
 const setupAlpineCartStore = () => {
@@ -43,6 +43,9 @@ const setupAlpineCartStore = () => {
       data: $cart.get(),
       handleAddToCart(product?: RawProduct) {
         addToCartStore(product)
+      },
+      handleRemoveFromCart(id: string) {
+        removeItem(id)
       },
       init() {
         $cart.subscribe((newProducto) => {
