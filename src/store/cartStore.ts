@@ -54,11 +54,12 @@ export function addItem({ id, item, quantity }: AddItemType) {
 export function removeItem(id: string) {
   const cart = $cart.get()
   const updatedItems = { ...cart.items }
+  const deletedItem = updatedItems[id]
+  if (!deletedItem) return
   delete updatedItems[id]
-  const total = Object.values(cart.total).reduce((sum, item) => sum + item.price * item.quantity, 0)
   $cart.set({
     items: updatedItems,
-    total,
+    total: cart.total - deletedItem.price * deletedItem.quantity,
   })
 }
 export function clearCart() {
