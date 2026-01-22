@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components'
+import Button from './Button.astro'
 ---
 
 <div
@@ -7,7 +8,7 @@ import { Icon } from 'astro-icon/components'
     open: open,
     toggle() { this.open = !this.open }
   }"
-  @open-cart.window="open = true"
+  @open-cart.window="open = false"
   class="relative"
 >
   <div
@@ -19,16 +20,32 @@ import { Icon } from 'astro-icon/components'
     :class="open ? 'translate-x-0' : '-translate-x-full'"
   >
     <!-- drawer header -->
-    <div class="p-4 border-border border-b shrink-0">
-      <div class="flex items-center">
-        <p class="text-heading text-lg font-semibold flex flex-col w-full items-center">
-          <span>Subtotal</span>
-          <slot name="headerDrawer" />
-        </p>
-      </div>
+    <div class="p-4 border-border border-b flex flex-col gap-3 items-center">
+      <h5
+        class:list={[
+          'group-hover:text-foreground inline-flex',
+          'items-center gap-2 text-sm font-medium transition-colors',
+        ]}
+      >
+        <Icon name="lucide:shopping-cart" size={15} />
+        <span
+          x-text="'Tu Carrito (' + Object.entries($store.cartStore?.data?.items ?? {}).length+')'"
+        ></span>
+      </h5>
+
+      <Button
+        href="/cart"
+        className="w-full rounded-sm py-[0.3rem] px-[0.25rem] text-xs"
+        x-show="open"
+      >
+        <span
+          x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+        ></span>
+        <Icon name="lucide:arrow-right" size={15} />
+      </Button>
     </div>
     <!-- drawer body scrolleable -->
-    <div class="flex-1 overflow-y-auto box-border min-h-0">
+    <div class="flex-1 overflow-y-auto overflow-x-hidden box-border min-h-0 flex justify-center">
       <slot name="vertical" />
     </div>
     <!-- drawer desktop Tab -->
@@ -52,14 +69,17 @@ import { Icon } from 'astro-icon/components'
       'bg-card border-border rounded-t-base fixed right-0 bottom-0 left-0 z-50 w-full',
       'border-t transition-transform duration-300 md:hidden flex flex-col max-h-dvh',
     ]}
-    :style="open ? 'transform: translateY(0)' : 'transform: translateY(calc(100% - 60px))'"
-    style="transform: translateY(calc(100% - 60px))"
+    :style="open ? 'transform: translateY(0)' : 'transform: translateY(calc(100% - 58px))'"
+    style="transform: translateY(calc(100% - 58px))"
   >
     <!-- drawer mobile Tab -->
     <div
-      class="group bg-card shrink-0 cursor-pointer border-b border-transparent p-4"
+      class:list={[
+        'group bg-card shrink-0 text-xs cursor-pointer border-b mt-2',
+        'border-transparent p-4 flex flex-nowrap justify-between text-foreground/80',
+      ]}
       :class="open ? 'border-border' : ''"
-      @click="toggle()"
+      x-on:click="toggle()"
     >
       <span
         class:list={[
@@ -68,17 +88,28 @@ import { Icon } from 'astro-icon/components'
         ]}></span>
       <h5
         class:list={[
-          'text-foreground/50 group-hover:text-foreground inline-flex',
-          'items-center gap-2 text-base font-medium transition-colors',
+          'group-hover:text-foreground inline-flex',
+          'items-center gap-2 text-xs font-medium transition-colors',
         ]}
       >
-        <Icon name="lucide:shopping-cart" size={17} />
-        <span>Ver Carrito</span>
-        <slot name="headerDrawer" />
+        <Icon name="lucide:shopping-cart" size={15} />
+        <span
+          x-text="'Tu Carrito (' + Object.entries($store.cartStore?.data?.items ?? {}).length+')'"
+        ></span>
       </h5>
+      <span
+        x-show="!open"
+        x-text="'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+        class="group-hover:text-foreground"></span>
+      <Button href="/cart" className="w-fit rounded-sm py-[0.3rem] text-xs" x-show="open">
+        <span
+          x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+        ></span>
+        <Icon name="lucide:arrow-right" size={15} />
+      </Button>
     </div>
     <!-- drawer body scrolleable -->
-    <div class="flex-1 overflow-y-auto box-border flex gap-3 p-4 min-h-0">
+    <div class="flex-1 overflow-y-auto box-border min-h-0">
       <slot name="horizontal" />
     </div>
   </div>
