@@ -14,27 +14,59 @@ const decrementButtonId = `${quantityId}-decrement`
 const incrementButtonId = `${quantityId}-increment`
 ---
 
-<div class="bg-secondary/30 rounded-base relative flex w-full items-center shadow-xs">
+<div
+  class:list={[
+    'md:h-full md:rounded-t-none md:rounded-b-sm',
+    'bg-secondary/30 relative flex w-full items-center shadow-xs  h-16 rounded-sm',
+  ]}
+>
   <button
     type="button"
     id={decrementButtonId}
-    data-input-counter-decrement={quantityId}
+    x-on:click="product.quantity > 1
+      ? $store.cartStore.handleAddToCart({ id: id, quantity: -1 })
+      : $store.cartStore.handleRemoveFromCart(id)"
     class:list={[
-      'ring-offset-background text-foreground border-border/10 hover:bg-accent/80',
-      'hover:text-accent-foreground focus:ring-ring rounded-s-base box-border h-10 border px-2',
-      'text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none ',
+      'ring-offset-background text-foreground border-border/10 hover:bg-accent/80 h-full w-10 md:w-auto ',
+      'flex justify-center items-center hover:text-accent-foreground focus:ring-ring rounded-s-base ',
+      'box-border h-10 border px-2 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none',
       'disabled:pointer-events-none disabled:opacity-50',
     ]}
-    @click={`product.quantity > 1
-      ? $store.cartStore.handleAddToCart({ id: id, quantity:  -1 })
-      : $store.cartStore.handleRemoveFromCart(id)`}
   >
-    <Icon x-show="product.quantity === 1" name="lucide:trash" size={16} />
-    <Icon x-show="product.quantity > 1" name="lucide:minus" size={16} />
+    <div class="relative flex h-4 w-4 items-center justify-center">
+      <div
+        x-show="product.quantity === 1"
+        x-transition:enter="transition ease-out duration-150 delay-75"
+        x-transition:enter-start="opacity-0 scale-y-90"
+        x-transition:enter-end="opacity-100 scale-y-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="opacity-100 scale-y-100"
+        x-transition:leave-end="opacity-0 scale-y-90"
+        class="absolute"
+      >
+        <Icon name="lucide:trash" size={16} />
+      </div>
+
+      <div
+        x-show="product.quantity > 1"
+        x-transition:enter="transition ease-out duration-150 delay-75"
+        x-transition:enter-start="opacity-0 scale-y-90"
+        x-transition:enter-end="opacity-100 scale-y-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="opacity-100 scale-y-100"
+        x-transition:leave-end="opacity-0 scale-y-90"
+        class="absolute"
+      >
+        <Icon name="lucide:minus" size={16} />
+      </div>
+    </div>
   </button>
   <span
     id={quantityId}
-    class="placeholder:text-foreground border-border/10 flex-1 ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center"
+    class:list={[
+      'placeholder:text-foreground border-border/10 flex-1 flex items-center justify-center',
+      'ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center',
+    ]}
     x-text="product.quantity"
     {...rest}>{value}</span
   >
@@ -43,10 +75,10 @@ const incrementButtonId = `${quantityId}-increment`
     id={incrementButtonId}
     data-input-counter-increment={quantityId}
     class:list={[
-      'ring-offset-background text-foreground hover:text-accent-foreground border-border/10',
-      'hover:bg-accent/80 focus:ring-ring rounded-e-base aria-expanded:text-accent-foreground box-border',
-      'h-10 border px-2 text-sm leading-5 transition-colors focus:ring-4 focus:outline-none',
-      'disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold',
+      'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
+      'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',
+      'aria-expanded:text-accent-foreground box-borderh-10 border px-2 text-sm leading-5 ',
+      'transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold',
     ]}
     @click="$store.cartStore.handleAddToCart({ id: id, quantity:  1 })"
   >
