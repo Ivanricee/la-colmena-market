@@ -2,7 +2,7 @@ type htmlString = {
   html: string
 }
 type ProductStatus = 'active' | 'inactive' | 'out_of_stock'
-type Category = {
+export type Category = {
   slug: string
   id: string
 }
