@@ -1,37 +1,70 @@
 ---
 import InputNumber from '@/components/ui/InputNumber.astro'
+import Button from '@/components/ui/Button.astro'
 
 interface Props {
   slot: 'vertical' | 'horizontal'
 }
 const { slot } = Astro.props
+const direction = slot === 'horizontal' ? 'row' : 'column'
 ---
 
-<div x-data>
+<div x-data class="w-fit">
   <ul
     class:list={[
-      'flex flex-col gap-4 w-full items-center p-4',
-      '[&>li]:p-2 [&>li]:border [&>li]:rounded-md [&>li]:w-28 [&>li]:aspect-3/4 [&>li]:flex [&>li]:flex-col',
+      'flex gap-4 w-full items-center px-4 pt-0 md:pt-4 pb-6 [&>li]:p-2 [&>li]:border [&>li]:rounded-md [&>li]:flex',
+      'md:[&>li]:w-28 md:[&>li]:h-auto md:[&>li]:aspect-3/4 md:[&>li]:flex-col',
+      '[&>li]:flex-row [&>li]:aspect-video [&>li]:w-auto [&>li]:h-28',
+      `${direction === 'row' ? 'flex-row' : 'flex-col'}`,
     ]}
   >
     <template
       x-for="[id, product] in Object.entries($store.cartStore?.data?.items ?? {})"
       :key="id"
     >
-      <li>
-        <div class="flex-1">
-          <img
-            x-bind:src="product.imgUrl"
-            x-bind:alt="product.title"
-            class="object-contain object-top h-20 w-full scale-125"
-          />
-        </div>
-        <div class="text-foreground text-sm font-semibold text-center w-full">
-          <label>$</label>
-          <label x-text="product.price"></label>
-          <label>.00</label>
-        </div>
-        <div class="h-4/12 bg-red-800/5">
+      <li class="md:block flex gap-1.5">
+        <a
+          class="transition-colors duration-300 ease-in-out cursor-pointer hover:bg-secondary/30 rounded-t-sm"
+          x-bind:href="`/product/${product.categoryId?.slug || 'uncategorized'}/${id}`"
+        >
+          <div class="flex-1 rounded-t-sm h-full">
+            <img
+              width="50"
+              height="50"
+              x-bind:src="product.imgUrl"
+              x-bind:alt="product.title"
+              class:list={[
+                'object-contain md:object-top md:h-14 md:w-full md:scale-125 mb:0',
+                'h-full w-16 object-center mb-1 scale-[120%]',
+              ]}
+            />
+            <div class="hidden md:block text-foreground text-sm text-center w-full">
+              <span
+                class="transition-colors duration-300 ease-in-out cursor-pointer text-xs line-clamp-1"
+                x-text="product.title"
+              >
+              </span>
+              <span
+                class="font-semibold text-xs text-honey-medium line-clamp-1 pb-0.5"
+                x-text="'$' + Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+              ></span>
+            </div>
+          </div>
+        </a>
+        <div class:list={['md:h-9  md:w-auto ', 'w-[62%] flex flex-col']}>
+          <div class:list={['md:hidden', 'flex flex-col gap-0.5 text-sm flex-1']}>
+            <a
+              class="transition-colors duration-300 ease-in-out cursor-pointer text-xs line-clamp-1 underline"
+              x-bind:href="`/product/${product.categoryId?.slug || 'uncategorized'}/${id}`"
+              x-text="product.title"
+            >
+            </a>
+            <div class="md:hidden block text-honey-medium font-semibold w-full mb-1.5 text-xs">
+              <span
+                x-text="'$' + Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+              ></span>
+            </div>
+          </div>
           <InputNumber x-text="product.quantity" :id="id" />
         </div>
       </li>
