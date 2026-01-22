@@ -23,17 +23,16 @@ const { cantidad, ...rest } = Astro.props
 >
   <input type="hidden" name="cantidad" />
   <Button
-    variant="default"
+    variant="secondary"
     x-ref="button"
     @click="open = !open"
     @click.outside="open = false"
     :aria-expanded="open"
     aria-haspopup="true"
     class:list={[
-      'bg-secondary/25 hover:bg-secondary/70 hover:text-foreground focus:ring-ring/40 rounded-md',
+      'hover:bg-secondary/70 hover:text-foreground focus:ring-ring/40 rounded-md',
       'text-foreground border-border/25 box-border inline-flex h-full w-full items-center justify-center border',
       'px-2 py-2.5 text-sm leading-5 font-semibold shadow-none transition-colors duration-300 focus:ring-2 focus:outline-none',
-      '',
     ]}
     type="button"
   >
