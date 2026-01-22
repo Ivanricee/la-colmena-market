@@ -15,7 +15,7 @@ interface RawProduct extends Product {
   quantity: number
 }
 const addToCartStore = (product?: RawProduct) => {
-  const { id, title, price, image, quantity } = product ?? {}
+  const { id, title, price, image, quantity, categoryid } = product ?? {}
   const { version, public_id } = image?.[0] ?? {}
 
   //ad new product
@@ -28,6 +28,7 @@ const addToCartStore = (product?: RawProduct) => {
         price: Number(price ?? 0),
         imgUrl: `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_100/v${version}/${public_id}.webp`,
         quantity: quantity ?? 1,
+        categoryId: categoryid ?? { slug: '', id: '' },
       },
       quantity,
     })
