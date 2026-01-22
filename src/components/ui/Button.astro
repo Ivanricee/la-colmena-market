@@ -3,33 +3,46 @@ type ButtonVariant = 'default' | 'secondary' | 'success' | 'danger' | 'warning' 
 
 interface Props {
   variant?: ButtonVariant
+  href?: string
+  target?: string
   className?: string
   [key: string]: any
 }
 
-const { variant = 'default', className = '', ...props } = Astro.props
+const { variant = 'default', href, target, className = '', ...props } = Astro.props
+const hasAlpineHref = props['x-bind:href'] || props[':href']
+const Wrapper = href || hasAlpineHref ? 'a' : 'button'
+const wrapperProps = href || hasAlpineHref ? { href, target } : { type: 'button' }
+
 const buttonClass: Record<ButtonVariant, string> = {
   default:
-    'bg-primary hover:bg-primary/90 focus:ring-honey-dark rounded-base border border-transparent px-4 py-2.5 text-sm leading-5 text-secondary hover:shadow-honey-medium/20',
+    'bg-primary hover:bg-primary/90 focus:ring-honey-dark rounded-base border border-transparent text-sm leading-5 text-secondary hover:shadow-honey-medium/20',
   secondary:
-    'text-body bg-transparent border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary rounded-base  border px-4 py-2.5 text-sm leading-5 font-semibold   ',
+    'text-body bg-secondary/25  border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary rounded-base  border text-sm leading-5 font-semibold   ',
   success:
-    'bg-success hover:bg-success-strong focus:ring-success-medium rounded-base border border-transparent px-4 py-2.5 text-sm leading-5 text-white  ',
+    'bg-success hover:bg-success-strong focus:ring-success-medium rounded-base border border-transparent text-sm leading-5 text-white  ',
   danger:
-    'bg-danger hover:bg-danger-strong focus:ring-danger-medium rounded-base border border-transparent px-4 py-2.5 text-sm leading-5 text-white  ',
+    'bg-danger hover:bg-danger-strong focus:ring-danger-medium rounded-base border border-transparent text-sm leading-5 text-white  ',
   warning:
-    'bg-warning hover:bg-warning-strong focus:ring-warning-medium rounded-base border border-transparent px-4 py-2.5 text-sm leading-5 text-white  ',
-  dark: 'bg-dark hover:bg-dark-strong focus:ring-neutral-tertiary rounded-base border border-transparent px-4 py-2.5 text-sm leading-5  text-white ocus:ring-4 ',
+    'bg-warning hover:bg-warning-strong focus:ring-warning-medium rounded-base border border-transparent text-sm leading-5 text-white  ',
+  dark: 'bg-dark hover:bg-dark-strong focus:ring-neutral-tertiary rounded-base border border-transparent text-sm leading-5  text-white ocus:ring-4 ',
   ghost:
-    'text-heading hover:bg-transparent focus:ring-neutral-tertiary rounded-base  border border-transparent bg-transparent px-4 py-2.5 text-sm leading-5  ',
+    'text-heading hover:bg-transparent focus:ring-neutral-tertiary rounded-base  border border-transparent bg-transparent text-sm leading-5  ',
 }
 const variantClass = buttonClass[variant]
 ---
 
-<button
+<Wrapper
+  {...wrapperProps}
   {...props}
   type="button"
-  class={`${variantClass} transition-all duration-300 gap-2 px-3 py-2 text-sm justify-center font-semibold flex flex-nowrap items-center hover:shadow-lg ${className}`}
+  class:list={[
+    `${variantClass}`,
+    'transition-all duration-300 gap-2  text-sm justify-center',
+    'font-semibold flex flex-nowrap items-center hover:shadow-lg',
+    'px-3 py-2',
+    `${className}`,
+  ]}
 >
   <slot />
-</button>
+</Wrapper>
