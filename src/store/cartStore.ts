@@ -1,4 +1,5 @@
 //import { map } from 'nanostores'
+import { Category } from '@/features/products/products.model'
 import { persistentMap } from '@nanostores/persistent'
 //types
 export type CartItem = {
@@ -6,6 +7,7 @@ export type CartItem = {
   price: number
   quantity: number
   imgUrl: string
+  categoryId: Category
 }
 interface Cart {
   items: Record<string, CartItem>
@@ -25,6 +27,7 @@ type AddItemType = {
   id: string
   item?: CartItem
   quantity?: number
+  categoryId?: Category
 }
 export function addItem({ id, item, quantity }: AddItemType) {
   const cart = $cart.get()
