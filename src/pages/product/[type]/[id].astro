@@ -26,8 +26,8 @@ const { id, title, price, image } = product
 <Layout {title}>
   <!-- drawer init and toggle -->
   <Drawer>
-    <span x-data slot="headerDrawer" x-text="$store.cartStore?.data?.total ?? ''"></span>
     <CardDrawerItems slot="vertical" />
+    <CardDrawerItems slot="horizontal" />
   </Drawer>
   <Card
     class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl"
