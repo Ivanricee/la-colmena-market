@@ -11,6 +11,9 @@ importers:
       '@alpinejs/collapse':
         specifier: ^3.15.3
         version: 3.15.3
+      '@alpinejs/intersect':
+        specifier: ^3.15.4
+        version: 3.15.4
       '@astrojs/alpinejs':
         specifier: ^0.4.9
         version: 0.4.9(@types/alpinejs@3.13.11)(alpinejs@3.15.3)
@@ -83,6 +86,9 @@ packages:
 
   '@alpinejs/collapse@3.15.3':
     resolution: {integrity: sha512-nheS20BsFY1Eh1nyW0YNs7RMOiO/LipCTltEplbWunTcgdCeZtD7YPUim5xtbhc+0nJP4SkR7G0axRXaRf4m1g==}
+
+  '@alpinejs/intersect@3.15.4':
+    resolution: {integrity: sha512-BbhyRN/x1rvJZxb67pfqpEQblfBNhHr/j0rksCAx/b/ibMTyaRyRUv0COo41OKSMEsRVwI6/FZYChZ43zJkYLg==}
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
@@ -3086,6 +3092,8 @@ packages:
 snapshots:
 
   '@alpinejs/collapse@3.15.3': {}
+
+  '@alpinejs/intersect@3.15.4': {}
 
   '@antfu/install-pkg@1.1.0':
     dependencies:

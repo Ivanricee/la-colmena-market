@@ -1,11 +1,13 @@
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
+import intersect from '@alpinejs/intersect'
 import { $cart, addItem, removeItem } from '@/store/cartStore'
 import { Image, Product } from '@/features/products/products.model'
 
 export default function initClientUI(): void {
   if (!window.AlpineInstance) {
     Alpine.plugin(collapse)
+    Alpine.plugin(intersect)
     setupAlpineCartStore()
     window.AlpineInstance = Alpine
   }
