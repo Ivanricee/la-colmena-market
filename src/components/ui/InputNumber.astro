@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 import { randomUUID } from 'node:crypto'
+import Tooltip from './Tooltip.astro'
 
 interface Props {
   id?: string
@@ -9,12 +10,23 @@ interface Props {
 }
 
 const { id, value = 1, ...rest } = Astro.props
-const quantityId = id ?? `quantity-input-${randomUUID()}`
-const decrementButtonId = `${quantityId}-decrement`
-const incrementButtonId = `${quantityId}-increment`
+//randomUUID()
 ---
 
 <div
+  x-data="{
+    get quantityId() { return `quantity-${id}` },
+    get decBtnId() { return `dec-${id}` },
+    get incBtnId() { return `inc-${id}` },
+    state: { show: false },
+    anchorRef: null
+  }"
+  x-init="anchorRef = $refs.container"
+  x-ref="container"
+  :id="'container-' + id"
+  :aria-describedby="'tooltip-content-' + id"
+  @mouseenter="state.show = true"
+  @mouseleave="state.show = false"
   class:list={[
     'md:h-full md:rounded-t-none md:rounded-b-sm',
     'bg-secondary/30 relative flex w-full items-center shadow-xs  h-16 rounded-sm',
@@ -22,7 +34,7 @@ const incrementButtonId = `${quantityId}-increment`
 >
   <button
     type="button"
-    id={decrementButtonId}
+    :id="decBtnId"
     x-on:click="product.quantity > 1
       ? $store.cartStore.handleAddToCart({ id: id, quantity: -1 })
       : $store.cartStore.handleRemoveFromCart(id)"
@@ -62,18 +74,16 @@ const incrementButtonId = `${quantityId}-increment`
     </div>
   </button>
   <span
-    id={quantityId}
+    :id="quantityId"
     class:list={[
       'placeholder:text-foreground border-border/10 flex-1 flex items-center justify-center',
       'ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center',
     ]}
-    x-text="product.quantity"
-    {...rest}>{value}</span
+    x-text="product.quantity">{value}</span
   >
   <button
     type="button"
-    id={incrementButtonId}
-    data-input-counter-increment={quantityId}
+    :id="incBtnId"
     class:list={[
       'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
       'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',
@@ -84,4 +94,5 @@ const incrementButtonId = `${quantityId}-increment`
   >
     <Icon name="lucide:plus" size={16} />
   </button>
+  <Tooltip content="¡Funciona sin saltos!" position="top" />
 </div>
