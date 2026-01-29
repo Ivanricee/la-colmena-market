@@ -1,6 +1,5 @@
 ---
 import InputNumber from '@/components/ui/InputNumber.astro'
-import Button from '@/components/ui/Button.astro'
 
 interface Props {
   slot: 'vertical' | 'horizontal'
@@ -22,7 +21,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
       x-for="[id, product] in Object.entries($store.cartStore?.data?.items ?? {})"
       :key="id"
     >
-      <li class="md:block flex gap-1.5">
+      <li class="md:block flex gap-1.5 relative">
         <a
           class="transition-colors duration-300 ease-in-out cursor-pointer hover:bg-secondary/30 rounded-t-sm"
           x-bind:href="`/product/${product.categoryId?.slug || 'uncategorized'}/${id}`"
@@ -65,7 +64,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
               ></span>
             </div>
           </div>
-          <InputNumber x-text="product.quantity" :id="id" />
+          <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
         </div>
       </li>
     </template>
