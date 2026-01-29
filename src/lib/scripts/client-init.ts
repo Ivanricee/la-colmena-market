@@ -1,14 +1,17 @@
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
 import intersect from '@alpinejs/intersect'
+import anchor from '@alpinejs/anchor'
 import { $cart, addItem, removeItem } from '@/store/cartStore'
-import { Image, Product } from '@/features/products/products.model'
+import { Product } from '@/features/products/products.model'
 
 export default function initClientUI(): void {
   if (!window.AlpineInstance) {
     Alpine.plugin(collapse)
     Alpine.plugin(intersect)
+    Alpine.plugin(anchor)
     setupAlpineCartStore()
+    setupCatalogHandler()
     window.AlpineInstance = Alpine
   }
 }
@@ -20,7 +23,7 @@ const addToCartStore = (product?: RawProduct) => {
   const { id, title, price, image, quantity, categoryid } = product ?? {}
   const { version, public_id } = image?.[0] ?? {}
 
-  //ad new product
+  //add new product
 
   if (title || price || image) {
     addItem({
@@ -57,4 +60,20 @@ const setupAlpineCartStore = () => {
       },
     })
   }
+}
+
+const setupCatalogHandler = () => {
+  Alpine.data('catalogHandler', (totalCount: number) => ({
+    limit: 12,
+    search: '',
+    totalCount,
+    shouldShow(index: number, title: string) {
+      const matchesSearch = title.toLowerCase().includes(this.search.toLowerCase())
+      const isWithinLimit = index < this.limit
+      return matchesSearch && isWithinLimit
+    },
+    loadMore() {
+      this.limit += 12
+    },
+  }))
 }

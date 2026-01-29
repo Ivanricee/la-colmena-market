@@ -23,69 +23,85 @@ const getImg = (image: Image) => {
       <p>{errorMessage}</p>
     </section>
   ) : (
-    <section>
+    <section x-data={`catalogHandler(${productos.length})`}>
       <h1>Productos</h1>
+      <input type="text" x-model="search" placeholder="Buscar..." />
       <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {productos.map((product) => (
-          <li class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
-            <Card
-              href={`/product/${product.categoryid?.slug || 'uncategorized'}/${product.id}`}
-              class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
-            >
-              <div class="h-full flex-1">
-                <div class="h-7/12 w-full">
-                  <div class="relative h-full">
-                    <div class="bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12" />
-                    <div class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700" />
-                    <img
-                      class:list={[
-                        'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3',
-                        'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
-                      ]}
-                      src={getImg(product.image[0])}
-                      alt={product.title}
-                    />
-                  </div>
-                </div>
-                <div class="flex h-5/12 flex-col justify-between overflow-hidden leading-normal">
-                  <div>
-                    <div class="mt-5 mb-2">
-                      <Tags tags={product.tags} />
-                    </div>
-                    <h4 class="text-foreground mb-2 line-clamp-1 text-lg font-semibold">
-                      {product.title}
-                    </h4>
-                    <div
-                      class="text-muted-foreground line-clamp-2 text-sm text-pretty @sm:text-balance"
-                      set:html={product.description.html}
-                    />
-                  </div>
-                  <div class="flex flex-nowrap items-center justify-between">
-                    <p class="flex items-baseline gap-2">
-                      <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-2xl font-bold text-transparent">
-                        ${product.price}
-                      </span>
-                      {product.previousPrice && (
-                        <span class="text-muted-foreground text-sm line-through">
-                          ${product.previousPrice}
-                        </span>
-                      )}
-                    </p>
-                    <div class="group-hover:shadow-honey-medium/20 group-hover:bg-primary/90 bg-primary text-secondary flex flex-nowrap items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all duration-500 group-hover:shadow-lg">
-                      <Icon
-                        name="lucide:shopping-bag"
-                        size={20}
-                        class="transition-[scale] duration-300 group-hover:scale-110"
+        {productos.map((product, index) => (
+          <li
+            x-show={`shouldShow(${index}, '${product.title.replace(/'/g, '')}')`}
+            x-transition:enter="transition ease-in-out duration-200"
+            x-transition:enter-start="opacity-5 transform scale-95"
+            x-transition:enter-end="opacity-100 transform scale-100"
+            x-transition:leave="transition ease-in-out duration-200"
+            x-transition:leave-start="opacity-100 transform scale-100"
+            x-transition:leave-end="opacity-5 transform scale-95"
+          >
+            <div class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
+              <Card
+                href={`/product/${product.categoryid?.slug || 'uncategorized'}/${product.id}`}
+                data-astro-prefetch
+                class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
+              >
+                <div class="h-full flex-1">
+                  <div class="h-7/12 w-full">
+                    <div class="relative h-full">
+                      <div class="bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0 -top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12" />
+
+                      <div class="bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0 bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700" />
+                      <img
+                        class:list={[
+                          'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3',
+                          'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
+                        ]}
+                        src={getImg(product.image[0])}
+                        alt={product.title}
                       />
-                      <p>¡Lo quiero!</p>
+                    </div>
+                  </div>
+                  <div class="flex h-5/12 flex-col justify-between overflow-hidden leading-normal">
+                    <div>
+                      <div class="mt-5 mb-2">
+                        <Tags tags={product.tags} />
+                      </div>
+                      <h4 class="text-foreground mb-2 line-clamp-1 text-lg font-semibold">
+                        {product.title}
+                      </h4>
+                      <div
+                        class="text-muted-foreground line-clamp-2 text-sm text-pretty @sm:text-balance"
+                        set:html={product.description.html}
+                      />
+                    </div>
+                    <div class="flex flex-nowrap items-center justify-between">
+                      <p class="flex items-baseline gap-2">
+                        <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-2xl font-bold text-transparent">
+                          ${product.price}
+                        </span>
+                        {product.previousPrice && (
+                          <span class="text-muted-foreground text-sm line-through">
+                            ${product.previousPrice}
+                          </span>
+                        )}
+                      </p>
+                      <div class="group-hover:shadow-honey-medium/20 group-hover:bg-primary/90 bg-primary text-secondary flex flex-nowrap items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all duration-500 group-hover:shadow-lg">
+                        <Icon
+                          name="lucide:shopping-bag"
+                          size={20}
+                          class="transition-[scale] duration-300 group-hover:scale-110"
+                        />
+                        <p>¡Lo quiero!</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </div>
           </li>
         ))}
       </ul>
+      <div x-show="limit < totalCount" class="flex justify-center w-full" x-intersect="loadMore()">
+        Cargando mas...
+      </div>
     </section>
   )
 }
