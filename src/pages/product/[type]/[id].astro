@@ -11,6 +11,7 @@ import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
 import CardDrawerItems from '@/features/products/components/CardDrawerItems.astro'
+import Tooltip from '@/components/ui/Tooltip.astro'
 export async function getStaticPaths() {
   const { productos, errorMessage } = await getProducts()
   return productos.map((product) => ({
@@ -19,7 +20,7 @@ export async function getStaticPaths() {
   }))
 }
 const { product } = Astro.props
-const { id, title, price, image } = product
+const { id, title } = product
 ---
 
 <Layout {title}>
@@ -75,30 +76,59 @@ const { id, title, price, image } = product
           </p>
 
           <form
-            id="product-form"
-            class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8"
+            @clean-quantity.window="state.disableIncreament = false; state.show = false;"
             x-data={`{
               selected:1,
-              itemData: ${JSON.stringify(product)}
+              itemData: ${JSON.stringify(product)},
+              state: {
+                show: false,
+                disableIncreament: false,
+              },
+              anchorRef: null,
+              addToCart() {
+                $dispatch('open-cart');
+                if(this.validateQuantity(this.selected)) return
+                $store.cartStore.handleAddToCart({...this.itemData, quantity: this.selected});
+              },
+              validateQuantity(selected) {
+                const isInCart = $store.cartStore.data.items['${id}']
+                const isValid = (isInCart.quantity ?? 0) + selected <= (isInCart.purchaseLimit ?? 10)
+                if (!isValid) {
+                  this.state.disableIncreament = true;
+                  this.state.show = true;
+                  return true
+                }
+                this.state.disableIncreament = false;
+                this.state.show = false;
+              }
             }`}
-            data-id={id}
-            data-title={title}
-            data-price={price}
-            data-imagepublicid={image?.[0].public_id ?? ''}
-            data-imageversion={image?.[0].version ?? ''}
+            class="my-6 flex flex-col gap-6 sm:flex-row sm:flex-nowrap md:my-8"
+            x-init="anchorRef = $refs.container"
+            x-ref="container"
+            :id={`'container-${id}'`}
+            :aria-describedby={`'tooltip-content-${id}'`}
           >
-            <Dropdown cantidad={5} x-model="selected" />
+            <Dropdown
+              cantidad={5}
+              x-model="selected"
+              @on-selected="validateQuantity($event.detail)"
+            />
+            <Tooltip
+              content={`Ya está en el carrito. Máx. ${product.purchaseLimit} unidades`}
+              position="top"
+            />
             <Button
+              @mouseleave="if (!state.disableIncreament) state.show = false"
               id="cart-add-button"
               className="w-full rounded-md inline-flex md:px-2"
               type="button"
               aria-controls="drawer-swipe-desktop"
-              @click="$dispatch('open-cart'); $store.cartStore.handleAddToCart({...itemData, quantity: selected})"
+              @click="addToCart"
             >
               <Icon name="lucide:shopping-cart" size={17} />
-              <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
-                >Agregar al carrito</span
-              >
+              <span
+                class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
+                x-text="state.disableIncreament ? 'Ir al carrito' : 'Agregar al carrito'"></span>
             </Button>
           </form>
         </div>
