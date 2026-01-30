@@ -19,6 +19,7 @@ export const getProducts = async (): Promise<productResponse> => {
           price
           previousPrice
           stock
+          purchaseLimit
           specifications {
             html
           }

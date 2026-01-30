@@ -1,6 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components'
-import { randomUUID } from 'node:crypto'
 import Tooltip from './Tooltip.astro'
 
 interface Props {
@@ -14,18 +13,12 @@ const { id, value = 1, ...rest } = Astro.props
 ---
 
 <div
-  x-data="{
-    get quantityId() { return `quantity-${id}` },
-    get decBtnId() { return `dec-${id}` },
-    get incBtnId() { return `inc-${id}` },
-    state: { show: false },
-    anchorRef: null
-  }"
+  x-data={`inputNumberHandler(id, product.purchaseLimit)`}
   x-init="anchorRef = $refs.container"
   x-ref="container"
   :id="'container-' + id"
   :aria-describedby="'tooltip-content-' + id"
-  @mouseenter="state.show = true"
+  @mouseenter="state.show = true && product.quantity >= product.purchaseLimit"
   @mouseleave="state.show = false"
   class:list={[
     'md:h-full md:rounded-t-none md:rounded-b-sm',
@@ -35,9 +28,7 @@ const { id, value = 1, ...rest } = Astro.props
   <button
     type="button"
     :id="decBtnId"
-    x-on:click="product.quantity > 1
-      ? $store.cartStore.handleAddToCart({ id: id, quantity: -1 })
-      : $store.cartStore.handleRemoveFromCart(id)"
+    x-on:click="decrease(product.quantity)"
     class:list={[
       'ring-offset-background text-foreground border-border/10 hover:bg-accent/80 h-full w-10 md:w-auto ',
       'flex justify-center items-center hover:text-accent-foreground focus:ring-ring rounded-s-base ',
@@ -79,20 +70,20 @@ const { id, value = 1, ...rest } = Astro.props
       'placeholder:text-foreground border-border/10 flex-1 flex items-center justify-center',
       'ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center',
     ]}
-    x-text="product.quantity">{value}</span
-  >
+    x-text="product.quantity"></span>
   <button
     type="button"
     :id="incBtnId"
+    x-bind:disabled="state.disableIncreament"
     class:list={[
       'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
       'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',
       'aria-expanded:text-accent-foreground box-borderh-10 border px-2 text-sm leading-5 ',
       'transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold',
     ]}
-    @click="$store.cartStore.handleAddToCart({ id: id, quantity:  1 })"
+    @click="increase(product.quantity)"
   >
     <Icon name="lucide:plus" size={16} />
   </button>
-  <Tooltip content="¡Funciona sin saltos!" position="top" />
+  <Tooltip content="Límite máximo alcanzado." position="top" />
 </div>

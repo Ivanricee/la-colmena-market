@@ -14,6 +14,7 @@ export interface Product {
   price: number
   previousPrice: number
   stock: number
+  purchaseLimit: number
   brand: string
   productStatus: ProductStatus
   featured: boolean
