@@ -15,13 +15,17 @@ const { cantidad, ...rest } = Astro.props
     close() {
       this.open = false
       this.$refs.button.focus()
-    }
+    },
+    onSelected(selected) {
+      this.close()
+      this.internalSelected = selected
+      this.$dispatch('on-selected', selected)
+    },
   }"
   @keydown.escape.prevent.stop="close()"
   x-modelable="internalSelected"
   {...rest}
 >
-  <input type="hidden" name="cantidad" />
   <Button
     variant="secondary"
     x-ref="button"
@@ -65,7 +69,7 @@ const { cantidad, ...rest } = Astro.props
           <li class="hover:bg-secondary/70 text-muted-foreground transition-colors duration-300">
             <button
               type="button"
-              @click={`internalSelected = ${i + 1}; close()`}
+              x-on:click={`onSelected(${i + 1})`}
               class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
             >
               Cantidad: {i + 1}
