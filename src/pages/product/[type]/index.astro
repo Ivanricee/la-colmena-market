@@ -13,12 +13,6 @@ const { category } = Astro.props
 const { slug, name, description } = category
 ---
 
-<ProductsLayout title={name}>
-  <header>
-    <h1>{name}</h1>
-    <p set:html={description.html} />
-  </header>
-  <main>
-    <Products />
-  </main>
+<ProductsLayout title={name} {description}>
+  <Products />
 </ProductsLayout>
