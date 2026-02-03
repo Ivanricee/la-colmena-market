@@ -2,6 +2,9 @@
 import { getCategories } from '@/features/categories/categories.api'
 import Layout from '../layouts/Layout.astro'
 import type { Category } from '@/features/categories/categories.api'
+import heroImage from '@/assets/hero-honey.jpg'
+import Button from '@/components/ui/Button.astro'
+import { Icon } from 'astro-icon/components'
 const { categories, errorMessage } = (await getCategories()) as {
   categories: Category[]
   errorMessage: string
@@ -16,12 +19,97 @@ const { categories, errorMessage } = (await getCategories()) as {
         <p>{errorMessage}</p>
       </section>
     ) : (
-      <section>
-        <h1>landing page</h1>
-        {categories.map((category) => (
-          <a href={`/product/${category.slug}`}>{category.name}</a>
-        ))}
-      </section>
+      <main>
+        {/* Hero Section */}
+        <section class="relative h-[600px] overflow-hidden">
+          <div class="absolute inset-0 bg-cover bg-center bg-[url('../assets/hero-honey.jpg')]">
+            <div class="absolute inset-0 bg-gradient-to-r from-background/95 to-background/60" />
+          </div>
+
+          <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+            <div class="max-w-2xl space-y-6">
+              <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
+                Miel Pura y{' '}
+                <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
+                  Artesanal
+                </span>
+              </h1>
+              <p class="text-xl text-muted-foreground">
+                Descubre nuestra selección de mieles premium, directamente de nuestras colmenas a tu
+                mesa. 100% natural, sin aditivos.
+              </p>
+              <div class="flex gap-4">
+                <a href="/catalogo">
+                  <Button size="lg" class="bg-primary hover:bg-primary/90">
+                    Ver Catálogo
+                    <Icon name="lucide:arrow-right" size={20} />
+                  </Button>
+                </a>
+                <Button size="lg" variant="secondary">
+                  Conoce Más
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {categories.map((category) => (
+            <a href={`/product/${category.slug}`}>{category.name}</a>
+          ))}
+        </section>
+
+        {/* Features */}
+        <section class="py-16 border-y border-border bg-gradient-warm">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="flex flex-col items-center text-center space-y-3">
+                <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Icon name="lucide:sun" size={20} />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">100% Natural</h3>
+                <p class="text-muted-foreground">Sin conservantes ni aditivos artificiales</p>
+              </div>
+              <div class="flex flex-col items-center text-center space-y-3">
+                <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Icon name="lucide:shield-check" size={20} />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Calidad Certificada</h3>
+                <p class="text-muted-foreground">Productos con certificación de calidad</p>
+              </div>
+              <div class="flex flex-col items-center text-center space-y-3">
+                <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Icon name="lucide:truck" size={20} />
+                </div>
+                <h3 class="text-lg font-semibold text-foreground">Envío Rápido</h3>
+                <p class="text-muted-foreground">Entrega en 24-48 horas en tu domicilio</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Featured Products */}
+        <section class="py-20">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-12">
+              <h2 class="text-4xl font-bold text-foreground">Productos Destacados</h2>
+              <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Nuestra selección premium de mieles más populares, escogidas especialmente para ti
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Product Card */}
+            </div>
+
+            <div class="text-center mt-10">
+              <a href="/catalogo">
+                <Button size="lg" variant="secondary">
+                  Ver Todos los Productos
+                  <Icon name="lucide:arrow-right" size={20} />
+                </Button>
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
     )
   }
 </Layout>
