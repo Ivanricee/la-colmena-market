@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
-import { Icon } from 'astro-icon/components'
+import NavBar from '@/components/NavBar.astro'
 
 interface Props {
   title: string
@@ -36,22 +36,11 @@ const { title = 'La Colmena Market' } = Astro.props
   </head>
 
   <body>
-    <div class="bg-background flex min-h-dvh w-full flex-col p-2 sm:p-8">
-      <section class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col">
-        <header class="bg-secondary/15">
-          <button
-            id="theme-toggle"
-            x-data
-            @click="$store.themeStore.set($store.themeStore.get() === 'light' ? 'dark': 'light')"
-            type="button"
-            class="rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-          >
-            <Icon x-show="$store.themeStore.get() === 'light'" name="lucide:moon" size={17} />
-            <Icon x-show="$store.themeStore.get() === 'dark'" name="lucide:sun" size={17} />
-          </button>
-        </header>
+    <div class="bg-background flex min-h-dvh w-full flex-col">
+      <div class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col">
+        <NavBar />
         <slot />
-      </section>
+      </div>
     </div>
   </body>
 </html>

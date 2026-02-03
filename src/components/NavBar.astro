@@ -1,0 +1,58 @@
+---
+import { Icon } from 'astro-icon/components'
+import Button from './ui/Button.astro'
+
+//add toggle here
+const { pathname } = Astro.url
+const currentPath = pathname.replace(/\/$/, '')
+const isActive = (path: string) => currentPath === path
+---
+
+<header class="xl:px-8">
+  <nav
+    class:list={[
+      'sticky top-0 z-50 w-full border-b border-border sm:px-8 px-2',
+      'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+    ]}
+  >
+    <div class="flex h-16 items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-primary">
+        <Icon name="lucide:shopping-bag" size={25} />
+        <span
+          class="text-xl font-bold from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent"
+        >
+          La Colmena Market
+        </span>
+      </a>
+
+      <div class="flex items-center gap-6">
+        <a
+          href="/"
+          class={`text-sm font-medium transition-colors hover:text-primary ${
+            isActive('') ? 'text-primary' : 'text-foreground'
+          }`}
+        >
+          Inicio
+        </a>
+        <a
+          href="/products"
+          class={`text-sm font-medium transition-colors hover:text-primary ${
+            isActive('/products') ? 'text-primary' : 'text-foreground'
+          }`}
+        >
+          Productos de miel
+        </a>
+        <Button
+          variant="ghost"
+          id="theme-toggle"
+          x-data
+          @click="$store.themeStore.set($store.themeStore.get() === 'light' ? 'dark': 'light')"
+          type="button"
+        >
+          <Icon x-show="$store.themeStore.get() === 'light'" name="lucide:moon" size={17} />
+          <Icon x-show="$store.themeStore.get() === 'dark'" name="lucide:sun" size={17} />
+        </Button>
+      </div>
+    </div>
+  </nav>
+</header>
