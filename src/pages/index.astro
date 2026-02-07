@@ -2,60 +2,62 @@
 import { getCategories } from '@/features/categories/categories.api'
 import Layout from '../layouts/Layout.astro'
 import type { Category } from '@/features/categories/categories.api'
-import heroImage from '@/assets/hero-honey.jpg'
+
 import Button from '@/components/ui/Button.astro'
 import { Icon } from 'astro-icon/components'
-const { categories, errorMessage } = (await getCategories()) as {
-  categories: Category[]
-  errorMessage: string
-}
+import { getProducts } from '@/features/products/products.api'
+import ProductCard from '@/features/products/components/ProductCard.astro'
+
+const [categoriesData, productsData] = await Promise.all([
+  getCategories(),
+  getProducts({ where: { featured: true } }),
+])
+const { categories, errorMessage: categoriesError } = categoriesData
+const { productos, errorMessage: productsError } = productsData
 ---
 
 <Layout title="La Colmena Market">
   {
-    errorMessage ? (
+    categoriesError || productsError ? (
       <section>
         <h1>Error</h1>
-        <p>{errorMessage}</p>
+        <p>{categoriesError ?? productsError}</p>
       </section>
     ) : (
-      <main>
+      <>
         {/* Hero Section */}
-        <section class="relative h-[600px] overflow-hidden">
-          <div class="absolute inset-0 bg-cover bg-center bg-[url('../assets/hero-honey.jpg')]">
-            <div class="absolute inset-0 bg-gradient-to-r from-background/95 to-background/60" />
-          </div>
+        {categories.map((category) => (
+          <section class="relative h-[600px] overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center bg-[url('../assets/hero-honey.jpg')]">
+              <div class="absolute inset-0 bg-gradient-to-r from-background/95 to-background/60" />
+            </div>
 
-          <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-            <div class="max-w-2xl space-y-6">
-              <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-                Miel Pura y{' '}
-                <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
-                  Artesanal
-                </span>
-              </h1>
-              <p class="text-xl text-muted-foreground">
-                Descubre nuestra selección de mieles premium, directamente de nuestras colmenas a tu
-                mesa. 100% natural, sin aditivos.
-              </p>
-              <div class="flex gap-4">
-                <a href="/catalogo">
-                  <Button size="lg" class="bg-primary hover:bg-primary/90">
-                    Ver Catálogo
+            <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+              <div class="max-w-2xl space-y-6">
+                <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
+                  Tus productos favoritos{' '}
+                  <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
+                    hechos con miel.
+                  </span>
+                </h1>
+                <p class="text-xl text-muted-foreground">
+                  Descubre nuestra selección de productos naturales para tu cuidado personal y tu
+                  cocina. Todo lo que necesitas para tu bienestar, 100% natural.
+                </p>
+                <div class="flex gap-4">
+                  <Button
+                    href={`/product/${category.slug}`}
+                    size="lg"
+                    class="bg-primary hover:bg-primary/90"
+                  >
+                    Explorar la tienda
                     <Icon name="lucide:arrow-right" size={20} />
                   </Button>
-                </a>
-                <Button size="lg" variant="secondary">
-                  Conoce Más
-                </Button>
+                </div>
               </div>
             </div>
-          </div>
-
-          {categories.map((category) => (
-            <a href={`/product/${category.slug}`}>{category.name}</a>
-          ))}
-        </section>
+          </section>
+        ))}
 
         {/* Features */}
         <section class="py-16 border-y border-border bg-gradient-warm">
@@ -63,24 +65,26 @@ const { categories, errorMessage } = (await getCategories()) as {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div class="flex flex-col items-center text-center space-y-3">
                 <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Icon name="lucide:sun" size={20} />
+                  <Icon name="lucide:leaf" size={20} />
                 </div>
                 <h3 class="text-lg font-semibold text-foreground">100% Natural</h3>
-                <p class="text-muted-foreground">Sin conservantes ni aditivos artificiales</p>
+                <p class="text-muted-foreground">Sin conservantes ni procesos industriales.</p>
               </div>
               <div class="flex flex-col items-center text-center space-y-3">
                 <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
                   <Icon name="lucide:shield-check" size={20} />
                 </div>
-                <h3 class="text-lg font-semibold text-foreground">Calidad Certificada</h3>
-                <p class="text-muted-foreground">Productos con certificación de calidad</p>
+                <h3 class="text-lg font-semibold text-foreground">Gran Variedad</h3>
+                <p class="text-muted-foreground">
+                  Soluciones naturales para tu salud, belleza y hogar.
+                </p>
               </div>
               <div class="flex flex-col items-center text-center space-y-3">
                 <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Icon name="lucide:truck" size={20} />
+                  <Icon name="lucide:phone-call" size={20} />
                 </div>
-                <h3 class="text-lg font-semibold text-foreground">Envío Rápido</h3>
-                <p class="text-muted-foreground">Entrega en 24-48 horas en tu domicilio</p>
+                <h3 class="text-lg font-semibold text-foreground">Compra Directa</h3>
+                <p class="text-muted-foreground">Pide por WhatsApp con atención personal.</p>
               </div>
             </div>
           </div>
@@ -90,26 +94,44 @@ const { categories, errorMessage } = (await getCategories()) as {
           <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4 mb-12">
               <h2 class="text-4xl font-bold text-foreground">Productos Destacados</h2>
-              <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p class="text-lg text-muted-foreground max-w-2xl text-center w-full">
                 Nuestra selección premium de mieles más populares, escogidas especialmente para ti
               </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Product Card */}
-            </div>
-
-            <div class="text-center mt-10">
-              <a href="/catalogo">
-                <Button size="lg" variant="secondary">
-                  Ver Todos los Productos
-                  <Icon name="lucide:arrow-right" size={20} />
-                </Button>
-              </a>
-            </div>
+            <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {productos.map((product, index) => (
+                <li>
+                  <div
+                    class:list={[
+                      'group shadow-honey-dark/30 @container h-full overflow-hidden',
+                      ' rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl',
+                    ]}
+                  >
+                    <ProductCard
+                      id={product.id}
+                      title={product.title}
+                      description={product.description.html}
+                      price={product.price}
+                      previousPrice={product.previousPrice}
+                      image={product.image[0]}
+                      tags={product.tags}
+                      slug={product.categoryid.slug}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
-      </main>
+        <footer class="py-12 border-t border-border">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-muted-foreground">
+              <p>© 2026 La colmena Market.</p>
+            </div>
+          </div>
+        </footer>
+      </>
     )
   }
 </Layout>
