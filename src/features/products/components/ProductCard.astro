@@ -1,0 +1,100 @@
+---
+import Card from '@/components/ui/Card.astro'
+import { Icon } from 'astro-icon/components'
+import Tags from './Tags.astro'
+import { Image } from '../products.model'
+
+interface Props {
+  slug: string
+  id: string
+  image: Image
+  title: string
+  description: string
+  price: number
+  previousPrice?: number
+  tags: string[]
+}
+const { id, slug, tags, title, description, price, previousPrice, image } = Astro.props
+const getImg = (image: Image) => {
+  const { version, public_id } = image
+  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_300/v${version}/${public_id}.webp`
+  return url
+}
+---
+
+<Card
+  href={`/product/${slug || 'uncategorized'}/${id}`}
+  data-astro-prefetch
+  class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
+>
+  <div class="h-full flex-1">
+    <div class="h-7/12 w-full">
+      <div class="relative h-full">
+        <div
+          class:list={[
+            'bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0',
+            '-top-6 mx-auto h-[calc(100%+0.8rem)] w-7/12 rounded-b-full bg-linear-to-t @sm:w-5/12',
+          ]}
+        >
+        </div>
+
+        <div
+          class:list={[
+            'bg-honey-medium/50 group-hover:bg-honey-medium/70 absolute inset-x-0',
+            'bottom-3 mx-auto h-40 w-24 rounded-full blur-2xl transition-colors duration-700',
+          ]}
+        >
+        </div>
+        <img
+          class:list={[
+            'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3',
+            'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
+          ]}
+          src={getImg(image)}
+          alt={title}
+        />
+      </div>
+    </div>
+    <div class="flex h-5/12 flex-col justify-between overflow-hidden leading-normal">
+      <div>
+        <div class="mt-5 mb-2">
+          <Tags {tags} />
+        </div>
+        <h4 class="text-foreground mb-2 line-clamp-1 text-lg font-semibold">
+          {title}
+        </h4>
+        <div
+          class="text-muted-foreground line-clamp-2 text-sm text-pretty @sm:text-balance"
+          set:html={description}
+        />
+      </div>
+      <div class="flex flex-nowrap items-center justify-between">
+        <p class="flex items-baseline gap-2">
+          <span
+            class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-2xl font-bold text-transparent"
+          >
+            ${price}
+          </span>
+          {
+            previousPrice && (
+              <span class="text-muted-foreground text-sm line-through">${previousPrice}</span>
+            )
+          }
+        </p>
+        <div
+          class:list={[
+            'group-hover:shadow-honey-medium/20 group-hover:bg-primary/90 bg-primary text-secondary flex flex-nowrap',
+            ' items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition-all duration-500 group-hover:shadow-lg',
+          ]}
+        >
+          <Icon
+            name="lucide:shopping-bag"
+            size={20}
+            class="transition-[scale] duration-300 group-hover:scale-110"
+          />
+          <p>¡Lo quiero!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Card>
