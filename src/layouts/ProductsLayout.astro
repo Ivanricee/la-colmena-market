@@ -9,12 +9,11 @@ const { title, description } = Astro.props
 ---
 
 <Layout {title}>
-  <main class="p-2 pt-0 sm:p-8 sm:pt-0">
-    <div class="bg-pink-500">
-      <h1>{title}</h1>
-      <h2>Category Products Introduction with iamge and text</h2>
-      <p set:html={description.html} />
+  <main class="sm:p-8 px-4 sm:px-6 lg:px-8 py-8">
+    <div class="space-y-8">
+      <h1 class="text-4xl font-bold text-foreground mb-2">{title}</h1>
+      <div class="text-lg text-muted-foreground" set:html={description.html} />
+      <slot />
     </div>
-    <slot />
   </main>
 </Layout>
