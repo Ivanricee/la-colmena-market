@@ -12,7 +12,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 30 20% 15%;
 
-    --primary: 38 92% 50%;
+    --primary: 38 75% 35%;
     --primary-foreground: 30 20% 15%;
 
     --secondary: 42 47% 90%;
@@ -34,9 +34,9 @@
     --radius: 0.75rem;
 
     /* Colores Honey */
-    --honey-light: 45 100% 88%;
-    --honey-medium: 38 92% 50%;
-    --honey-dark: 35 75% 35%;
+    --honey-light: 45 35% 35%;
+    --honey-medium: 38 70% 28%;
+    --honey-dark: 35 65% 20%;
 
     /* Gradientes (aquí sí mantenemos la función porque son imágenes, no colores puros) */
     --gradient-primary: linear-gradient(135deg, hsl(38 92% 50%), hsl(45 93% 58%));
