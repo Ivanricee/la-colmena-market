@@ -3,6 +3,7 @@ import Card from '@/components/ui/Card.astro'
 import { Icon } from 'astro-icon/components'
 import Tags from './Tags.astro'
 import { Image } from '../products.model'
+import { fade } from 'astro:transitions'
 
 interface Props {
   slug: string
@@ -20,16 +21,18 @@ const getImg = (image: Image) => {
   const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_300/v${version}/${public_id}.webp`
   return url
 }
+//transition:name={`bg-img-${id}`}
 ---
 
 <Card
   href={`/product/${slug || 'uncategorized'}/${id}`}
   data-astro-prefetch
   class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent @sm:flex-row @sm:flex-nowrap"
+  transition:name={`card-img-${id}`}
 >
   <div class="h-full flex-1">
     <div class="h-7/12 w-full">
-      <div class="relative h-full">
+      <div class="relative h-full" transition:name={`bg-img-${id}`}>
         <div
           class:list={[
             'bg-honey-dark/50 @3xs:6/12 from-honey-medium/35 to-honey-dark/25 absolute inset-x-0',
@@ -51,16 +54,21 @@ const getImg = (image: Image) => {
             'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
           ]}
           src={getImg(image)}
+          loading="eager"
+          fetchpriority="high"
           alt={title}
         />
       </div>
     </div>
     <div class="flex h-5/12 flex-col justify-between overflow-hidden leading-normal">
       <div>
-        <div class="mt-5 mb-2">
+        <div class="mt-5 mb-2" transition:name={`tags-${id}`}>
           <Tags {tags} />
         </div>
-        <h4 class="text-foreground mb-2 line-clamp-1 text-lg font-semibold">
+        <h4
+          class="text-foreground mb-2 line-clamp-1 text-lg font-semibold"
+          transition:name={`title-${id}`}
+        >
           {title}
         </h4>
         <div
@@ -69,7 +77,7 @@ const getImg = (image: Image) => {
         />
       </div>
       <div class="flex flex-nowrap items-center justify-between">
-        <p class="flex items-baseline gap-2">
+        <p class="flex items-baseline gap-2" transition:name={`price-${id}`}>
           <span
             class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-2xl font-bold text-transparent"
           >

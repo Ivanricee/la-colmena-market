@@ -3,13 +3,14 @@ interface Props {
   href?: string
   target?: string
   class?: string
+  [key: string]: any
 }
-const { class: className, href, target } = Astro.props
+const { class: className, href, target, ...props } = Astro.props
 const Wrapper = href ? 'a' : 'div'
 const wrapperProps = href ? { href, target } : {}
 ---
 
-<div class={` p-6 rounded-lg border border-border  ${className}`}>
+<div class={` p-6 rounded-lg border border-border  ${className}`} {...props}>
   <Wrapper {...wrapperProps} class="flex h-full w-full flex-col">
     <!-- Header section -->
     <header class="flex w-full flex-nowrap">

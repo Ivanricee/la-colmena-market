@@ -50,6 +50,7 @@ const { productos, errorMessage } = (await getProducts()) as {
             x-transition:leave="transition ease-in-out duration-200"
             x-transition:leave-start="opacity-100 transform scale-100"
             x-transition:leave-end="opacity-5 transform scale-95"
+            transition:name={product.id}
           >
             <div class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
               <ProductCard
