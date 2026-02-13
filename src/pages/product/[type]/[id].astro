@@ -7,6 +7,8 @@ import Dropdown from '@/components/ui/Dropdown.astro'
 import Carousel from '@/features/products/components/Carousel.astro'
 import ProductDetails from '@/features/products/components/ProductDetails.astro'
 import Tags from '@/features/products/components/Tags.astro'
+import BackButton from '@/components/ui/BackButton.astro'
+import Breadcrumb from '@/components/ui/Breadcrumb.astro'
 import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
@@ -20,6 +22,13 @@ export async function getStaticPaths() {
   }))
 }
 const { product } = Astro.props
+
+const category = product?.categoryid ?? {}
+const breadcrumbItems = [
+  { label: 'Inicio', href: '/' },
+  { label: category?.name ?? 'Productos', href: `/product/${category?.slug || 'sin categoría'}` },
+  { label: product?.title ?? 'Detalle' },
+]
 const { id, title } = product
 ---
 
@@ -29,12 +38,14 @@ const { id, title } = product
     <CardDrawerItems slot="vertical" />
     <CardDrawerItems slot="horizontal" />
   </Drawer>
+  <Breadcrumb items={breadcrumbItems} className="md:px-8 px-2" />
   <Card
-    class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl mt-8"
+    class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl my-8 mb-20 sm:my-8"
     transition:name={`card-img-${id}`}
   >
     <main class="flex flex-col md:flex-row md:flex-nowrap">
-      <div class="h-[16rem] w-full md:h-[30rem] md:w-6/12">
+      <BackButton className="absolute left-4 top-4 z-20" />
+      <div class="h-64 w-full md:h-[30rem] md:w-6/12">
         <div class="relative mx-auto aspect-[3/4] h-full w-full" transition:name={`bg-img-${id}`}>
           <div
             class:list={[
@@ -92,13 +103,17 @@ const { id, title } = product
               },
               anchorRef: null,
               addToCart() {
-                $dispatch('open-cart');
-                if(this.validateQuantity(this.selected)) return
+                //$dispatch('open-cart');
+                console.log('add to cart',this.selected)
+                if(this.validateQuantity(this.selected)){
+                  return window.location.href="/cart"
+                }
                 $store.cartStore.handleAddToCart({...this.itemData, quantity: this.selected});
+                window.location.href="/cart"
               },
               validateQuantity(selected) {
                 const isInCart = $store.cartStore.data.items['${id}']
-                const isValid = (isInCart.quantity ?? 0) + selected <= (isInCart.purchaseLimit ?? 10)
+                const isValid = (isInCart?.quantity ?? 0) + selected <= (isInCart?.purchaseLimit ?? 10)
                 if (!isValid) {
                   this.state.disableIncreament = true;
                   this.state.show = true;
@@ -120,7 +135,7 @@ const { id, title } = product
               @on-selected="validateQuantity($event.detail)"
             />
             <Tooltip
-              content={`Ya está en el carrito. Máx. ${product.purchaseLimit} unidades`}
+              content={`Ya está en el carrito. Máx. ${product?.purchaseLimit} unidades`}
               position="top"
             />
             <Button
@@ -132,9 +147,9 @@ const { id, title } = product
               @click="addToCart"
             >
               <Icon name="lucide:shopping-cart" size={17} />
-              <span
-                class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base"
-                x-text="state.disableIncreament ? 'Ir al carrito' : 'Agregar al carrito'"></span>
+              <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base">
+                Comprar ahora
+              </span>
             </Button>
           </form>
         </div>

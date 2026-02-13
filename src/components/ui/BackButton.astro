@@ -1,0 +1,25 @@
+---
+import Button from './Button.astro'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  label?: string
+  className?: string
+}
+
+const { label, className = '', ...rest } = Astro.props as Props
+---
+
+<Button
+  variant="dark"
+  type="button"
+  x-data
+  x-on:click="history.back()"
+  x-on:keydown.window.escape="history.back()"
+  className={`inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm ${className}`}
+  aria-label={label}
+  {...rest}
+>
+  <Icon name="lucide:arrow-left" size={18} />
+  {label && <span class="hidden md:inline">{label}</span>}
+</Button>
