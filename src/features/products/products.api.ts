@@ -38,6 +38,7 @@ export const getProducts = async (params?: GetProductsParams): Promise<productRe
             tags
             featured
             categoryid {
+              name
               slug
               id
             }

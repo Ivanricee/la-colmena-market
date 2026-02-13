@@ -3,6 +3,7 @@ type htmlString = {
 }
 type ProductStatus = 'active' | 'inactive' | 'out_of_stock'
 export type Category = {
+  name: string
   slug: string
   id: string
 }
