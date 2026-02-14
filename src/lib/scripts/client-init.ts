@@ -35,7 +35,7 @@ const addToCartStore = (product?: RawProduct) => {
         imgUrl: `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_100/v${version}/${public_id}.webp`,
         quantity: quantity ?? 1,
         purchaseLimit: purchaseLimit ?? 10,
-        categoryId: categoryid ?? { slug: '', id: '' },
+        categoryId: categoryid ?? { slug: '', id: '', name: '' },
       },
       quantity,
     })
