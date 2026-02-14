@@ -1,10 +1,45 @@
 ---
-import ProductCard from '@/features/products/components/ProductCard.astro'
+import EmptyCart from '@/components/cart/EmptyCart.astro'
 import Layout from '@/layouts/Layout.astro'
+import { STEPS } from './cart.config'
+import { Icon } from 'astro-icon/components'
+import Button from '@/components/ui/Button.astro'
 ---
 
 <Layout title="Mi carrito">
-  <div>
-    <h1>Mi carrito</h1>
+  <div x-data="cartHandler">
+    <EmptyCart x-show="itemCount === 0 && step === 1" x-cloak />
+    <!-- STEPPER -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center justify-center gap-2 mb-10">
+        {
+          STEPS.map((s, i) => (
+            <div class="flex items-center gap-2">
+              <Button
+                @onClick="s.id < step && setStep(s.id)"
+                class={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all `}
+                x-bind:class={`
+                step === ${s.id}
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : step > ${s.id}
+                  ? "bg-primary/20 text-primary cursor-pointer"
+                  : "bg-muted text-muted-foreground"
+                }`}
+                x-bind:disabled="s.id > step"
+              >
+                <Icon name={`lucide:${s.icon}`} size={20} />
+                <span class="hidden sm:inline">{s.label}</span>
+              </Button>
+              {i < STEPS.length - 1 && (
+                <div
+                  class={`w-8 h-0.5`}
+                  x-bind:class={`step > ${s.id} ? "bg-primary" : "bg-border"`}
+                />
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </div>
 </Layout>
