@@ -10,7 +10,7 @@ export type CartItem = {
   imgUrl: string
   categoryId: Category
 }
-interface Cart {
+export interface Cart {
   items: Record<string, CartItem>
   total: number
 }
