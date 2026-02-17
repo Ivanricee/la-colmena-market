@@ -49,7 +49,7 @@ const isActive = (path: string) => currentPath === path
             size="icon"
             href="/cart"
             class="relative"
-            x-data="{totalItems: Object.keys($store.cartStore.data.items).length}"
+            x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
           >
             <Icon name="lucide:shopping-cart" size={17} />
             <span
@@ -81,7 +81,7 @@ const isActive = (path: string) => currentPath === path
             size="icon"
             href="/cart"
             class="relative"
-            x-data="{totalItems: Object.keys($store.cartStore.data.items).length}"
+            x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
           >
             <Icon name="lucide:shopping-cart" size={17} />
             <span
