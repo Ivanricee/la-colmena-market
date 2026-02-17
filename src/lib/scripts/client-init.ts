@@ -4,6 +4,7 @@ import intersect from '@alpinejs/intersect'
 import anchor from '@alpinejs/anchor'
 import { $cart, addItem, removeItem } from '@/store/cartStore'
 import { Product } from '@/features/products/products.model'
+import { setupCartHandler } from '@/lib/scripts/cart'
 
 export default function initClientUI(): void {
   if (!window.AlpineInstance) {
@@ -13,6 +14,7 @@ export default function initClientUI(): void {
     setupAlpineCartStore()
     setupCatalogHandler()
     setupInputNumberHandler()
+    setupCartHandler(Alpine)
     window.AlpineInstance = Alpine
   }
 }
