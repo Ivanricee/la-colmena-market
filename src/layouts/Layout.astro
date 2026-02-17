@@ -63,10 +63,8 @@ const { title = 'La Colmena Market' } = Astro.props
   import { $themeStore } from '@/store/themeStore.ts'
   import Alpine from 'alpinejs'
 
+  Alpine.store('themeStore', $themeStore)
   initClientUI()
-  document.addEventListener('alpine:init', () => {
-    Alpine.store('themeStore', $themeStore)
-  })
   $themeStore.subscribe((value) => {
     if (value === 'dark') {
       document.documentElement.classList.add('dark')
