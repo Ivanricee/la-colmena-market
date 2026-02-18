@@ -1,5 +1,13 @@
 ---
-type ButtonVariant = 'default' | 'secondary' | 'success' | 'danger' | 'warning' | 'dark' | 'ghost'
+type ButtonVariant =
+  | 'default'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'dark'
+  | 'ghost'
+  | 'outline'
 
 interface Props {
   variant?: ButtonVariant
@@ -16,22 +24,20 @@ const wrapperProps = href || hasAlpineHref ? { href, target } : { type: 'button'
 
 const buttonClass: Record<ButtonVariant, string> = {
   default:
-    'bg-primary  hover:bg-primary/90 focus:ring-honey-dark border border-transparent text-sm leading-5 text-secondary hover:shadow-honey-medium/20 hover:shadow-lg',
+    'bg-primary hover:bg-primary/90 focus:ring-honey-dark border border-transparent text-sm leading-5 text-secondary hover:shadow-honey-medium/20 hover:shadow-lg rounded-md',
   secondary:
-    'text-body bg-secondary/25  border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary  border text-sm leading-5 font-semibold hover:shadow-lg',
+    'text-body bg-secondary/25 border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary border text-sm leading-5 font-semibold hover:shadow-lg rounded-md',
   success:
-    'bg-success hover:bg-success-strong focus:ring-success-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg',
+    'bg-success hover:bg-success-strong focus:ring-success-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg rounded-md',
   danger:
-    'bg-danger hover:bg-danger-strong focus:ring-danger-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg ',
+    'bg-danger hover:bg-danger-strong focus:ring-danger-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg rounded-md',
   warning:
-    'bg-warning hover:bg-warning-strong focus:ring-warning-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg ',
-  dark: `bg-secondary/25 border border-border/75
-  hover:bg-secondary/70 hover:text-foreground focus:ring-ring/40 rounded-md
-  text-foreground  box-border inline-flex items-center justify-center border
-  px-2 py-2.5 text-sm leading-5 font-semibold shadow-none transition-colors duration-300 focus:ring-2 focus:outline-none`,
-
+    'bg-warning hover:bg-warning-strong focus:ring-warning-medium border border-transparent text-sm leading-5 text-white hover:shadow-lg rounded-md',
+  dark: `bg-secondary/25 border border-border/75 hover:bg-secondary/70 hover:text-foreground focus:ring-ring/40 text-foreground box-border inline-flex items-center justify-center border px-2 py-2.5 text-sm leading-5 font-semibold shadow-none transition-colors duration-300 focus:ring-2 focus:outline-none rounded-md`,
+  outline:
+    'focus:ring-honey-dark border border-transparent text-sm leading-5 hover:shadow-honey-medium/20 hover:shadow-lg',
   ghost:
-    'hover:bg-accent hover:text-accent-foreground text-heading focus:ring-neutral-tertiary  border border-transparent bg-transparent text-sm leading-5',
+    'hover:bg-accent hover:text-accent-foreground text-heading focus:ring-neutral-tertiary border border-transparent bg-transparent text-sm leading-5 rounded-md',
 }
 const variantClass = buttonClass[variant]
 ---
@@ -42,9 +48,9 @@ const variantClass = buttonClass[variant]
   type="button"
   class:list={[
     `${variantClass}`,
-    'transition-all duration-300 gap-2 text-sm justify-center rounded-md',
+    'cursor-pointer transition-all duration-300 gap-2 text-sm justify-center',
     'font-semibold flex flex-nowrap items-center ',
-    'px-3 py-2 disabled:opacity-50 disabled:pointer-events-none disabled:hover:shadow-none',
+    'px-3 py-2 disabled:pointer-events-none disabled:hover:shadow-none',
     `${className}`,
   ]}
 >
