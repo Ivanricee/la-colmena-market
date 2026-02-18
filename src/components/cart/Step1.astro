@@ -1,0 +1,82 @@
+---
+import { Icon } from 'astro-icon/components'
+import Card from '../ui/Card.astro'
+import InputNumber from '../ui/InputNumber.astro'
+import Button from '../ui/Button.astro'
+---
+
+<Card x-show="step === 1" class="bg-card" x-cloak>
+  <div class="flex flex-col space-y-1.5 pb-6">
+    <h3
+      class="flex items-center gap-2 text-xl leading-none font-semibold tracking-tight sm:text-2xl"
+    >
+      <Icon name="lucide:package" size={20} class="h-5 w-5 text-primary" />
+      Revisa tu pedido
+    </h3>
+  </div>
+  <div class="p-6 pt-0 space-y-6">
+    <template x-for="[id, product] in Object.entries(items)" :key="id">
+      <div
+        class="rounded-xl bg-muted/30 p-3 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:p-4"
+      >
+        <div class="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div
+            class="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gradient-warm sm:h-20 sm:w-20"
+          >
+            <img
+              x-bind:src="product.imgUrl"
+              x-bind:alt="product.title"
+              class="h-full w-full object-contain p-2"
+            />
+          </div>
+          <div class="min-w-0 flex-1">
+            <h3 class="truncate font-semibold text-foreground" x-text="product.title"></h3>
+            <p
+              class="mt-1 text-sm text-muted-foreground"
+              x-text="'$' + Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' c/u'"
+            >
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="mt-3 grid grid-cols-1 gap-3 border-t border-border/40 pt-3 sm:mt-0 sm:grid-cols-[auto_auto] sm:items-center sm:gap-4 sm:border-0 sm:pt-0"
+        >
+          <div class="space-y-1 sm:w-36 sm:space-y-0 h-12">
+            <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground sm:hidden">
+              Cantidad
+            </p>
+            <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
+          </div>
+
+          <div class="flex items-end justify-between gap-3 sm:items-center sm:justify-end sm:gap-4">
+            <div class="text-left sm:text-right">
+              <p
+                class="text-xs font-medium uppercase tracking-wide text-muted-foreground sm:hidden"
+              >
+                Subtotal
+              </p>
+              <p
+                class="text-lg font-bold text-foreground"
+                x-text="'$' + Number(product.price * product.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+              >
+              </p>
+            </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              x-on:click="$store.cartStore.handleRemoveFromCart(id)"
+              class="h-8 w-8 text-destructive hover:text-destructive"
+              aria-label="Eliminar producto"
+              title="Eliminar producto"
+            >
+              <div>
+                <Icon name="lucide:trash-2" size={18} />
+              </div>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</Card>

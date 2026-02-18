@@ -1,0 +1,48 @@
+---
+import Badge from '../ui/Badge.astro'
+import Card from '../ui/Card.astro'
+---
+
+<div class="lg:col-span-1">
+  <Card class="sticky top-24 from-card bg-linear-to-t to-transparent">
+    <div class="flex flex-col space-y-1.5 pb-6">
+      <h3 class="text-lg font-semibold">Resumen del pedido</h3>
+    </div>
+    <div class="space-y-4">
+      <template x-for="[id, product] in Object.entries(items)">
+        <div class="flex justify-between text-sm">
+          <span
+            class="text-muted-foreground mr-2 line-clamp-1"
+            x-text="product.quantity + '× ' + product.title"
+          >
+          </span>
+          <span
+            class="font-medium text-foreground whitespace-nowrap"
+            x-text="'$' + (product.price * product.quantity).toFixed(2)"
+          >
+          </span>
+        </div>
+      </template>
+
+      <div class="h-px bg-border"></div>
+
+      <div class="space-y-2">
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground" x-text="'Productos (' + itemCount + ')'"> </span>
+          <span class="text-foreground" x-text="'$'+totalPrice"> </span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Envío</span>
+          <Badge variant="secondary" class="text-xs"> Por acordar </Badge>
+        </div>
+      </div>
+
+      <div class="h-px bg-border"></div>
+
+      <div class="flex justify-between font-bold text-lg">
+        <span class="text-foreground">Total</span>
+        <span class="text-primary" x-text="'$'+totalPrice"></span>
+      </div>
+    </div>
+  </Card>
+</div>

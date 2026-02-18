@@ -1,135 +1,64 @@
 ---
 import EmptyCart from '@/components/cart/EmptyCart.astro'
 import Layout from '@/layouts/Layout.astro'
-import { STEPS } from './cart.config'
 import { Icon } from 'astro-icon/components'
 import Button from '@/components/ui/Button.astro'
-import Card from '@/components/ui/Card.astro'
-import InputNumber from '@/components/ui/InputNumber.astro'
+import { prevStep } from '@/lib/utils/cart.order'
+import Stepper from '@/components/cart/Stepper.astro'
+import OrderSummary from '@/components/cart/OrderSummary.astro'
+import Step1 from '@/components/cart/Step1.astro'
+import Step2 from '@/components/cart/Step2.astro'
+import Step3 from '@/components/cart/Step3.astro'
+import Step4 from '@/components/cart/Step4.astro'
 ---
 
 <Layout title="Mi carrito">
   <div x-data="cartHandler">
     <EmptyCart x-show="itemCount === 0 && step === 1" x-cloak />
-    <!-- STEPPER -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="flex items-center justify-center gap-2 mb-10">
-        {
-          STEPS.map((s, i) => (
-            <div class="flex items-center gap-2">
-              <Button
-                x-on:onClick={`${s.id} < step && setStep(${s.id})`}
-                class={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all `}
-                x-bind:class={`step === ${s.id}
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : step > ${s.id}
-                    ? "bg-primary/20 text-primary cursor-pointer"
-                    : "bg-muted text-muted-foreground"`}
-                x-bind:disabled={`${s.id} > step`}
-                x-cloak
-              >
-                <Icon name={`lucide:${s.icon}`} size={20} />
-                <span class="hidden sm:inline">{s.label}</span>
-              </Button>
-              {i < STEPS.length - 1 && (
-                <div
-                  class={`w-8 h-0.5`}
-                  x-bind:class={`step > ${s.id} ? "bg-primary" : "bg-border"`}
-                />
-              )}
-            </div>
-          ))
-        }
-      </div>
-    </div>
-    {/* Main content */}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 space-y-6">
-        {/* Step 1: Cart review */}
-        <Card x-show="step === 1" x-cloak>
-          <h1 class="flex items-center gap-2">
-            <Icon name="lucide:package" size={20} class="h-5 w-5 text-primary" />
-            Revisa tu pedido
-          </h1>
-          <div class="space-y-4">
-            <template x-for="[id, product] in Object.entries(items)" :key="id">
-              <div class="flex items-center gap-4 p-4 rounded-lg bg-muted/30">
-                <div class="h-20 w-20 rounded-lg bg-gradient-warm overflow-hidden flex-shrink-0">
-                  <img
-                    x-bind:src="product.imgUrl"
-                    x-bind:alt="product.title"
-                    class="h-full w-full object-contain p-2"
-                  />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-foreground truncate" x-text="product.title"></h3>
-                  <p class="text-sm text-muted-foreground" x-text="product.price.toFixed(2)"></p>
-                </div>
-                <div class="flex items-center gap-2">
-                  <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
-                </div>
-                <span
-                  class="font-bold text-foreground w-20 text-right"
-                  x-text="(product.price * product.quantity).toFixed(2)"></span>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  class="h-8 w-8 text-destructive hover:text-destructive"
-                >
-                  <Icon name="lucide:trash" size={20} />
-                </Button>
-              </div>
-            </template>
-          </div>
-        </Card>
-      </div>
-    </div>
+      <!-- STEPPER -->
+      <span x-text="step"></span>
+      <Stepper />
+      {/* Main content */}
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          {/* Cart review */}
+          <Step1 />
+          {/* Customer info */}
+          <Step2 />
+          {/* Step 3: Delivery address */}
+          <Step3 />
+          {/* Step 4: Confirmation */}
+          <Step4 />
+          {/* Navigation buttons */}
+          <div class="flex justify-between">
+            <Button x-show="step > 1" variant="ghost" onClick={prevStep}>
+              <Icon name="lucide:arrow-left" size={20} />
+              Anterior
+            </Button>
+            <Button href="/catalogo" x-show="step === 1" variant="secondary">
+              <Icon name="lucide:arrow-left" size={20} />
+              Seguir comprando
+            </Button>
+            <Button x-show="step < 4" x-on:click="nextStep" x-bind:disabled="!canProceedFromStep">
+              Siguiente
+              <Icon name="lucide:arrow-right" size={20} />
+            </Button>
 
-    {/* Sidebar: Order summary (always visible) */}
-    <div class="lg:col-span-1">
-      <Card class="sticky top-24">
-        <h3 class="text-lg">Resumen del pedido</h3>
-        <div class="space-y-4">
-          <template x-for="item in items">
-            <div class="flex justify-between text-sm">
-              <span
-                class="text-muted-foreground truncate mr-2"
-                x-text="item.quantity + '× ' + item.product.name"
-              >
-              </span>
-              <span
-                class="font-medium text-foreground whitespace-nowrap"
-                x-text="(item.product.price * item.quantity).toFixed(2)"
-              >
-              </span>
-            </div>
-          </template>
-
-          <div class="h-px bg-border"></div>
-
-          <div class="space-y-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-muted-foreground" x-text="'Productos (' + itemCount + ')'"> </span>
-              <span class="text-foreground" x-text="totalPrice"> </span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-muted-foreground">Envío</span>
-              <!--
-                <Badge variant="secondary" class="text-xs">
-                  Por acordar
-                </Badge>
-               -->
-            </div>
-          </div>
-
-          <div class="h-px bg-border"></div>
-
-          <div class="flex justify-between font-bold text-lg">
-            <span class="text-foreground">Total</span>
-            <span class="text-primary" x-text="totalPrice().toFixed(2)"></span>
+            <!-- onClick={handleFinalize} -->
+            <Button
+              x-show="step === 5"
+              class="bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white gap-2"
+              size="lg"
+            >
+              <Icon name="lucide:message-circle" size={20} />
+              Finalizar por WhatsApp
+            </Button>
           </div>
         </div>
-      </Card>
+        {/* Sidebar */}
+        <OrderSummary />
+      </div>
     </div>
   </div>
 </Layout>

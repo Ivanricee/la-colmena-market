@@ -1,0 +1,43 @@
+---
+interface Props {
+  id: string
+  value: string
+  label: string
+  description: string
+  name: string
+  model: string
+}
+
+const { id, value, label, description, name, model } = Astro.props
+---
+
+<label
+  class:list={[
+    'group flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4 transition-all',
+    'hover:border-primary/40',
+  ]}
+  :class={`${model} === '${value}' ? 'border-primary bg-primary/5 shadow-md' : 'border-border/50 bg-card'`}
+>
+  <input type="radio" {name} {value} class="peer sr-only" x-model={model} />
+
+  <div
+    class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all"
+    :class={`${model} === '${value}' ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground group-hover:border-primary/60'`}
+  >
+    <svg
+      class="h-3 w-3 transition-transform"
+      :class={`${model} === '${value}' ? 'scale-100' : 'scale-0'`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="3"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+    </svg>
+  </div>
+
+  <div class="flex flex-col">
+    <span class="font-semibold text-foreground">{label}</span>
+    <span class="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</span>
+  </div>
+</label>
