@@ -5,7 +5,7 @@ import FormInput from '../ui/FormInput.astro'
 ---
 
 {/* Step 2: Customer info */}
-<Card x-show="step === 1" class="bg-card" x-cloak>
+<Card x-show="step === 2" class="bg-card" x-cloak>
   <div class="flex flex-col space-y-1.5 pb-4">
     <h3
       class="flex items-center gap-2 text-xl leading-none font-semibold tracking-tight sm:text-2xl"
@@ -16,33 +16,40 @@ import FormInput from '../ui/FormInput.astro'
   </div>
 
   <div class="p-6 pt-0 space-y-6">
-    <form>
-      <div class="space-y-5">
-        <FormInput
-          id="name"
-          name="name"
-          type="text"
-          label="Nombre completo"
-          placeholder="Ej. María García"
-        />
+    <div class="space-y-5">
+      <FormInput
+        id="name"
+        name="name"
+        type="text"
+        label="Nombre completo"
+        placeholder="Ej. María García"
+        model="customer.name"
+        errorKey="name"
+        inputHandler="clearError('name')"
+        blurHandler="validateField('name')"
+      />
 
-        <FormInput
-          id="phone"
-          name="phone"
-          type="tel"
-          label="Teléfono de contacto"
-          placeholder="Ej. 55 1234 5678"
-        />
+      <FormInput
+        id="phone"
+        name="phone"
+        type="tel"
+        label="Teléfono de contacto"
+        placeholder="Ej. 55 1234 5678"
+        model="customer.phone"
+        errorKey="phone"
+        inputHandler="clearError('phone')"
+        blurHandler="validateField('phone')"
+      />
 
-        <FormInput
-          id="notes"
-          name="notes"
-          type="text"
-          label="Notas adicionales"
-          placeholder="Ej. Timbre del portón blanco"
-          optional={true}
-        />
-      </div>
-    </form>
+      <FormInput
+        id="note"
+        name="note"
+        type="text"
+        label="Notas adicionales"
+        placeholder="Ej. Timbre del portón blanco"
+        optional={true}
+        model="customer.note"
+      />
+    </div>
   </div>
 </Card>

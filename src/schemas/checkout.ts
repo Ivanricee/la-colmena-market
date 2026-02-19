@@ -4,7 +4,7 @@ export const checkoutSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, 'Ingresa tu nombre completo')
+    .min(3, 'Ingresa tu nombre completo')
     .max(100, 'El nombre es demasiado largo'),
   phone: z
     .string()
@@ -15,3 +15,10 @@ export const checkoutSchema = z.object({
   addressId: z.string().min(1, 'Selecciona un punto de entrega'),
   note: z.string().max(300, 'Máximo 500 caracteres').optional(),
 })
+
+export const step2Schema = checkoutSchema.pick({ name: true, phone: true, note: true })
+export const step3Schema = checkoutSchema.pick({ addressId: true })
+
+export type CheckoutInput = z.infer<typeof checkoutSchema>
+export type Step2Input = z.infer<typeof step2Schema>
+export type Step3Input = z.infer<typeof step3Schema>

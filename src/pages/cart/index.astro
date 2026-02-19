@@ -3,7 +3,6 @@ import EmptyCart from '@/components/cart/EmptyCart.astro'
 import Layout from '@/layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
 import Button from '@/components/ui/Button.astro'
-import { prevStep } from '@/lib/utils/cart.order'
 import Stepper from '@/components/cart/Stepper.astro'
 import OrderSummary from '@/components/cart/OrderSummary.astro'
 import Step1 from '@/components/cart/Step1.astro'
@@ -17,22 +16,23 @@ import Step4 from '@/components/cart/Step4.astro'
     <EmptyCart x-show="itemCount === 0 && step === 1" x-cloak />
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- STEPPER -->
-      <span x-text="step"></span>
       <Stepper />
       {/* Main content */}
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-6">
           {/* Cart review */}
           <Step1 />
-          {/* Customer info */}
-          <Step2 />
-          {/* Step 3: Delivery address */}
-          <Step3 />
+          {/* Customer info + Delivery address — single form for both steps */}
+          <form novalidate x-ref="checkoutForm" x-on:submit.prevent="nextStep">
+            <Step2 />
+            {/* Step 3: Delivery address */}
+            <Step3 />
+          </form>
           {/* Step 4: Confirmation */}
           <Step4 />
           {/* Navigation buttons */}
           <div class="flex justify-between">
-            <Button x-show="step > 1" variant="ghost" onClick={prevStep}>
+            <Button x-show="step > 1" variant="secondary" x-on:click="prevStep" type="button">
               <Icon name="lucide:arrow-left" size={20} />
               Anterior
             </Button>
@@ -40,24 +40,42 @@ import Step4 from '@/components/cart/Step4.astro'
               <Icon name="lucide:arrow-left" size={20} />
               Seguir comprando
             </Button>
-            <Button x-show="step < 4" x-on:click="nextStep" x-bind:disabled="!canProceedFromStep">
+            <Button
+              class="disabled:opacity-35"
+              x-show="step < 4"
+              type="button"
+              x-bind:disabled="!canProceed"
+              x-on:click="nextStep"
+            >
               Siguiente
               <Icon name="lucide:arrow-right" size={20} />
             </Button>
 
-            <!-- onClick={handleFinalize} -->
             <Button
-              x-show="step === 5"
-              class="bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white gap-2"
+              x-show="step === 4"
+              x-on:click="finalize"
+              x-bind:disabled="isSubmitting"
+              class="bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               size="lg"
+              type="button"
             >
-              <Icon name="lucide:message-circle" size={20} />
-              Finalizar por WhatsApp
+              <span x-show="!isSubmitting" class="flex items-center gap-2">
+                <Icon name="lucide:message-circle" size={20} />
+                Finalizar por WhatsApp
+              </span>
             </Button>
+
+            <div
+              x-show="finalizeError"
+              x-cloak
+              class="mt-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800/30 px-4 py-3 text-sm text-red-700 dark:text-red-400"
+            >
+              <p class="font-medium" x-text="finalizeError?.message"></p>
+            </div>
           </div>
+          {/* Sidebar */}
+          <OrderSummary />
         </div>
-        {/* Sidebar */}
-        <OrderSummary />
       </div>
     </div>
   </div>

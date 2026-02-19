@@ -7,6 +7,10 @@ interface Props {
   placeholder?: string
   optional?: boolean
   class?: string
+  model?: string
+  errorKey?: string
+  blurHandler?: string
+  inputHandler?: string
 }
 
 const {
@@ -17,7 +21,13 @@ const {
   placeholder = '',
   optional = false,
   class: className = '',
+  model,
+  errorKey,
+  blurHandler,
+  inputHandler,
 } = Astro.props
+
+const errorId = errorKey ? `error-${id}` : undefined
 
 const inputClasses = [
   'w-full rounded-lg border border-border/80 bg-background px-4 py-3',
@@ -41,9 +51,38 @@ const inputClasses = [
         name={name}
         placeholder={placeholder}
         class={`${inputClasses} min-h-[100px] resize-none`}
+        x-model={model}
+        x-on:input={inputHandler}
+        x-on:blur={blurHandler}
+        x-bind:aria-invalid={errorKey ? `!!errors.${errorKey}` : undefined}
+        aria-describedby={errorId}
       />
     ) : (
-      <input id={id} name={name} type={type} placeholder={placeholder} class={inputClasses} />
+      <input
+        id={id}
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        class={inputClasses}
+        x-model={model}
+        x-on:input={inputHandler}
+        x-on:blur={blurHandler}
+        x-bind:aria-invalid={errorKey ? `!!errors.${errorKey}` : undefined}
+        aria-describedby={errorId}
+      />
+    )
+  }
+
+  {
+    errorKey && (
+      <p
+        id={errorId}
+        role="alert"
+        class="text-sm text-destructive"
+        x-show={`!!errors.${errorKey}`}
+        x-text={`errors.${errorKey}?.[0] ?? ''`}
+        x-cloak
+      />
     )
   }
 </div>

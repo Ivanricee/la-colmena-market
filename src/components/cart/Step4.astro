@@ -1,9 +1,10 @@
 ---
 import { Icon } from 'astro-icon/components'
 import Card from '../ui/Card.astro'
+import { DELIVERY_ADDRESSES } from '@/pages/cart/cart.config'
 ---
 
-<Card x-show="step === 1" class="bg-card" x-cloak>
+<Card x-show="step === 4" class="bg-card" x-cloak>
   <div class="flex flex-col space-y-1.5 pb-4">
     <h3
       class="flex items-center gap-2 text-xl leading-none font-semibold tracking-tight sm:text-2xl"
@@ -17,38 +18,32 @@ import Card from '../ui/Card.astro'
     {/* Customer summary */}
     <div class="space-y-2">
       <h4 class="font-semibold text-foreground flex items-center gap-2">
-        <!--  create icon user   -->
         <Icon name="lucide:user" size={20} class="h-5 w-5 text-primary" />
         Datos del cliente
       </h4>
       <div class="p-4 rounded-lg bg-muted/30 space-y-1">
-        <p class="text-foreground">{"form.getValues('name')"}</p>
+        <p class="text-foreground" x-text="customer.name"></p>
         <p class="text-sm text-muted-foreground">
-          Tel: {'form.getValues("phone")'}
+          Tel: <span x-text="customer.phone"></span>
         </p>
-        {
-          /*form.getValues("notes") && (
-            <p class="text-sm text-muted-foreground">
-              Notas: {form.getValues("notes")}
-            </p>
-          )*/
-        }
+        <p class="text-sm text-muted-foreground" x-show="customer.note">
+          Notas: <span x-text="customer.note"></span>
+        </p>
       </div>
     </div>
 
     {/* Address summary */}
-    <div class="space-y-2">
+    <div
+      class="space-y-2"
+      x-data={`{ addresses: ${JSON.stringify(DELIVERY_ADDRESSES)}, get selectedAddress() { return this.addresses.find(a => a.id === delivery.addressId) } }`}
+    >
       <h4 class="font-semibold text-foreground flex items-center gap-2">
         <Icon name="lucide:map-pin" size={20} class="h-5 w-5 text-primary" />
         Punto de entrega
       </h4>
       <div class="p-4 rounded-lg bg-muted/30">
-        <p class="font-medium text-foreground">
-          {'selectedAddress?.label'}
-        </p>
-        <p class="text-sm text-muted-foreground">
-          {'selectedAddress?.full'}
-        </p>
+        <p class="font-medium text-foreground" x-text="selectedAddress?.label"></p>
+        <p class="text-sm text-muted-foreground" x-text="selectedAddress?.full"></p>
       </div>
     </div>
 
@@ -59,35 +54,29 @@ import Card from '../ui/Card.astro'
         Productos
       </h4>
       <div class="space-y-2">
-        {
-          /*items.map((item) => (
-            <div
-              key={item.product.id}
-              class="flex justify-between items-center p-3 rounded-lg bg-muted/30"
-            >
-              <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded bg-gradient-warm overflow-hidden">
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    class="h-full w-full object-contain p-1"
-                  />
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-foreground">
-                    {item.product.name}
-                  </p>
-                  <p class="text-xs text-muted-foreground">
-                    {item.quantity} × ${item.product.price.toFixed(2)}
-                  </p>
-                </div>
+        <template x-for="[id, item] in Object.entries(items)" x-bind:key="id">
+          <div class="flex justify-between items-center p-3 rounded-lg bg-muted/30">
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded overflow-hidden bg-muted shrink-0">
+                <img
+                  x-bind:src="item.imgUrl"
+                  x-bind:alt="item.title"
+                  class="h-full w-full object-contain p-1"
+                />
               </div>
-              <span class="font-semibold text-foreground">
-                ${(item.product.price * item.quantity).toFixed(2)}
-              </span>
+              <div>
+                <p class="text-sm font-medium text-foreground" x-text="item.title"></p>
+                <p class="text-xs text-muted-foreground">
+                  <span x-text="item.quantity"></span> × $<span x-text="item.price.toFixed(2)"
+                  ></span>
+                </p>
+              </div>
             </div>
-          ))*/
-        }
+            <span
+              class="font-semibold text-foreground"
+              x-text="'$' + (item.price * item.quantity).toFixed(2)"></span>
+          </div>
+        </template>
       </div>
     </div>
   </div>

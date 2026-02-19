@@ -17,10 +17,10 @@ interface Props {
   [key: string]: any
 }
 
-const { variant = 'default', href, target, className = '', ...props } = Astro.props
+const { variant = 'default', href, target, className = '', type, ...props } = Astro.props
 const hasAlpineHref = props['x-bind:href'] || props[':href']
 const Wrapper = href || hasAlpineHref ? 'a' : 'button'
-const wrapperProps = href || hasAlpineHref ? { href, target } : { type: 'button' }
+const wrapperProps = href || hasAlpineHref ? { href, target } : { type: type ?? 'button' }
 
 const buttonClass: Record<ButtonVariant, string> = {
   default:
@@ -45,7 +45,6 @@ const variantClass = buttonClass[variant]
 <Wrapper
   {...wrapperProps}
   {...props}
-  type="button"
   class:list={[
     `${variantClass}`,
     'cursor-pointer transition-all duration-300 gap-2 text-sm justify-center',

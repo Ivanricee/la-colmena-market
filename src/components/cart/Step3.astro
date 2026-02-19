@@ -5,7 +5,7 @@ import Card from '../ui/Card.astro'
 import AddressOption from '../ui/AddressOption.astro'
 ---
 
-<Card x-show="step === 1" class="bg-card" x-cloak>
+<Card x-show="step === 3" class="bg-card" x-cloak>
   <div class="flex flex-col space-y-1.5 pb-4">
     <h3
       class="flex items-center gap-2 text-xl leading-none font-semibold tracking-tight sm:text-2xl"
@@ -15,8 +15,14 @@ import AddressOption from '../ui/AddressOption.astro'
     </h3>
   </div>
 
-  <div class="p-6 pt-0 space-y-6" x-data="{ selectedAddress: 'addr-1' }">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <div class="p-6 pt-0 space-y-6">
+    <div
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+      role="radiogroup"
+      aria-label="Punto de entrega"
+      aria-describedby="error-addressId"
+      x-on:change="clearError('addressId'); validateField('addressId')"
+    >
       {
         DELIVERY_ADDRESSES.map((addr) => (
           <AddressOption
@@ -25,10 +31,19 @@ import AddressOption from '../ui/AddressOption.astro'
             name="addressId"
             label={addr.label}
             description={addr.full}
-            model="selectedAddress"
+            model="delivery.addressId"
           />
         ))
       }
     </div>
+    <p
+      id="error-addressId"
+      role="alert"
+      class="text-sm text-destructive"
+      x-show="!!errors.addressId"
+      x-text="errors.addressId?.[0] ?? ''"
+      x-cloak
+    >
+    </p>
   </div>
 </Card>
