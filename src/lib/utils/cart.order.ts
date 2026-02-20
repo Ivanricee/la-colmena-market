@@ -1,7 +1,7 @@
 import { DELIVERY_ADDRESSES } from '@/pages/cart/cart.config'
 import { step2Schema, step3Schema } from '@/schemas/checkout'
 import { Cart, CartItem, clearCart } from '@/store/cartStore'
-import { actions } from 'astro:actions'
+import { actions, isInputError } from 'astro:actions'
 import { navigate } from 'astro:transitions/client'
 
 type StepType = {
@@ -77,7 +77,7 @@ export const handleFinalize = async ({
   })
 
   if (error) {
-    if (error.type === 'AstroActionInputError') {
+    if (isInputError(error)) {
       return {
         ok: false,
         error: {
