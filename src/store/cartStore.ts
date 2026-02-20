@@ -35,12 +35,25 @@ export function addItem({ id, item, quantity }: AddItemType) {
   const itemInCart = cart.items[id]
   const quantityToAdd = quantity ?? 1
 
+  const currentPurchaseLimit = item?.purchaseLimit ?? itemInCart?.purchaseLimit
+  const currentQty = itemInCart?.quantity ?? 0
+  const proposedQty = currentQty + quantityToAdd
+  const clampedQty =
+    typeof currentPurchaseLimit === 'number'
+      ? Math.min(proposedQty, currentPurchaseLimit)
+      : proposedQty
+
+  if (
+    typeof currentPurchaseLimit === 'number' &&
+    currentQty >= currentPurchaseLimit &&
+    quantityToAdd > 0
+  ) {
+    return
+  }
+
   const updatedItems = {
     ...cart.items,
-    [id]:
-      !itemInCart && item
-        ? { ...item }
-        : { ...itemInCart, quantity: (itemInCart?.quantity ?? 0) + quantityToAdd },
+    [id]: !itemInCart && item ? { ...item } : { ...itemInCart, quantity: clampedQty },
   }
   const total = Object.values(updatedItems).reduce(
     (sum, item) => sum + item.price * item.quantity,
