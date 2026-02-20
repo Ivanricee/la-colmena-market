@@ -2,6 +2,11 @@
 import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
 import NavBar from '@/components/NavBar.astro'
+import Drawer from '@/components/ui/Drawer.astro'
+import CardDrawerItems from '@/features/products/components/CardDrawerItems.astro'
+
+const showDrawer =
+  !Astro.url.pathname.startsWith('/cart') && !Astro.url.pathname.startsWith('/pedidos')
 
 interface Props {
   title: string
@@ -36,6 +41,14 @@ const { title = 'La Colmena Market' } = Astro.props
   </head>
 
   <body>
+    {
+      showDrawer && (
+        <Drawer>
+          <CardDrawerItems slot="vertical" />
+          <CardDrawerItems slot="horizontal" />
+        </Drawer>
+      )
+    }
     <div class="bg-background flex min-h-dvh w-full flex-col">
       <div class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col mt-16">
         <NavBar />

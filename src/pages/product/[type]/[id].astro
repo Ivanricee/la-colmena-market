@@ -1,6 +1,5 @@
 ---
 import BuyWidget from '@/components/BuyWidget.astro'
-import Drawer from '@/components/ui/Drawer.astro'
 import Button from '@/components/ui/Button.astro'
 import Card from '@/components/ui/Card.astro'
 import Dropdown from '@/components/ui/Dropdown.astro'
@@ -12,7 +11,6 @@ import Breadcrumb from '@/components/ui/Breadcrumb.astro'
 import { getProducts } from '@/features/products/products.api'
 import Layout from '@/layouts/Layout.astro'
 import { Icon } from 'astro-icon/components'
-import CardDrawerItems from '@/features/products/components/CardDrawerItems.astro'
 import Tooltip from '@/components/ui/Tooltip.astro'
 export async function getStaticPaths() {
   const { productos, errorMessage } = await getProducts()
@@ -33,11 +31,6 @@ const { id, title } = product
 ---
 
 <Layout {title}>
-  <!-- drawer init and toggle -->
-  <Drawer>
-    <CardDrawerItems slot="vertical" />
-    <CardDrawerItems slot="horizontal" />
-  </Drawer>
   <Breadcrumb items={breadcrumbItems} className="md:px-8 px-2" />
   <Card
     class="from-card relative mx-auto h-full w-full min-w-[16rem] flex-1 overflow-hidden bg-linear-to-t to-transparent md:max-w-4xl my-8 mb-20 sm:my-8"
