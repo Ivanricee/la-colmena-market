@@ -8,6 +8,7 @@ type ButtonVariant =
   | 'dark'
   | 'ghost'
   | 'outline'
+  | 'whatsapp'
 
 interface Props {
   variant?: ButtonVariant
@@ -38,6 +39,8 @@ const buttonClass: Record<ButtonVariant, string> = {
     'focus:ring-honey-dark border border-transparent text-sm leading-5 hover:shadow-honey-medium/20 hover:shadow-lg',
   ghost:
     'hover:bg-accent hover:text-accent-foreground text-heading focus:ring-neutral-tertiary border border-transparent bg-transparent text-sm leading-5 rounded-md',
+  whatsapp:
+    '!bg-[hsl(142,70%,40%)] hover:!bg-[hsl(142,70%,35%)] !text-white border border-transparent text-sm leading-5 hover:shadow-lg rounded-md focus:ring-green-600',
 }
 const variantClass = buttonClass[variant]
 ---
