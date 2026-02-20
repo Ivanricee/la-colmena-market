@@ -87,6 +87,26 @@ export default defineConfig({
         access: 'secret',
         optional: false,
       }),
+      WHATSAPP_TO_NUMBER: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      TURSO_DATABASE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      TURSO_AUTH_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      PUBLIC_SITE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
     },
   },
 
