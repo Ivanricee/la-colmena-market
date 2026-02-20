@@ -51,31 +51,54 @@ import Step4 from '@/components/cart/Step4.astro'
               <Icon name="lucide:arrow-right" size={20} />
             </Button>
 
-            <Button
-              x-show="step === 4"
-              x-on:click="finalize"
-              x-bind:disabled="isSubmitting"
-              class="bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              size="lg"
-              type="button"
-            >
-              <span x-show="!isSubmitting" class="flex items-center gap-2">
-                <Icon name="lucide:message-circle" size={20} />
-                Finalizar por WhatsApp
-              </span>
-            </Button>
-
-            <div
-              x-show="finalizeError"
-              x-cloak
-              class="mt-3 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800/30 px-4 py-3 text-sm text-red-700 dark:text-red-400"
-            >
-              <p class="font-medium" x-text="finalizeError?.message"></p>
+            <div class="relative">
+              <Button
+                variant="whatsapp"
+                x-show="step === 4"
+                x-on:click="finalize"
+                x-bind:disabled="isSubmitting"
+                class="disabled:opacity-60 disabled:cursor-not-allowed min-w-[200px]"
+                size="lg"
+                type="button"
+              >
+                <span x-show="!isSubmitting" class="flex items-center gap-2">
+                  <Icon name="lucide:message-circle" size={20} />
+                  Finalizar por WhatsApp
+                </span>
+                <span x-show="isSubmitting" x-cloak class="flex items-center gap-2">
+                  <svg
+                    class="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                  Enviando...
+                </span>
+              </Button>
+              <div
+                x-show="finalizeError"
+                x-cloak
+                class="absolute top-full left-0 mt-2 w-max max-w-xs rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800/30 px-4 py-2 text-sm text-red-700 dark:text-red-400 z-10"
+              >
+                <p class="font-medium" x-text="finalizeError?.message"></p>
+              </div>
             </div>
           </div>
-          {/* Sidebar */}
-          <OrderSummary />
         </div>
+        {/* Sidebar */}
+        <OrderSummary />
       </div>
     </div>
   </div>
