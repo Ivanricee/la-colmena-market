@@ -1,0 +1,196 @@
+---
+export const prerender = false
+
+import Button from '@/components/ui/Button.astro'
+import Layout from '@/layouts/Layout.astro'
+import { turso } from '@/lib/db/turso'
+import type { CartItem } from '@/store/cartStore'
+import Icon from 'node_modules/astro-icon/components/Icon.astro'
+
+const { ticket } = Astro.params
+
+if (!ticket) {
+  return Astro.redirect('/catalogo')
+}
+
+const result = await turso.execute({
+  sql: 'SELECT * FROM tickets WHERE id = ? LIMIT 1',
+  args: [ticket],
+})
+
+if (result.rows.length === 0) {
+  return Astro.redirect('/catalogo')
+}
+
+const row = result.rows[0]
+
+const ticketData = {
+  id: row.id as string,
+  createdAt: row.created_at as string,
+  customerName: row.customer_name as string,
+  customerPhone: row.customer_phone as string,
+  customerNote: row.customer_note as string,
+  addressLabel: row.address_label as string,
+  addressFull: row.address_full as string,
+  items: JSON.parse(row.items_json as string) as Record<string, CartItem>,
+  totalPrice: row.total_price as number,
+  message: row.message as string,
+  whatsappUrl: row.whatsapp_url as string,
+}
+
+const openWa = Astro.url.searchParams.get('openWa') === '1'
+
+const formattedDate = new Intl.DateTimeFormat('es-MX', {
+  dateStyle: 'long',
+  timeStyle: 'short',
+}).format(new Date(ticketData.createdAt))
+---
+
+<Layout title={`Pedido — ${ticketData.id.slice(0, 8).toUpperCase()}`}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-2xl">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <div
+        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4"
+      >
+        <Icon name="lucide:check" size={24} class="w-8 h-8 text-primary" />
+      </div>
+      <h1 class="text-2xl font-bold text-foreground">¡Pedido registrado!</h1>
+      <p class="mt-1 text-muted-foreground text-sm">
+        Tu compra continuará por WhatsApp. Guarda este ticket como referencia.
+      </p>
+    </div>
+
+    <!-- Ticket card -->
+    <div class="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+      <!-- Ticket ID + fecha -->
+      <div
+        class="bg-secondary/40 border-b border-border px-6 py-4 flex items-center justify-between gap-4"
+      >
+        <div>
+          <p class="text-xs text-primary font-medium uppercase tracking-wide">Ticket</p>
+          <p class="font-mono text-sm font-bold text-card-foreground break-all">
+            {ticketData.id}
+          </p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-xs text-muted-foreground">{formattedDate}</p>
+        </div>
+      </div>
+
+      <div class="px-6 py-5 space-y-5">
+        <!-- Cliente -->
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+            Cliente
+          </h2>
+          <div class="space-y-1 text-sm text-card-foreground">
+            <p><span class="font-medium">Nombre:</span> {ticketData.customerName}</p>
+            <p><span class="font-medium">Teléfono:</span> {ticketData.customerPhone}</p>
+            {
+              ticketData.customerNote && (
+                <p>
+                  <span class="font-medium">Notas:</span> {ticketData.customerNote}
+                </p>
+              )
+            }
+          </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- Entrega -->
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+            Punto de entrega
+          </h2>
+          <div class="space-y-1 text-sm text-card-foreground">
+            <p class="font-medium">{ticketData.addressLabel}</p>
+            <p class="text-muted-foreground">{ticketData.addressFull}</p>
+          </div>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- Productos -->
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+            Productos
+          </h2>
+          <ul class="space-y-3">
+            {
+              Object.entries(ticketData.items).map(([, item]) => (
+                <li class="flex items-center gap-3 text-sm">
+                  <img
+                    src={item.imgUrl}
+                    alt={item.title}
+                    class="w-12 h-12 rounded-lg object-cover shrink-0 border border-border"
+                  />
+                  <span class="flex-1 text-card-foreground">
+                    <span class="font-medium">{item.quantity}x</span> {item.title}
+                  </span>
+                  <span class="font-medium text-foreground shrink-0">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <hr class="border-border" />
+
+        <!-- Total -->
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-foreground">Total</span>
+          <span class="text-xl font-bold text-primary">
+            ${ticketData.totalPrice.toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <!-- Footer: botones -->
+      <div class="bg-muted/40 border-t border-border px-6 py-4 flex flex-col sm:flex-row gap-3">
+        <Button
+          variant="whatsapp"
+          href={ticketData.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center justify-center gap-2 flex-1 rounded-xl bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold py-3 px-4 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+            ></path>
+          </svg>
+          Continuar por WhatsApp
+        </Button>
+        <Button
+          variant="secondary"
+          href="/catalogo"
+          class="rounded-xl flex-1 font-semibold py-3 px-4 transition-colors"
+        >
+          <Icon name="lucide:arrow-left" size={18} />
+          Seguir comprando
+        </Button>
+      </div>
+    </div>
+
+    <!-- Nota informativa -->
+    <p class="mt-6 text-center text-xs text-muted-foreground">
+      Guarda el link de esta página para consultar tu pedido en cualquier momento.
+    </p>
+  </div>
+</Layout>
+
+<script define:vars={{ whatsappUrl: ticketData.whatsappUrl, openWa }}>
+  if (openWa) {
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+    history.replaceState({}, '', window.location.pathname)
+  }
+</script>
