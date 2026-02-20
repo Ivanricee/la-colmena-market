@@ -94,7 +94,7 @@ const { productos, errorMessage: productsError } = productsData
           <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4 mb-12">
               <h2 class="text-4xl font-bold text-foreground">Productos Destacados</h2>
-              <p class="text-lg text-muted-foreground max-w-2xl text-center w-full">
+              <p class="text-lg text-muted-foreground max-w-2xl text-center mx-auto">
                 Nuestra selección premium de mieles más populares, escogidas especialmente para ti
               </p>
             </div>
@@ -108,16 +108,7 @@ const { productos, errorMessage: productsError } = productsData
                       ' rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl',
                     ]}
                   >
-                    <ProductCard
-                      id={product.id}
-                      title={product.title}
-                      description={product.description.html}
-                      price={product.price}
-                      previousPrice={product.previousPrice}
-                      image={product.image[0]}
-                      tags={product.tags}
-                      slug={product.categoryid.slug}
-                    />
+                    <ProductCard product={product} />
                   </div>
                 </li>
               ))}

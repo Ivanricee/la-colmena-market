@@ -43,7 +43,7 @@ const { productos, errorMessage } = (await getProducts()) as {
       <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {productos.map((product, index) => (
           <li
-            x-show={`shouldShow(${index}, '${product.title.replace(/'/g, '')}')`}
+            x-show={`shouldShow(${index}, ${JSON.stringify(product.title)})`}
             x-transition:enter="transition ease-in-out duration-200"
             x-transition:enter-start="opacity-5 transform scale-95"
             x-transition:enter-end="opacity-100 transform scale-100"
@@ -53,16 +53,7 @@ const { productos, errorMessage } = (await getProducts()) as {
             transition:name={product.id}
           >
             <div class="group shadow-honey-dark/30 @container h-full overflow-hidden rounded-lg transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
-              <ProductCard
-                id={product.id}
-                title={product.title}
-                description={product.description.html}
-                price={product.price}
-                previousPrice={product.previousPrice}
-                image={product.image[0]}
-                tags={product.tags}
-                slug={product.categoryid.slug}
-              />
+              <ProductCard product={product} />
             </div>
           </li>
         ))}
