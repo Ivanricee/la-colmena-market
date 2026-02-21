@@ -14,7 +14,7 @@ import Step4 from '@/components/cart/Step4.astro'
 <Layout title="Mi carrito">
   <div x-data="cartHandler">
     <EmptyCart x-show="itemCount === 0 && step === 1" x-cloak />
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-cloak x-show="itemCount > 0">
       <!-- STEPPER -->
       <Stepper />
       {/* Main content */}
@@ -51,10 +51,9 @@ import Step4 from '@/components/cart/Step4.astro'
               <Icon name="lucide:arrow-right" size={20} />
             </Button>
 
-            <div class="relative">
+            <div class="relative" x-show="step === 4" x-cloak>
               <Button
                 variant="whatsapp"
-                x-show="step === 4"
                 x-on:click="finalize"
                 x-bind:disabled="isSubmitting"
                 class="disabled:opacity-60 disabled:cursor-not-allowed min-w-[200px]"
