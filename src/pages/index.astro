@@ -35,14 +35,14 @@ const { productos, errorMessage: productsError } = productsData
             <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
               <div class="max-w-2xl space-y-6">
                 <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-                  Tus productos favoritos{' '}
+                  Productos hechos con{' '}
                   <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
-                    hechos con miel.
+                    miel natural
                   </span>
                 </h1>
-                <p class="text-xl text-muted-foreground">
-                  Descubre nuestra selección de productos naturales para tu cuidado personal y tu
-                  cocina. Todo lo que necesitas para tu bienestar, 100% natural.
+                <p class="text-xl text-muted-foreground max-w-md">
+                  Productos naturales elaborados a partir de miel natural y de ingredientes
+                  naturales.
                 </p>
                 <div class="flex gap-4">
                   <Button
@@ -91,16 +91,16 @@ const { productos, errorMessage: productsError } = productsData
         </section>
         {/* Featured Products */}
         <section class="py-20">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4 mb-12">
               <h2 class="text-4xl font-bold text-foreground">Productos Destacados</h2>
-              <p class="text-lg text-muted-foreground max-w-2xl text-center mx-auto">
-                Nuestra selección premium de mieles más populares, escogidas especialmente para ti
+              <p class="text-lg text-muted-foreground text-center mx-auto">
+                Una selección de nuestros productos más buscados y recomendados.
               </p>
             </div>
 
-            <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {productos.map((product, index) => (
+            <ul class="grid auto-rows-[16rem] lg:auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {productos.map((product) => (
                 <li>
                   <div
                     class:list={[
