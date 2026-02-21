@@ -18,7 +18,7 @@ const { productos, errorMessage } = (await getProducts()) as {
     </section>
   ) : (
     <section x-data={`catalogHandler(${productos.length})`} class="space-y-8">
-      <div class="relative max-w-7xl mx-auto px-6 py-8">
+      <div class="relative max-w-7xl mx-auto px-0 sm:px-6 py-8">
         <div class="relative">
           <div class="absolute inset-0 bg-gradient-to-r from-honey-dark/35 to-honey-medium/15 blur-2xl opacity-50 rounded-2xl" />
 
@@ -40,9 +40,10 @@ const { productos, errorMessage } = (await getProducts()) as {
         </div>
       </div>
 
-      <ul class="grid auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <ul class="grid auto-rows-[16rem] lg:auto-rows-[30rem] grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {productos.map((product, index) => (
           <li
+            class="h-full"
             x-show={`shouldShow(${index}, ${JSON.stringify(product.title)})`}
             x-transition:enter="transition ease-in-out duration-200"
             x-transition:enter-start="opacity-5 transform scale-95"
