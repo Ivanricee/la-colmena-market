@@ -69,7 +69,7 @@ const formattedDate = new Intl.DateTimeFormat('es-MX', {
       >
         <div>
           <p class="text-xs text-primary font-medium uppercase tracking-wide">Ticket</p>
-          <p class="font-mono text-sm font-bold text-card-foreground break-all">
+          <p class="font-mono text-sm font-bold text-card-foreground break-all line-clamp-2">
             {ticketData.id}
           </p>
         </div>
@@ -126,7 +126,7 @@ const formattedDate = new Intl.DateTimeFormat('es-MX', {
                     alt={item.title}
                     class="w-12 h-12 rounded-lg object-cover shrink-0 border border-border"
                   />
-                  <span class="flex-1 text-card-foreground">
+                  <span class="flex-1 text-card-foreground line-clamp-2">
                     <span class="font-medium">{item.quantity}x</span> {item.title}
                   </span>
                   <span class="font-medium text-foreground shrink-0">
