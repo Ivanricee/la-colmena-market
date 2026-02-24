@@ -7,6 +7,7 @@ const anchorDirection = `x-anchor.${position}.offset.10.no-flip.track`
 <template x-teleport="body">
   <div
     x-show="state.show"
+    x-cloak
     {...{ [anchorDirection]: 'anchorRef' }}
     role="tooltip"
     class="pointer-events-none fixed z-[70] rounded bg-black px-3 py-2 text-xs text-white shadow-xl"
