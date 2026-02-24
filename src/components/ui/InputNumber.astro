@@ -18,8 +18,9 @@ const { id, value = 1, ...rest } = Astro.props
   x-ref="container"
   :id="'container-' + id"
   :aria-describedby="'tooltip-content-' + id"
-  @mouseenter="state.show = true && product.quantity >= product.purchaseLimit"
-  @mouseleave="state.show = false"
+  @mouseenter="handleMouseEnter(product)"
+  @mouseleave="handleMouseLeave()"
+  x-effect="showTooltip(product)"
   class:list={[
     'md:h-full md:rounded-t-none md:rounded-b-sm',
     'bg-secondary/30 relative flex w-full items-center shadow-xs h-12 rounded-sm sm:h-16',
@@ -74,7 +75,7 @@ const { id, value = 1, ...rest } = Astro.props
   <button
     type="button"
     :id="incBtnId"
-    x-bind:disabled="state.disableIncreament"
+    x-bind:disabled="product.quantity >= product.purchaseLimit"
     class:list={[
       'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
       'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',

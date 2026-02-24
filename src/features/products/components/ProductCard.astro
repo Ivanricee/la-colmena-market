@@ -112,6 +112,7 @@ const getImg = (image: Image) => {
           x-data={`{
             itemData: ${productJson.replace(/'/g, "\\'")},
             state: { show: false },
+            isHovered: false,
             anchorRef: null,
             get inCartQty() { return $store.cartStore?.data?.items?.[this.itemData.id]?.quantity ?? 0 },
             get limit() { return this.itemData.purchaseLimit ?? 10 },
@@ -119,12 +120,13 @@ const getImg = (image: Image) => {
           }`}
           x-init="anchorRef = $el"
           :aria-describedby="'tooltip-content-' + itemData.id"
-          @mouseenter="state.show = reachedLimit"
-          @mouseleave="state.show = false"
+          @mouseenter="isHovered = true; state.show = isHovered && reachedLimit"
+          @mouseleave="isHovered = false; state.show = false"
+          x-effect="if (reachedLimit && isHovered) state.show = true; else state.show = false"
         >
           <Button
             x-bind:disabled="reachedLimit"
-            @click="if (!reachedLimit) { $store.cartStore.handleAddToCart({...itemData, quantity: 1}); $dispatch('open-cart') } else { state.show = true }"
+            @click="if (!reachedLimit) { $store.cartStore.handleAddToCart({...itemData, quantity: 1}); $dispatch('open-cart') }"
             className="text-xs px-2 py-2"
           >
             <Icon name="lucide:shopping-cart" size={14} />
@@ -161,6 +163,7 @@ const getImg = (image: Image) => {
         x-data={`{
           itemData: ${productJson.replace(/'/g, "\\'")},
           state: { show: false },
+          isHovered: false,
           anchorRef: null,
           get inCartQty() { return $store.cartStore?.data?.items?.[this.itemData.id]?.quantity ?? 0 },
           get limit() { return this.itemData.purchaseLimit ?? 10 },
@@ -168,12 +171,13 @@ const getImg = (image: Image) => {
         }`}
         x-init="anchorRef = $el"
         :aria-describedby="'tooltip-content-' + itemData.id"
-        @mouseenter="state.show = reachedLimit"
-        @mouseleave="state.show = false"
+        @mouseenter="isHovered = true; state.show = isHovered && reachedLimit"
+        @mouseleave="isHovered = false; state.show = false"
+        x-effect="if (reachedLimit && isHovered) state.show = true; else state.show = false"
       >
         <Button
           x-bind:disabled="reachedLimit"
-          @click="if (!reachedLimit) { $store.cartStore.handleAddToCart({...itemData, quantity: 1}); $dispatch('open-cart') } else { state.show = true }"
+          @click="if (!reachedLimit) { $store.cartStore.handleAddToCart({...itemData, quantity: 1}); $dispatch('open-cart') }"
           className="text-xs px-2 py-2"
         >
           <Icon name="lucide:shopping-cart" size={14} />

@@ -93,11 +93,6 @@ const setupInputNumberHandler = () => {
       return `inc-${id}`
     },
     decrease(quantity: number) {
-      if (this.state.disableIncreament && quantity <= purchaseLimit) {
-        this.$dispatch('clean-quantity')
-        this.state.disableIncreament = false
-        this.state.show = false
-      }
       if (quantity > 1) {
         return Alpine.store('cartStore').handleAddToCart({ id: id, quantity: -1 })
       }
@@ -105,15 +100,27 @@ const setupInputNumberHandler = () => {
       Alpine.store('cartStore').handleRemoveFromCart(id)
     },
     increase(quantity: number) {
-      if (quantity >= purchaseLimit) {
-        this.state.disableIncreament = true
+      if (quantity < purchaseLimit) {
+        Alpine.store('cartStore').handleAddToCart({ id: id, quantity: 1 })
+      }
+    },
+    handleMouseEnter(product: RawProduct) {
+      this.isHovered = true
+      this.state.show = this.isHovered && product.quantity >= product.purchaseLimit
+    },
+    handleMouseLeave() {
+      this.isHovered = false
+      this.state.show = false
+    },
+    showTooltip(product: RawProduct) {
+      if (product.quantity >= product.purchaseLimit && this.isHovered) {
         this.state.show = true
         return
       }
-
-      Alpine.store('cartStore').handleAddToCart({ id: id, quantity: 1 })
+      this.state.show = false
     },
-    state: { show: false, disableIncreament: false },
+    isHovered: false,
+    state: { show: false },
     anchorRef: null,
   }))
 }
