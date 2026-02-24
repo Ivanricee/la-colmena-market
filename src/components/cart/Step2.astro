@@ -11,7 +11,7 @@ import FormInput from '../ui/FormInput.astro'
       class="flex items-center gap-2 text-xl leading-none font-semibold tracking-tight sm:text-2xl"
     >
       <Icon name="lucide:user" size={20} class="h-5 w-5 text-primary" />
-      ¿Cómo te llamamos?
+      Tus datos de contacto
     </h3>
   </div>
 
@@ -35,6 +35,7 @@ import FormInput from '../ui/FormInput.astro'
         type="tel"
         label="Teléfono de contacto"
         placeholder="Ej. 55 1234 5678"
+        optional
         model="customer.phone"
         errorKey="phone"
         inputHandler="clearError('phone')"
@@ -47,7 +48,7 @@ import FormInput from '../ui/FormInput.astro'
         type="text"
         label="Notas adicionales"
         placeholder="Ej. Timbre del portón blanco"
-        optional={true}
+        optional
         model="customer.note"
       />
     </div>

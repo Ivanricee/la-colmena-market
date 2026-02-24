@@ -9,9 +9,17 @@ export const checkoutSchema = z.object({
   phone: z
     .string()
     .trim()
-    .min(10, 'Ingresa un número válido de 10 dígitos')
-    .max(15, 'Número demasiado largo')
-    .regex(/^[0-9+\s()-]+$/, 'Solo números y caracteres válidos'),
+    .optional()
+    .refine(
+      (val) =>
+        !val ||
+        val.length === 0 ||
+        (val.length >= 10 && val.length <= 15 && /^[0-9+\s()-]+$/.test(val)),
+      {
+        message: 'Ingresa un número válido de 10 a 15 dígitos',
+      }
+    ),
+
   addressId: z.string().min(1, 'Selecciona un punto de entrega'),
   note: z.string().max(300, 'Máximo 500 caracteres').optional(),
 })
