@@ -12,7 +12,7 @@ import Step4 from '@/components/cart/Step4.astro'
 ---
 
 <Layout title="Mi carrito">
-  <div x-data="cartHandler">
+  <div x-data="cartHandler" x-ref="cartContainer">
     <EmptyCart x-show="itemCount === 0 && step === 1" x-cloak />
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8" x-cloak x-show="itemCount > 0">
       <!-- STEPPER -->
@@ -36,7 +36,7 @@ import Step4 from '@/components/cart/Step4.astro'
               <Icon name="lucide:arrow-left" size={20} />
               Anterior
             </Button>
-            <Button href="/catalogo" x-show="step === 1" variant="secondary">
+            <Button href="/" x-show="step === 1" variant="secondary">
               <Icon name="lucide:arrow-left" size={20} />
               Seguir comprando
             </Button>
