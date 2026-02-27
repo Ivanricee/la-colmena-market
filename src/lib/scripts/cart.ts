@@ -75,6 +75,14 @@ export const setupCartHandler = (Alpine: AlpineLike) => {
       }
     },
 
+    scrollToContainer() {
+      this.$nextTick(() => {
+        const container = this.$refs.cartContainer
+        if (container) return container.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+    },
+
     nextStep() {
       this.errors = {}
       const result = handleNextStep({
@@ -87,11 +95,13 @@ export const setupCartHandler = (Alpine: AlpineLike) => {
         return
       }
       this.step = result.nextStep
+      this.scrollToContainer()
     },
 
     prevStep() {
       this.errors = {}
       this.step = Math.max(this.step - 1, 1)
+      this.scrollToContainer()
     },
 
     setStep(step: number) {
