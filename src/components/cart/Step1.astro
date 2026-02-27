@@ -40,13 +40,15 @@ import Button from '../ui/Button.astro'
         </div>
 
         <div
-          class="mt-3 grid grid-cols-1 gap-3 border-t border-border/40 pt-3 sm:mt-0 sm:grid-cols-[auto_auto] sm:items-center sm:gap-4 sm:border-0 sm:pt-0"
+          class="space-y-8 sm:space-y-0 mt-3 grid grid-cols-1 gap-3 border-t border-border/40 pt-3 sm:mt-0 sm:grid-cols-[auto_auto] sm:items-center sm:gap-4 sm:border-0 sm:pt-0"
         >
-          <div class="space-y-1 sm:w-36 sm:space-y-0 h-12">
+          <div class="space-y-1 w-full sm:w-36 sm:space-y-0 h-12 flex flex-col">
             <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground sm:hidden">
               Cantidad
             </p>
-            <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
+            <div class="w-40 flex justify-center items-end self-center">
+              <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
+            </div>
           </div>
 
           <div class="flex items-end justify-between gap-3 sm:items-center sm:justify-end sm:gap-4">
