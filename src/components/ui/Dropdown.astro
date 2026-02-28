@@ -27,6 +27,7 @@ const { cantidad, ...rest } = Astro.props
   {...rest}
 >
   <Button
+    id="dropdownDefaultButton"
     variant="secondary"
     x-ref="button"
     @click="open = !open"
