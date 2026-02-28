@@ -3,6 +3,7 @@ import collapse from '@alpinejs/collapse'
 import intersect from '@alpinejs/intersect'
 import anchor from '@alpinejs/anchor'
 import { $cart, addItem, removeItem } from '@/store/cartStore'
+import { $themeStore, type ThemeType } from '@/store/themeStore'
 import { Product } from '@/features/products/products.model'
 import { setupCartHandler } from '@/lib/scripts/cart'
 
@@ -12,13 +13,51 @@ export default function initClientUI(): void {
     Alpine.plugin(intersect)
     Alpine.plugin(anchor)
     setupAlpineCartStore()
+    setupAlpineThemeStore()
     setupCatalogHandler()
     setupInputNumberHandler()
     setupCartHandler(Alpine)
     window.AlpineInstance = Alpine
   }
 }
-//cartStore
+
+// Theme Store
+interface ThemeStore {
+  theme: ThemeType
+  get(): ThemeType
+  set(newValue: ThemeType): void
+  toggle(): void
+  init(): void
+}
+
+const setupAlpineThemeStore = () => {
+  if (!Alpine.store('themeStore')) {
+    Alpine.store('themeStore', {
+      theme: $themeStore.get(),
+      get() {
+        return this.theme
+      },
+      set(newValue: ThemeType) {
+        $themeStore.set(newValue)
+      },
+      toggle() {
+        this.set(this.theme === 'light' ? 'dark' : 'light')
+      },
+      init() {
+        $themeStore.subscribe((value) => {
+          this.theme = value
+          if (value === 'dark') {
+            document.documentElement.classList.add('dark')
+          } else {
+            document.documentElement.classList.remove('dark')
+          }
+        })
+      },
+    } as ThemeStore)
+  }
+}
+
+// Cart Store
 interface RawProduct extends Product {
   quantity: number
 }
