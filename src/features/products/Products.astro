@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon/components'
 import ProductCard from './components/ProductCard.astro'
 import { getProducts } from './products.api'
-import type { Image, Product } from './products.model'
+import type { Product } from './products.model'
 
 const { productos, errorMessage } = (await getProducts()) as {
   productos: Product[]
