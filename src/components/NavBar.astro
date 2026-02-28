@@ -15,7 +15,9 @@ const isActive = (path: string) => currentPath === path
         'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
       ]}
     >
-      <div class="flex h-16 items-center justify-between">
+      <div
+        class="flex h-16 items-center justify-between animate-fade-in animate-duration-300 animate-delay-100"
+      >
         <a href="/" class="flex items-center gap-2 text-primary">
           <Icon name="lucide:shopping-bag" size={25} />
           <span
@@ -25,53 +27,68 @@ const isActive = (path: string) => currentPath === path
           </span>
         </a>
         <!-- Desktop Menu -->
-        <div class="hidden md:flex items-center gap-6">
-          <a
-            href="/"
-            class={`text-sm font-medium transition-colors hover:text-primary ${
-              isActive('') ? 'text-primary' : 'text-foreground'
-            }`}
-          >
-            Inicio
-          </a>
-          <a
-            href="/product/honey_and_natural"
-            class={`text-sm font-medium transition-colors hover:text-primary ${
-              isActive('/product/honey_and_natural') ? 'text-primary' : 'text-foreground'
-            }`}
-          >
-            Productos de miel
-          </a>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            href="/cart"
-            class="relative"
-            x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
-          >
-            <Icon name="lucide:shopping-cart" size={17} />
-            <span
-              x-show="totalItems > 0"
-              class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold"
-              x-text="totalItems"
-              x-cloak
+        <ul class="hidden md:flex items-center gap-6">
+          <li>
+            <a
+              href="/"
+              class={`text-sm font-medium transition-colors hover:text-primary ${
+                isActive('') ? 'text-primary' : 'text-foreground'
+              }`}
             >
-            </span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            id="theme-toggle"
-            x-data
-            @click="$store.themeStore.set($store.themeStore.get() === 'light' ? 'dark': 'light')"
-            type="button"
-            x-cloak
-          >
-            <Icon x-show="$store.themeStore.get() === 'light'" name="lucide:moon" size={17} />
-            <Icon x-show="$store.themeStore.get() === 'dark'" name="lucide:sun" size={17} />
-          </Button>
-        </div>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a
+              href="/product/honey_and_natural"
+              class={`text-sm font-medium transition-colors hover:text-primary ${
+                isActive('/product/honey_and_natural') ? 'text-primary' : 'text-foreground'
+              }`}
+            >
+              Productos de miel
+            </a>
+          </li>
+          <li>
+            <Button
+              variant="ghost"
+              size="icon"
+              href="/cart"
+              class="relative"
+              x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
+            >
+              <Icon name="lucide:shopping-cart" size={17} />
+              <span
+                x-show="totalItems > 0"
+                class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold"
+                x-text="totalItems"
+                x-cloak
+              >
+              </span>
+            </Button>
+          </li>
+          <li>
+            <Button variant="ghost" x-data @click="$store.themeStore.toggle()" type="button">
+              <Icon
+                x-show="$store.themeStore.get() === 'light'"
+                x-transition:enter="transition ease-in-out duration-500"
+                x-transition:enter-start="opacity-5 transform scale-85"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                name="lucide:moon"
+                size={17}
+                x-cloak
+              />
+              <Icon
+                x-show="$store.themeStore.get() === 'dark'"
+                x-transition:enter="transition ease-in-out duration-500"
+                x-transition:enter-start="opacity-5 transform scale-85"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                name="lucide:sun"
+                size={17}
+              />
+            </Button>
+          </li>
+        </ul>
 
         <!-- Mobile Hamburger Menu -->
         <div class="flex md:hidden items-center gap-2">
@@ -91,18 +108,28 @@ const isActive = (path: string) => currentPath === path
             >
             </span>
           </Button>
-          <Button
-            variant="ghost"
-            x-data
-            @click="$store.themeStore.set($store.themeStore.get() === 'light' ? 'dark': 'light')"
-            type="button"
-          >
-            <Icon x-show="$store.themeStore.get() === 'light'" name="lucide:moon" size={17} />
-            <Icon x-show="$store.themeStore.get() === 'dark'" name="lucide:sun" size={17} />
+          <Button variant="ghost" x-data @click="$store.themeStore.toggle()" type="button">
+            <Icon
+              x-show="$store.themeStore.get() === 'light'"
+              x-transition:enter="transition ease-in-out duration-500"
+              x-transition:enter-start="opacity-5 transform scale-85"
+              x-transition:enter-end="opacity-100 transform scale-100"
+              name="lucide:moon"
+              size={17}
+              x-cloak
+            />
+            <Icon
+              x-show="$store.themeStore.get() === 'dark'"
+              x-transition:enter="transition ease-in-out duration-500"
+              x-transition:enter-start="opacity-5 transform scale-85"
+              x-transition:enter-end="opacity-100 transform scale-100"
+              name="lucide:sun"
+              size={17}
+            />
           </Button>
           <Button variant="ghost" @click="mobileMenuOpen = !mobileMenuOpen" type="button">
             <Icon x-show="!mobileMenuOpen" name="lucide:menu" size={20} />
-            <Icon x-show="mobileMenuOpen" name="lucide:x" size={20} />
+            <Icon x-show="mobileMenuOpen" name="lucide:x" size={20} x-cloak />
           </Button>
         </div>
       </div>
@@ -120,33 +147,37 @@ const isActive = (path: string) => currentPath === path
   </div>
 
   <!-- Mobile Menu Dropdown -->
-  <div
+  <nav
     x-show="mobileMenuOpen"
     x-transition
     class="md:hidden fixed top-16 left-0 right-0 bg-card border-b border-border z-50"
     x-cloak
   >
-    <div class="px-2 py-4 space-y-2 max-w-sm mx-auto">
-      <a
-        href="/"
-        @click="mobileMenuOpen = false"
-        class={`block px-4 py-2 rounded-md transition-colors ${
-          isActive('') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-        }`}
-      >
-        Inicio
-      </a>
-      <a
-        href="/product/honey_and_natural"
-        @click="mobileMenuOpen = false"
-        class={`block px-4 py-2 rounded-md transition-colors ${
-          isActive('/product/honey_and_natural')
-            ? 'bg-primary text-primary-foreground'
-            : 'text-foreground hover:bg-muted'
-        }`}
-      >
-        Productos de miel
-      </a>
-    </div>
-  </div>
+    <ul class="px-2 py-4 space-y-2 max-w-sm mx-auto">
+      <li>
+        <a
+          href="/"
+          @click="mobileMenuOpen = false"
+          class={`block px-4 py-2 rounded-md transition-colors ${
+            isActive('') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+          }`}
+        >
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a
+          href="/product/honey_and_natural"
+          @click="mobileMenuOpen = false"
+          class={`block px-4 py-2 rounded-md transition-colors ${
+            isActive('/product/honey_and_natural')
+              ? 'bg-primary text-primary-foreground'
+              : 'text-foreground hover:bg-muted'
+          }`}
+        >
+          Productos de miel
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
