@@ -41,6 +41,12 @@ const { title = 'La Colmena Market' } = Astro.props
   </head>
 
   <body>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black"
+    >
+      Saltar al contenido principal
+    </a>
     {
       showDrawer && (
         <Drawer>
@@ -49,10 +55,24 @@ const { title = 'La Colmena Market' } = Astro.props
         </Drawer>
       )
     }
-    <div class="bg-background flex min-h-dvh w-full flex-col">
-      <div class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col mt-16">
-        <NavBar />
-        <slot />
+    <NavBar />
+    <div
+      class="bg-background flex min-h-dvh w-full flex-col animate-blurred-fade-in animate-duration-300"
+    >
+      <div
+        class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col mt-16 justify-between"
+      >
+        <main id="main-content">
+          <slot />
+        </main>
+        <footer class="mb-12 sm:mb-0 py-14 border-t border-border text-xs sm:text-sm">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-muted-foreground flex flex-col gap-2 items-center">
+              <p>Entregas en Valle de Chalco y alrededores</p>
+              <p>© 2026 La colmena Market.</p>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   </body>
@@ -73,16 +93,5 @@ const { title = 'La Colmena Market' } = Astro.props
 
 <script>
   import initClientUI from '@/lib/scripts/client-init'
-  import { $themeStore } from '@/store/themeStore.ts'
-  import Alpine from 'alpinejs'
-
-  Alpine.store('themeStore', $themeStore)
   initClientUI()
-  $themeStore.subscribe((value) => {
-    if (value === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  })
 </script>
