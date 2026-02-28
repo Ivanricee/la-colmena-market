@@ -12,6 +12,7 @@ const { title, benefits, description } = product
   <h2 class="mt-4">
     <button
       type="button"
+      id="accordion-card-heading-1"
       @click="active = (active === 1 ? null : 1)"
       class:list={[
         'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
@@ -36,6 +37,7 @@ const { title, benefits, description } = product
   <h2 class="mt-4">
     <button
       type="button"
+      id="accordion-card-heading-2"
       @click="active = (active === 2 ? null : 2)"
       class:list={[
         'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
@@ -77,6 +79,7 @@ const { title, benefits, description } = product
   <h2 class="mt-4">
     <button
       type="button"
+      id="accordion-card-heading-3"
       @click="active = (active === 3 ? null : 3)"
       class:list={[
         'text-foreground border-border/25 hover:text-accent-foreground flex w-full items-center justify-between gap-3 rounded-md border p-4 py-4 text-sm text-nowrap shadow-xs transition-colors duration-300 md:text-base rtl:text-right',
