@@ -6,23 +6,23 @@ type addressesType = {
 export const DELIVERY_ADDRESSES: addressesType[] = [
   {
     id: 'addr-1',
-    label: 'Centro Histórico',
-    full: 'Centro Histórico, Calle Principal #123, Col. Centro',
+    label: 'Entrega habitual',
+    full: 'Poniente 6',
   },
   {
     id: 'addr-2',
-    label: 'Zona Norte',
-    full: 'Av. Universidad #456, Fracc. Las Palmas, Zona Norte',
+    label: 'Casas Ara',
+    full: 'Frente a Tienda 3B, Cerro del Quetzal',
   },
   {
     id: 'addr-3',
-    label: 'Zona Sur',
-    full: 'Blvd. de la Luz #789, Col. Jardines del Sur',
+    label: 'Paradero Tláhuac',
+    full: 'Frente a Farmacias del Ahorro, Av. Tláhuac',
   },
   {
     id: 'addr-4',
-    label: 'Plaza del Valle',
-    full: 'Plaza del Valle, Local 12, Av. Reforma #1010',
+    label: 'Cuauhtémoc y Cuitláhuac',
+    full: 'Esquina entre Av. Cuauhtémoc y Av. Cuitláhuac, frente a los bicitaxis',
   },
 ]
 export const STEPS = [
