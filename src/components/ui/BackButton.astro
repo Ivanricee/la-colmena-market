@@ -15,7 +15,7 @@ const { label, className = '', ...rest } = Astro.props as Props
   type="button"
   x-data
   x-on:click="history.back()"
-  x-on:keydown.window.escape="history.back()"
+  x-on:keydown.window.escape="$el.isConnected && history.back()"
   className={`inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm ${className}`}
   aria-label={label}
   {...rest}
