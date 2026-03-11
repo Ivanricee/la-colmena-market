@@ -14,10 +14,10 @@ const isActive = (path: string) => currentPath === path
         'fixed top-0 left-0 right-0 z-50 w-full border-b border-border sm:px-8 px-2',
         'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
       ]}
+      transition:persist
+      transition:animate="none"
     >
-      <div
-        class="flex h-16 items-center justify-between animate-fade-in animate-duration-300 animate-delay-100"
-      >
+      <div class="flex h-16 items-center justify-between">
         <a href="/" class="flex items-center gap-2 text-primary">
           <Icon name="lucide:shopping-bag" size={25} />
           <span
