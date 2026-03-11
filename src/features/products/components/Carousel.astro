@@ -43,7 +43,7 @@ const getImageClass = (index: number) => {
     {
       images.map((image, index) => (
       <div
-        class="absolute inset-0 w-full h-full transition-transform duration-700 ease-in-out"
+        class={`absolute inset-0 w-full h-full transition-transform duration-700 ease-in-out ${index === 0 ? 'translate-x-0 z-30' : 'translate-x-full z-10'}`}
         :class={getImageClass(index)}
       >
         <img
@@ -60,7 +60,7 @@ const getImageClass = (index: number) => {
   {
     images.length > 1 && (
       <>
-        <div class="absolute md:bottom-5 bottom-0.5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 md:bg-secondary/50 bg-secondary/80 p-2 px-4 rounded-full border border-border/30">
+        <div  class="absolute md:bottom-5 bottom-0.5 left-1/2 z-40 flex -translate-x-1/2 space-x-3 md:bg-secondary/50 bg-secondary/80 p-2 px-4 rounded-full border border-border/30">
           {images.map((_, index) => (
           <button
             type="button"
