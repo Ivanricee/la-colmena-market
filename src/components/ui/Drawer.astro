@@ -9,15 +9,19 @@ import Button from './Button.astro'
     toggle() { this.open = !this.open }
   }"
   @open-cart.window="open = true"
-  class="relative"
+  class="relative z-[100]"
+  transition:persist
+  transition:animate="none"
 >
   <div
     id="drawer-swipe-desktop"
     class:list={[
-      'border-border bg-card fixed top-0 left-0 z-60 hidden h-screen w-40 -translate-x-full border-r',
+      'border-border bg-card fixed top-0 left-0 z-[100] hidden h-screen w-40 -translate-x-full border-r',
       'transition-transform duration-300 md:flex flex-col',
     ]}
     :class="open ? 'translate-x-0' : '-translate-x-full'"
+    transition:persist
+    transition:animate="none"
   >
     <!-- drawer header -->
     <div class="p-4 border-border border-b flex flex-col gap-3 items-center">
@@ -56,6 +60,8 @@ import Button from './Button.astro'
         'flex h-52 w-[60px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl',
         'border border-s-0 transition-colors duration-500',
       ]}
+      transition:persist
+      transition:animate="none"
     >
       <span
         class="bg-foreground/50 group-hover:bg-foreground h-12 w-1.5 rounded-full transition-colors"
@@ -66,11 +72,13 @@ import Button from './Button.astro'
   <div
     id="drawer-swipe-mobile"
     class:list={[
-      'bg-card border-border rounded-t-base fixed right-0 bottom-0 left-0 z-60 w-full',
+      'bg-card border-border rounded-t-base fixed right-0 bottom-0 left-0 z-[100] w-full',
       'border-t transition-transform duration-300 md:hidden flex flex-col max-h-dvh',
     ]}
     :style="open ? 'transform: translateY(0)' : 'transform: translateY(calc(100% - 58px))'"
     style="transform: translateY(calc(100% - 58px))"
+    transition:persist
+    transition:animate="none"
   >
     <!-- drawer mobile Tab -->
     <div
@@ -80,6 +88,7 @@ import Button from './Button.astro'
       ]}
       :class="open ? 'border-border' : ''"
       x-on:click="toggle()"
+      transition:persist
     >
       <span
         class:list={[
