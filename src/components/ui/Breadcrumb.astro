@@ -14,11 +14,14 @@ const { items = [], className = '' } = Astro.props as Props
         <li class="flex items-center">
           {idx > 0 && <span class="text-muted-foreground mx-1 md:mx-2">/</span>}
           {item.href ? (
-            <a href={item.href} class="text-foreground hover:text-primary transition-colors">
+            <a
+              href={item.href}
+              class="text-foreground hover:text-primary transition-colors line-clamp-1"
+            >
               {item.label}
             </a>
           ) : (
-            <span class="text-foreground">{item.label}</span>
+            <span class="text-foreground line-clamp-1">{item.label}</span>
           )}
         </li>
       ))
