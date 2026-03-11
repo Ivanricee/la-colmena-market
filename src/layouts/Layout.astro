@@ -36,7 +36,10 @@ const { title = 'La Colmena Market' } = Astro.props
         document.documentElement.classList.toggle('dark', theme === 'dark')
       }
       setDarkMode()
-      document.addEventListener('astro:after-swap', setDarkMode)
+      document.addEventListener('astro:before-swap', (ev) => {
+        const theme = getTheme()
+        ev.newDocument.documentElement.classList.toggle('dark', theme === 'dark')
+      })
     </script>
   </head>
 
@@ -47,17 +50,9 @@ const { title = 'La Colmena Market' } = Astro.props
     >
       Saltar al contenido principal
     </a>
-    {
-      showDrawer && (
-        <Drawer>
-          <CardDrawerItems slot="vertical" />
-          <CardDrawerItems slot="horizontal" />
-        </Drawer>
-      )
-    }
     <NavBar />
     <div
-      class="bg-background flex min-h-dvh w-full flex-col animate-blurred-fade-in animate-duration-300"
+      class="bg-background flex min-h-dvh w-full flex-col animate-blurred-fade-in animate-duration-300 relative"
     >
       <div
         class="lg:max-w-8xl mx-auto flex h-full w-full min-w-[200px] flex-1 flex-col mt-16 justify-between"
@@ -75,9 +70,16 @@ const { title = 'La Colmena Market' } = Astro.props
         </footer>
       </div>
     </div>
+    {
+      showDrawer && (
+        <Drawer>
+          <CardDrawerItems slot="vertical" />
+          <CardDrawerItems slot="horizontal" />
+        </Drawer>
+      )
+    }
   </body>
 </html>
-
 <style>
   html,
   body {
@@ -90,7 +92,6 @@ const { title = 'La Colmena Market' } = Astro.props
     background: #fff;
   }
 </style>
-
 <script>
   import initClientUI from '@/lib/scripts/client-init'
   initClientUI()
