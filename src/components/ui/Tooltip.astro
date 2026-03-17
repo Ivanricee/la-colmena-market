@@ -1,6 +1,6 @@
 ---
 // Tooltip.astro
-const { content, position = 'top' } = Astro.props
+const { content, position = 'top', id } = Astro.props
 const anchorDirection = `x-anchor.${position}.offset.10.no-flip.track`
 ---
 
@@ -10,6 +10,8 @@ const anchorDirection = `x-anchor.${position}.offset.10.no-flip.track`
     x-cloak
     {...{ [anchorDirection]: 'anchorRef' }}
     role="tooltip"
+    {...id ? { id } : {}}
+    :id={!id ? "'tooltip-content-' + (itemData?.id ?? id)" : undefined}
     class="pointer-events-none fixed z-[70] rounded bg-black px-3 py-2 text-xs text-white shadow-xl"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0 scale-90 translate-y-1"
