@@ -10,18 +10,34 @@ const showDrawer =
 
 interface Props {
   title: string
+  description?: string
 }
 
-const { title = 'La Colmena Market' } = Astro.props
+const {
+  title = 'La Colmena Market',
+  description = 'Productos naturales elaborados a partir de miel natural. Entregas en Valle de Chalco y alrededores.',
+} = Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="La Colmena Market" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <title>{title}</title>
 
     <ClientRouter />
