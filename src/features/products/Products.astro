@@ -29,7 +29,11 @@ const { productos, errorMessage } = (await getProducts()) as {
                 <Icon name="lucide:search" size={20} class="relative w-6 h-6 text-primary" />
               </div>
 
+              <label for="product-search" class="sr-only">
+                Buscar productos
+              </label>
               <input
+                id="product-search"
                 type="text"
                 x-model="search"
                 placeholder="Buscar..."
