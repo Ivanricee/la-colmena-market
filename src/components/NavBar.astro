@@ -10,6 +10,7 @@ const isActive = (path: string) => currentPath === path
 <div x-data="{ mobileMenuOpen: false }">
   <header class="xl:px-8">
     <nav
+      aria-label="Navegación principal"
       class:list={[
         'fixed top-0 left-0 right-0 z-50 w-full border-b border-border sm:px-8 px-2',
         'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
@@ -55,6 +56,7 @@ const isActive = (path: string) => currentPath === path
               size="icon"
               href="/cart"
               class="relative"
+              aria-label="Carrito de compras"
               x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
             >
               <Icon name="lucide:shopping-cart" size={17} />
@@ -68,7 +70,13 @@ const isActive = (path: string) => currentPath === path
             </Button>
           </li>
           <li>
-            <Button variant="ghost" x-data @click="$store.themeStore.toggle()" type="button">
+            <Button
+              variant="ghost"
+              x-data
+              @click="$store.themeStore.toggle()"
+              type="button"
+              aria-label="Cambiar tema"
+            >
               <Icon
                 x-show="$store.themeStore.get() === 'light'"
                 x-transition:enter="transition ease-in-out duration-500"
@@ -97,6 +105,7 @@ const isActive = (path: string) => currentPath === path
             size="icon"
             href="/cart"
             class="relative"
+            aria-label="Carrito de compras"
             x-data="{ get totalItems() { return Object.keys($store.cartStore?.data?.items ?? {}).length } }"
           >
             <Icon name="lucide:shopping-cart" size={17} />
@@ -108,7 +117,13 @@ const isActive = (path: string) => currentPath === path
             >
             </span>
           </Button>
-          <Button variant="ghost" x-data @click="$store.themeStore.toggle()" type="button">
+          <Button
+            variant="ghost"
+            x-data
+            @click="$store.themeStore.toggle()"
+            type="button"
+            aria-label="Cambiar tema"
+          >
             <Icon
               x-show="$store.themeStore.get() === 'light'"
               x-transition:enter="transition ease-in-out duration-500"
@@ -127,7 +142,12 @@ const isActive = (path: string) => currentPath === path
               size={17}
             />
           </Button>
-          <Button variant="ghost" @click="mobileMenuOpen = !mobileMenuOpen" type="button">
+          <Button
+            variant="ghost"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+            type="button"
+            aria-label="Abrir menú de navegación"
+          >
             <Icon x-show="!mobileMenuOpen" name="lucide:menu" size={20} />
             <Icon x-show="mobileMenuOpen" name="lucide:x" size={20} x-cloak />
           </Button>
@@ -152,6 +172,7 @@ const isActive = (path: string) => currentPath === path
     x-transition
     class="md:hidden fixed top-16 left-0 right-0 bg-card border-b border-border z-50"
     x-cloak
+    aria-label="Menú móvil"
   >
     <ul class="px-2 py-4 space-y-2 max-w-sm mx-auto">
       <li>
