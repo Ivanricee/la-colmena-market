@@ -25,7 +25,7 @@ import Button from './Button.astro'
   >
     <!-- drawer header -->
     <div class="p-4 border-border border-b flex flex-col gap-3 items-center">
-      <h5
+      <span
         class:list={[
           'group-hover:text-foreground inline-flex',
           'items-center gap-2 text-sm font-medium transition-colors',
@@ -35,7 +35,7 @@ import Button from './Button.astro'
         <span
           x-text="'Tu Carrito (' + Object.entries($store.cartStore?.data?.items ?? {}).length+')'"
         ></span>
-      </h5>
+      </span>
 
       <Button
         href="/cart"
@@ -44,7 +44,8 @@ import Button from './Button.astro'
       >
         <span
           x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-        ></span>
+          >Pagar</span
+        >
         <Icon name="lucide:arrow-right" size={15} />
       </Button>
     </div>
@@ -53,8 +54,10 @@ import Button from './Button.astro'
       <slot name="vertical" />
     </div>
     <!-- drawer desktop Tab -->
-    <div
+    <button
+      type="button"
       @click="toggle()"
+      aria-label="Abrir o cerrar carrito"
       class:list={[
         'group bg-card border-border/80 hover:border-border absolute top-1/2 -right-[60px]',
         'flex h-52 w-[60px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl',
@@ -66,7 +69,7 @@ import Button from './Button.astro'
       <span
         class="bg-foreground/50 group-hover:bg-foreground h-12 w-1.5 rounded-full transition-colors"
       ></span>
-    </div>
+    </button>
   </div>
 
   <div
@@ -81,21 +84,23 @@ import Button from './Button.astro'
     transition:animate="none"
   >
     <!-- drawer mobile Tab -->
-    <div
+    <button
+      type="button"
       class:list={[
-        'group bg-card shrink-0 text-xs cursor-pointer border-b mt-2',
+        'group bg-card shrink-0 text-xs cursor-pointer border-b mt-2 w-full',
         'border-transparent p-4 flex flex-nowrap justify-between text-foreground/80',
       ]}
       :class="open ? 'border-border' : ''"
       x-on:click="toggle()"
       transition:persist
+      aria-label="Abrir o cerrar carrito"
     >
       <span
         class:list={[
           'bg-foreground/50 group-hover:bg-foreground absolute top-3 left-1/2 h-1 w-8',
           '-translate-x-1/2 rounded-lg transition-colors',
         ]}></span>
-      <h5
+      <span
         class:list={[
           'group-hover:text-foreground inline-flex',
           'items-center gap-2 text-xs font-medium transition-colors',
@@ -105,18 +110,21 @@ import Button from './Button.astro'
         <span
           x-text="'Tu Carrito (' + Object.entries($store.cartStore?.data?.items ?? {}).length+')'"
         ></span>
-      </h5>
+      </span>
       <span
         x-show="!open"
         x-text="'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-        class="group-hover:text-foreground"></span>
+        class="group-hover:text-foreground"
+      >
+      </span>
       <Button href="/cart" className="w-fit rounded-sm py-[0.3rem] text-xs" x-show="open">
         <span
           x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-        ></span>
+          >Pagar</span
+        >
         <Icon name="lucide:arrow-right" size={15} />
       </Button>
-    </div>
+    </button>
     <!-- drawer body scrolleable -->
     <div class="flex-1 overflow-y-auto box-border min-h-0">
       <slot name="horizontal" />
