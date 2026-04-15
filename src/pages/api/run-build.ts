@@ -5,11 +5,12 @@ export const POST = async ({ request }: any) => {
   console.log({ headers: request.headers })
 
   const signature = request.headers.get('Upstash-Signature') || ''
-  //const body = await request.body;
+  const upstashRegion = request.headers.get('Upstash-Region') || undefined
   const body = await request.text()
   const isValid = await verifyQstashSignature({
     body,
     signature,
+    upstashRegion,
   })
   try {
     if (!isValid) {
