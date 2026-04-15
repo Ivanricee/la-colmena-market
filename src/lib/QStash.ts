@@ -4,8 +4,6 @@ import {
   QSTASH_DELAY,
   QSTASH_BUILD_URL,
   QSTASH_URL,
-  QSTASH_CURRENT_SIGNING_KEY,
-  QSTASH_NEXT_SIGNING_KEY,
   VERCEL_DEPLOY_HOOK_URL,
 } from 'astro:env/server'
 export const qstashClient = new Client({
@@ -29,21 +27,21 @@ export async function scheduleRebuild({ body }: QueuedBuild): Promise<string> {
 type verifyQstashSign = {
   body: any
   signature: string
+  upstashRegion?: string
 }
 export async function verifyQstashSignature({
   body,
   signature,
+  upstashRegion,
 }: verifyQstashSign): Promise<boolean> {
-  const receiver = new Receiver({
-    currentSigningKey: QSTASH_CURRENT_SIGNING_KEY,
-    nextSigningKey: QSTASH_NEXT_SIGNING_KEY,
-  })
+  const receiver = new Receiver()
   const isValid = await receiver.verify({
     body,
     signature,
     url: QSTASH_BUILD_URL,
+    upstashRegion,
   })
-  console.log({ body, signature, url: QSTASH_BUILD_URL, isValid })
+  console.log({ body, signature, url: QSTASH_BUILD_URL, upstashRegion, isValid })
 
   return isValid
 }
