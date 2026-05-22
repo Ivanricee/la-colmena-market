@@ -3,7 +3,7 @@ import { redisClient } from '@/lib/redis'
 
 export const prerender = false
 
-export const GET: APIRoute = async () => {
+export const POST: APIRoute = async () => {
   const startTime = Date.now()
   const result = {
     redis: { status: 'unknown', latency: 0, error: null as string | null },
