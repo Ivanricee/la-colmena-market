@@ -20,12 +20,12 @@ importers:
       '@astrojs/alpinejs':
         specifier: ^1.0.0
         version: 1.0.0(@types/alpinejs@3.13.11)(alpinejs@3.15.12)
-      '@astrojs/check':
-        specifier: ^0.9.10
-        version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.6.2)(typescript@5.9.3)
       '@astrojs/sitemap':
         specifier: 3.7.3
         version: 3.7.3
+      '@astrojs/vercel':
+        specifier: ^11.0.4
+        version: 11.0.4(astro@7.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@25.9.1)(@upstash/redis@1.38.0)(@vercel/functions@3.7.6(ws@8.21.0))(jiti@2.7.0)(yaml@2.9.0))(ws@8.21.0)
       '@hygraph/utils':
         specifier: ^1.2.1
         version: 1.2.1
@@ -78,9 +78,9 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
     devDependencies:
-      '@astrojs/vercel':
-        specifier: ^11.0.4
-        version: 11.0.4(astro@7.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@25.9.1)(@upstash/redis@1.38.0)(@vercel/functions@3.7.6(ws@8.21.0))(jiti@2.7.0)(yaml@2.9.0))(ws@8.21.0)
+      '@astrojs/check':
+        specifier: ^0.9.10
+        version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.6.2)(typescript@5.9.3)
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@9.39.4(jiti@2.7.0))
