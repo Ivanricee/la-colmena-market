@@ -1,4 +1,5 @@
 import { defineAction, ActionError } from 'astro:actions'
+import { randomUUID } from 'node:crypto'
 import { z } from 'astro/zod'
 import { DELIVERY_ADDRESSES } from '@/pages/cart/cart.config'
 import { turso } from '@/lib/db/turso'
@@ -60,7 +61,7 @@ export const server = {
         })
       }
 
-      const ticketId = crypto.randomUUID()
+      const ticketId = randomUUID()
       const createdAt = new Date().toISOString()
       const ticketUrl = `${PUBLIC_SITE_URL}/pedidos/${ticketId}`
 
@@ -109,10 +110,11 @@ export const server = {
             ticketUrl,
           ],
         })
-      } catch (err) {
+      } catch (error) {
+        globalThis.console.error('Turso insert error:', error)
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'No se pudo guardar el pedido. Intenta de nuevo.',
+          message: 'No se pudo generar el pedido. Intenta de nuevo.',
         })
       }
 
