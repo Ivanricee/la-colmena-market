@@ -86,6 +86,7 @@ const { id, title } = product
 
           <form
             @clean-quantity.window="state.disableIncreament = false; state.show = false;"
+            @submit.prevent="addToCart"
             x-data={`{
               selected:1,
               itemData: ${JSON.stringify(product)},
@@ -129,7 +130,7 @@ const { id, title } = product
             <Tooltip
               content={`Ya está en el carrito. Máx. ${product?.purchaseLimit} unidades`}
               position="top"
-              id={`'tooltip-content-${id}'`}
+              id={`tooltip-content-${id}`}
             />
             <Button
               type="submit"
@@ -137,7 +138,6 @@ const { id, title } = product
               id="cart-add-button"
               className="w-full rounded-md inline-flex md:px-2"
               aria-controls="drawer-swipe-desktop"
-              @submit.prevent="addToCart"
             >
               <Icon name="lucide:shopping-cart" size={17} />
               <span class="line-clamp-1 text-left text-sm whitespace-nowrap md:text-base">
