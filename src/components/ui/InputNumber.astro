@@ -3,20 +3,16 @@ import { Icon } from 'astro-icon/components'
 import Tooltip from './Tooltip.astro'
 
 interface Props {
-  id?: string
-  value?: number
-  [key: string]: any
+  scope?: string
 }
-
-const { id, value = 1, ...rest } = Astro.props
-//randomUUID()
+const { scope = '' } = Astro.props
 ---
 
 <div
-  x-data={`inputNumberHandler(id, product.purchaseLimit)`}
+  x-data={`inputNumberHandler(id, product.purchaseLimit, '${scope}')`}
   x-init="anchorRef = $refs.container"
   x-ref="container"
-  :id="'container-' + id"
+  :id="containerId"
   :aria-describedby="'tooltip-content-' + id"
   @mouseenter="handleMouseEnter(product)"
   @mouseleave="handleMouseLeave()"
@@ -79,7 +75,7 @@ const { id, value = 1, ...rest } = Astro.props
     class:list={[
       'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
       'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',
-      'aria-expanded:text-accent-foreground box-borderh-10 border px-2 text-sm leading-5 ',
+      'aria-expanded:text-accent-foreground box-border h-10 border px-2 text-sm leading-5 ',
       'transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold',
     ]}
     @click="increase(product.quantity)"

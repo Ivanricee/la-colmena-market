@@ -3,8 +3,9 @@ import InputNumber from '@/components/ui/InputNumber.astro'
 
 interface Props {
   slot: 'vertical' | 'horizontal'
+  scope: 'vertical' | 'horizontal'
 }
-const { slot } = Astro.props
+const { slot, scope } = Astro.props
 const direction = slot === 'horizontal' ? 'row' : 'column'
 ---
 
@@ -64,7 +65,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
               ></span>
             </div>
           </div>
-          <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
+          <InputNumber scope={slot} />
         </div>
       </li>
     </template>
