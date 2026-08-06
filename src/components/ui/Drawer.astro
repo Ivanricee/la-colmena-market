@@ -14,7 +14,6 @@ console.log({ showDrawer })
   x-init="$nextTick(() => mounted = true)"
   @open-cart.window="$store.cartUI.open = true"
   class:list={['relative z-[100]', !showDrawer && 'hidden']}
-  transition:name="cart-drawer"
   transition:animate="none"
 >
   <div
