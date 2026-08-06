@@ -56,6 +56,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
         const theme = getTheme()
         ev.newDocument.documentElement.classList.toggle('dark', theme === 'dark')
       })
+      // Sincronizar tema después de navegación SPA para Alpine
+      document.addEventListener('astro:after-swap', () => {
+        const stored = localStorage.getItem('color-theme')
+        if (stored && window.AlpineInstance?.store) {
+          const currentStoreTheme = window.AlpineInstance.store('themeStore')?.get()
+          if (currentStoreTheme !== stored) {
+            window.AlpineInstance.store('themeStore')?.set(stored)
+          }
+        }
+      })
     </script>
   </head>
 
@@ -86,14 +96,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
         </footer>
       </div>
     </div>
-    {
-      showDrawer && (
-        <Drawer>
-          <CardDrawerItems slot="vertical" />
-          <CardDrawerItems slot="horizontal" />
-        </Drawer>
-      )
-    }
+    <Drawer {showDrawer}>
+      <CardDrawerItems slot="vertical" scope="vertical" />
+      <CardDrawerItems slot="horizontal" scope="horizontal" />
+    </Drawer>
   </body>
 </html>
 <style>
