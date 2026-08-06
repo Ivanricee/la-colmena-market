@@ -1,27 +1,29 @@
 ---
 import { Icon } from 'astro-icon/components'
 import Button from './Button.astro'
+interface Props {
+  showDrawer?: boolean
+}
+const { showDrawer = true } = Astro.props
+console.log({ showDrawer })
 ---
 
 <div
-  x-data="{
-    open: false,
-    toggle() { this.open = !this.open }
-  }"
-  @open-cart.window="open = true"
-  class="relative z-[100]"
-  transition:persist
+  id="cart-drawer-root"
+  x-data="{mounted: false}"
+  x-init="$nextTick(() => mounted = true)"
+  @open-cart.window="$store.cartUI.open = true"
+  class:list={['relative z-[100]', !showDrawer && 'hidden']}
+  transition:name="cart-drawer"
   transition:animate="none"
 >
   <div
     id="drawer-swipe-desktop"
     class:list={[
       'border-border bg-card fixed top-0 left-0 z-[100] hidden h-screen w-40 -translate-x-full border-r',
-      'transition-transform duration-300 md:flex flex-col',
+      ' md:flex flex-col',
     ]}
-    :class="open ? 'translate-x-0' : '-translate-x-full'"
-    transition:persist
-    transition:animate="none"
+    :class="`${$store.cartUI.open ? 'translate-x-0' : '-translate-x-full'} ${mounted ? 'transition-transform duration-300' : ''}`"
   >
     <!-- drawer header -->
     <div class="p-4 border-border border-b flex flex-col gap-3 items-center">
@@ -40,7 +42,7 @@ import Button from './Button.astro'
       <Button
         href="/cart"
         className="w-full rounded-sm py-[0.3rem] px-[0.25rem] text-xs"
-        x-show="open"
+        x-show="$store.cartUI.open"
       >
         <span
           x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
@@ -56,15 +58,13 @@ import Button from './Button.astro'
     <!-- drawer desktop Tab -->
     <button
       type="button"
-      @click="toggle()"
+      @click="$store.cartUI.toggle()"
       aria-label="Abrir o cerrar carrito"
       class:list={[
         'group bg-card border-border/80 hover:border-border absolute top-1/2 -right-[60px]',
         'flex h-52 w-[60px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl',
         'border border-s-0 transition-colors duration-500',
       ]}
-      transition:persist
-      transition:animate="none"
     >
       <span
         class="bg-foreground/50 group-hover:bg-foreground h-12 w-1.5 rounded-full transition-colors"
@@ -76,12 +76,10 @@ import Button from './Button.astro'
     id="drawer-swipe-mobile"
     class:list={[
       'bg-card border-border rounded-t-base fixed right-0 bottom-0 left-0 z-[100] w-full',
-      'border-t transition-transform duration-300 md:hidden flex flex-col max-h-dvh',
+      'border-t md:hidden flex flex-col max-h-dvh',
     ]}
-    :style="open ? 'transform: translateY(0)' : 'transform: translateY(calc(100% - 58px))'"
+    :style="`transform: translateY(${$store.cartUI.open ? '0' : 'calc(100% - 58px)'}); ${mounted ? 'transition: transform 300ms ease' : ''}`"
     style="transform: translateY(calc(100% - 58px))"
-    transition:persist
-    transition:animate="none"
   >
     <!-- drawer mobile Tab -->
     <button
@@ -90,9 +88,8 @@ import Button from './Button.astro'
         'group bg-card shrink-0 text-xs cursor-pointer border-b mt-2 w-full',
         'border-transparent p-4 flex flex-nowrap justify-between text-foreground/80',
       ]}
-      :class="open ? 'border-border' : ''"
-      x-on:click="toggle()"
-      transition:persist
+      :class="$store.cartUI.open ? 'border-border' : ''"
+      x-on:click="$store.cartUI.toggle()"
       aria-label="Abrir o cerrar carrito"
     >
       <span
@@ -112,12 +109,16 @@ import Button from './Button.astro'
         ></span>
       </span>
       <span
-        x-show="!open"
+        x-show="!$store.cartUI.open"
         x-text="'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
         class="group-hover:text-foreground"
       >
       </span>
-      <Button href="/cart" className="w-fit rounded-sm py-[0.3rem] text-xs" x-show="open">
+      <Button
+        href="/cart"
+        className="w-fit rounded-sm py-[0.3rem] text-xs"
+        x-show="$store.cartUI.open"
+      >
         <span
           x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
           >Pagar</span

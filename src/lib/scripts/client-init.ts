@@ -14,6 +14,7 @@ export default function initClientUI(): void {
     Alpine.plugin(anchor)
     setupAlpineCartStore()
     setupAlpineThemeStore()
+    setupAlpineCartUIStore()
     setupCatalogHandler()
     setupInputNumberHandler()
     setupCartHandler(Alpine)
@@ -32,18 +33,29 @@ interface ThemeStore {
 
 const setupAlpineThemeStore = () => {
   if (!Alpine.store('themeStore')) {
+    const initialTheme = $themeStore.get()
     Alpine.store('themeStore', {
-      theme: $themeStore.get(),
+      theme: initialTheme,
       get() {
         return this.theme
       },
       set(newValue: ThemeType) {
+        this.theme = newValue
         $themeStore.set(newValue)
       },
       toggle() {
-        this.set(this.theme === 'light' ? 'dark' : 'light')
+        const newTheme = this.theme === 'light' ? 'dark' : 'light'
+        this.set(newTheme)
       },
       init() {
+        // Aplicar tema inicial inmediatamente
+        if (initialTheme === 'dark') {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+
+        // Suscribirse a cambios futuros
         $themeStore.subscribe((value) => {
           this.theme = value
           if (value === 'dark') {
@@ -96,6 +108,7 @@ const setupAlpineCartStore = () => {
       handleRemoveFromCart(id: string) {
         removeItem(id)
       },
+
       init() {
         $cart.subscribe((newProducto) => {
           this.data = { ...newProducto }
@@ -104,7 +117,20 @@ const setupAlpineCartStore = () => {
     })
   }
 }
-
+type CartUIStore = {
+  open: boolean
+  toggle(): void
+}
+const setupAlpineCartUIStore = () => {
+  if (!Alpine.store('cartUI')) {
+    Alpine.store('cartUI', {
+      open: false,
+      toggle() {
+        this.open = !this.open
+      },
+    } as CartUIStore)
+  }
+}
 const setupCatalogHandler = () => {
   Alpine.data('catalogHandler', (totalCount: number) => ({
     limit: 12,
@@ -121,15 +147,21 @@ const setupCatalogHandler = () => {
   }))
 }
 const setupInputNumberHandler = () => {
-  Alpine.data('inputNumberHandler', (id: string, purchaseLimit: number) => ({
+  Alpine.data('inputNumberHandler', (id: string, purchaseLimit: number, scope = '') => ({
+    get uid() {
+      return scope ? `${scope}-${id}` : id
+    },
+    get containerId() {
+      return `container-${this.uid}`
+    },
     get quantityId() {
-      return `quantity-${id}`
+      return `quantity-${this.uid}`
     },
     get decBtnId() {
-      return `dec-${id}`
+      return `dec-${this.uid}`
     },
     get incBtnId() {
-      return `inc-${id}`
+      return `inc-${this.uid}`
     },
     decrease(quantity: number) {
       if (quantity > 1) {
