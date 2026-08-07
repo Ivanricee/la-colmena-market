@@ -1,13 +1,16 @@
 @import 'tailwindcss';
 @import 'tailwind-animations';
+
 ::view-transition-group(cart-drawer-desktop),
-::view-transition-group(cart-drawer-mobile) {
+::view-transition-group(cart-drawer-mobile),
+::view-transition-group(nav) {
+
   animation: none!important;
   z-index: 9999!important;
 }
 
 ::view-transition-group(*) {
-  /*animation-duration: 1s !important;*/
+  animation-duration: 1s !important;
   z-index: 1;
 }
 @layer base {
