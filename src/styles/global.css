@@ -10,7 +10,7 @@
 }
 
 ::view-transition-group(*) {
-  animation-duration: 1s !important;
+  /*animation-duration: 1s !important;*/
   z-index: 1;
 }
 @layer base {
