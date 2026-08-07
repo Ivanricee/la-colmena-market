@@ -1,12 +1,7 @@
 @import 'tailwindcss';
 @import 'tailwind-animations';
-::view-transition-group(cart-drawer) {
-  animation: none!important;
-  z-index: 9999!important;
-}
-:view-transition-group(cart-drawer) {
-  animation: none !important;
-  z-index: 9999 !important;
+::view-transition-group(*) {
+  /*animation-duration: 1s !important;
 }
 @layer base {
   * {
@@ -16,18 +11,11 @@
         display: none !important;
       }
     }
-        ::view-transition-group(cart-drawer) {
-          animation: none;
-          z-index: 9999;
-        }
     body {
       @apply bg-background text-foreground;
     }
 
 
-    /*::view-transition-group(*) {
-      animation-duration: 3s !important;
-    }*/
   :root {
     /* Solo los valores de los canales para permitir opacidad */
     --background: 42 50% 98%;
