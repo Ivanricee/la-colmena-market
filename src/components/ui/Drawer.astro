@@ -5,7 +5,6 @@ interface Props {
   showDrawer?: boolean
 }
 const { showDrawer = true } = Astro.props
-console.log({ showDrawer })
 ---
 
 <div
@@ -22,6 +21,7 @@ console.log({ showDrawer })
       ' md:flex flex-col',
     ]}
     :class="`${$store.cartUI.open ? 'translate-x-0' : '-translate-x-full'} ${mounted ? 'transition-transform duration-300' : ''}`"
+    transition:name="cart-drawer-desktop"
   >
     <!-- drawer header -->
     <div class="p-4 border-border border-b flex flex-col gap-3 items-center">
@@ -78,6 +78,7 @@ console.log({ showDrawer })
     ]}
     :style="`transform: translateY(${$store.cartUI.open ? '0' : 'calc(100% - 58px)'}); ${mounted ? 'transition: transform 300ms ease' : ''}`"
     style="transform: translateY(calc(100% - 58px))"
+    transition:name="cart-drawer-mobile"
   >
     <!-- drawer mobile Tab -->
     <button
