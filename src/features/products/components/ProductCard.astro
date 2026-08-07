@@ -5,6 +5,7 @@ import Tags from './Tags.astro'
 import { Image, Product } from '../products.model'
 import Button from '@/components/ui/Button.astro'
 import Tooltip from '@/components/ui/Tooltip.astro'
+import { an } from 'node_modules/@upstash/redis/error-8y4qG0W2.d.mts'
 
 interface Props {
   product: Product
@@ -33,6 +34,7 @@ const getImg = (image: Image) => {
   data-astro-prefetch
   class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent"
   transition:name={`card-img-${id}`}
+  transition:animate="none"
 >
   <div class="flex flex-1 min-h-0 flex-row lg:flex-col">
     <!-- Imagen + info desktop -->
@@ -84,20 +86,30 @@ const getImg = (image: Image) => {
         <div
           class="text-muted-foreground line-clamp-2 text-sm text-balance"
           set:html={descriptionHtml}
+          transition:name={`description-${id}`}
         />
       </div>
     </a>
     <!-- Columna derecha solo visible en mobile -->
     <div class="flex flex-1 flex-col justify-between gap-2 pl-3 lg:hidden">
       <div class="flex flex-col overflow-hidden leading-normal">
-        <div class="mb-2">
+        <div class="mb-2" transition:name={`tags-${id}`}>
           <Tags {tags} />
         </div>
-        <h3 class="text-foreground mb-1 line-clamp-2 text-base font-semibold">{title}</h3>
-        <div class="text-muted-foreground line-clamp-2 text-xs" set:html={descriptionHtml} />
+        <h3
+          class="text-foreground mb-1 line-clamp-2 text-base font-semibold"
+          transition:name={`title-${id}`}
+        >
+          {title}
+        </h3>
+        <div
+          class="text-muted-foreground line-clamp-2 text-xs"
+          set:html={descriptionHtml}
+          transition:name={`description-${id}`}
+        />
       </div>
       <div class="flex flex-col gap-2">
-        <p class="flex items-baseline gap-2">
+        <p class="flex items-baseline gap-2" transition:name={`price-${id}`}>
           <span
             class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-xl font-bold text-transparent"
           >
@@ -125,6 +137,7 @@ const getImg = (image: Image) => {
           @mouseenter="isHovered = true; state.show = isHovered && reachedLimit"
           @mouseleave="isHovered = false; state.show = false"
           x-effect="if (reachedLimit && isHovered) state.show = true; else state.show = false"
+          transition:name={`add-to-cart-${id}`}
         >
           <Button
             x-bind:disabled="reachedLimit"
@@ -176,6 +189,7 @@ const getImg = (image: Image) => {
         @mouseenter="isHovered = true; state.show = isHovered && reachedLimit"
         @mouseleave="isHovered = false; state.show = false"
         x-effect="if (reachedLimit && isHovered) state.show = true; else state.show = false"
+        transition:name={`add-to-cart-${id}`}
       >
         <Button
           x-bind:disabled="reachedLimit"
