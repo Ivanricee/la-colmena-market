@@ -13,7 +13,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
   <ul
     class:list={[
       'flex gap-4 w-full items-center px-4 pt-0 md:pt-4 pb-6 [&>li]:p-2 [&>li]:border [&>li]:rounded-md [&>li]:flex',
-      'md:[&>li]:w-28 md:[&>li]:h-auto md:[&>li]:aspect-3/4 md:[&>li]:flex-col',
+      'md:[&>li]:w-32 md:[&>li]:h-auto md:[&>li]:aspect-square md:[&>li]:flex-col',
       '[&>li]:flex-row [&>li]:aspect-video [&>li]:w-auto [&>li]:h-28',
       `${direction === 'row' ? 'flex-row' : 'flex-col'}`,
     ]}
@@ -22,7 +22,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
       x-for="[id, product] in Object.entries($store.cartStore?.data?.items ?? {})"
       :key="id"
     >
-      <li class="md:block flex gap-1.5 relative">
+      <li class="md:block flex gap-1.5 relative justify-between">
         <a
           class="transition-colors duration-300 ease-in-out cursor-pointer hover:bg-secondary/30 rounded-t-sm"
           x-bind:href="`/product/${product.categoryId?.slug || 'uncategorized'}/${id}`"
@@ -45,7 +45,7 @@ const direction = slot === 'horizontal' ? 'row' : 'column'
               >
               </span>
               <span
-                class="font-semibold text-xs text-honey-medium line-clamp-1 pb-0.5"
+                class="font-semibold text-honey-medium line-clamp-1 pb-0.5"
                 x-text="'$' + Number(product.price).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
               ></span>
             </div>

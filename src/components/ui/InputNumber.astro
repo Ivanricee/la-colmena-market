@@ -6,6 +6,7 @@ interface Props {
   scope?: string
 }
 const { scope = '' } = Astro.props
+//h 12 sm:h-16
 ---
 
 <div
@@ -18,8 +19,8 @@ const { scope = '' } = Astro.props
   @mouseleave="handleMouseLeave()"
   x-effect="showTooltip(product)"
   class:list={[
-    'md:h-full md:rounded-t-none md:rounded-b-sm',
-    'bg-secondary/30 relative flex w-full items-center shadow-xs h-12 rounded-sm sm:h-16',
+    'md:h-full rounded-sm',
+    'bg-secondary/30 relative flex w-full items-center shadow-xs h-full rounded-sm',
   ]}
 >
   <button
@@ -27,10 +28,10 @@ const { scope = '' } = Astro.props
     :id="decBtnId"
     x-on:click="decrease(product.quantity)"
     class:list={[
-      'ring-offset-background text-foreground border-border/10 hover:bg-accent/80 h-full w-10 md:w-auto ',
-      'flex justify-center items-center hover:text-accent-foreground focus:ring-ring rounded-s-base ',
-      'box-border h-10 border px-2 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none',
-      'disabled:pointer-events-none disabled:opacity-50',
+      'ring-offset-background text-foreground border-border/10 hover:bg-accent/80 h-full min-w-11 md:w-auto',
+      'flex justify-center items-center hover:text-accent-foreground focus:ring-ring rounded-s-sm ',
+      'box-border min-h-11 border px-2 text-sm leading-5 font-medium transition-colors focus:ring-4 focus:outline-none',
+      'disabled:pointer-events-none disabled:opacity-50 hover:rounded-s-sm',
     ]}
   >
     <div class="relative flex h-4 w-4 items-center justify-center">
@@ -65,7 +66,7 @@ const { scope = '' } = Astro.props
     :id="quantityId"
     class:list={[
       'placeholder:text-foreground border-border/10 flex-1 flex items-center justify-center',
-      'ring-ring h-10 w-full border-x-0 bg-transparent py-2.5 text-center',
+      'ring-ring min-h-11 w-full border-x-0 bg-transparent py-2.5 text-center',
     ]}
     x-text="product.quantity"></span>
   <button
@@ -73,9 +74,9 @@ const { scope = '' } = Astro.props
     :id="incBtnId"
     x-bind:disabled="product.quantity >= product.purchaseLimit"
     class:list={[
-      'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full w-10 md:w-auto',
-      'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-base',
-      'aria-expanded:text-accent-foreground box-border h-10 border px-2 text-sm leading-5 ',
+      'ring-offset-background text-foreground hover:text-accent-foreground border-border/10 h-full min-w-11 md:w-auto',
+      'flex justify-center items-center hover:bg-accent/80 focus:ring-ring rounded-e-sm hover:rounded-e-sm',
+      'aria-expanded:text-accent-foreground box-border min-h-11 border px-2 text-sm leading-5 ',
       'transition-colors focus:ring-4 focus:outline-none disabled:pointer-events-none disabled:opacity-50 aria-expanded:font-semibold',
     ]}
     @click="increase(product.quantity)"
