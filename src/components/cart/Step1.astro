@@ -41,33 +41,20 @@ import Button from '../ui/Button.astro'
           </div>
         </div>
         <!--Count & subtotal -->
-        <div class="border-t border-border pt-6 lg:border-0 lg:pt-0">
+        <div class="border-t border-border lg:border-0 lg:pt-0">
           <div
-            class="space-y-8 sm:space-y-0 mt-3 grid grid-cols-1 gap-1 border-t
-          border-border/40 pt-3 sm:mt-0 sm:grid-cols-[auto_auto] sm:items-center sm:gap-4 sm:border-0 sm:pt-0"
+            class="space-y-8 sm:space-y-0 mt-3 grid gap-3 justify-between
+             lg:mt-0 grid-cols-[auto_auto] items-center sm:gap-4 sm:border-0 sm:pt-0"
           >
-            <div class="space-y-1 w-full lg:w-28 sm:space-y-0 h-fit flex flex-col">
-              <p
-                class="text-xs font-medium uppercase tracking-wide text-muted-foreground sm:hidden"
-              >
-                Cantidad
-              </p>
-              <div class="w-full lg:w-28 flex h-16 justify-center items-end self-center">
-                <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
-              </div>
-            </div>
-
             <div
-              class="flex items-end justify-between gap-3 sm:items-center sm:justify-end lg:gap-2"
+              class="lg:w-28 flex h-16 justify-center items-end self-center m-0 w-[7rem] sm:w-52 sm:space-y-0"
             >
+              <InputNumber x-text="product.quantity" :id="id" x-bind:id="id" />
+            </div>
+            <div class="flex justify-between gap-1 sm:gap-3 items-center sm:justify-end lg:gap-2">
               <div class="text-left sm:text-right sm:w-20">
                 <p
-                  class="text-xs font-medium uppercase tracking-wide text-muted-foreground sm:hidden"
-                >
-                  Subtotal
-                </p>
-                <p
-                  class="text-lg font-bold text-foreground"
+                  class="text-base sm:text-lg font-bold text-foreground"
                   x-text="'$' + Number(product.price * product.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
                 >
                 </p>
