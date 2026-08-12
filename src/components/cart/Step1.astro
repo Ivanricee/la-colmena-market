@@ -17,8 +17,8 @@ import Button from '../ui/Button.astro'
   <div class="p-0 sm:p-6 sm:pt-0 space-y-6">
     <template x-for="[id, product] in Object.entries(items)" :key="id">
       <div
-        class="rounded-xl bg-muted/30 p-3 sm:grid grid-cols-[minmax(2,1fr)_auto]
-      lg:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:p-6"
+        class="rounded-xl bg-muted/30 p-3 grid grid-cols-1
+            lg:grid-cols-[minmax(0,1fr)_auto] items-center sm:gap-4 sm:p-6"
       >
         <!--Img title price -->
         <div class="flex items-start gap-3 sm:items-center sm:gap-4">
