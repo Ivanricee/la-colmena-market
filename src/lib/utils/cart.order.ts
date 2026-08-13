@@ -67,6 +67,7 @@ export const handleFinalize = async ({
   items,
   totalPrice,
 }: FinalizeType): Promise<{ ok: false; error: FinalizeError } | { ok: true }> => {
+  //insert ticket in turso async, create whats mesg and url
   const { data, error } = await actions.finalizeTicket({
     name,
     phone,
@@ -97,6 +98,7 @@ export const handleFinalize = async ({
   }
 
   clearCart()
-  navigate(`/pedidos/${data.ticketId}?openWa=1`)
+  window.open(data.whatsappUrl, '_blank', 'noopener,noreferrer')
+  navigate(`/pedidos/${data.ticketId}?checkout`)
   return { ok: true }
 }
