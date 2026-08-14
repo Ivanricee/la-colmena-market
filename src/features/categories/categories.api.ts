@@ -31,7 +31,7 @@ export const getCategories = async (): Promise<categoriesResponse> => {
     `)
     return { categories }
   } catch (error) {
-    console.log(error)
-    return { categories: [], errorMessage: 'fallo al obtener las categorias' }
+    console.log('fallo al obtener las categorias', error)
+    return { categories: [], errorMessage: 'Sin conexión' }
   }
 }

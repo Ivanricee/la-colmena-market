@@ -4,6 +4,9 @@ import ProductsLayout from '@/layouts/ProductsLayout.astro'
 import { getCategories } from '@/features/categories/categories.api'
 export async function getStaticPaths() {
   const { categories, errorMessage } = await getCategories()
+  if (!errorMessage) {
+    console.error('no se pudieron obtener las categorias')
+  }
   return categories.map((category) => ({
     params: { type: category.slug },
     props: { category },

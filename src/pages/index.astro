@@ -1,7 +1,6 @@
 ---
 import { getCategories } from '@/features/categories/categories.api'
 import Layout from '../layouts/Layout.astro'
-import type { Category } from '@/features/categories/categories.api'
 
 import Button from '@/components/ui/Button.astro'
 import { Icon } from 'astro-icon/components'
@@ -19,9 +18,10 @@ const { productos, errorMessage: productsError } = productsData
 <Layout title="La Colmena Market">
   {
     categoriesError || productsError ? (
-      <section>
-        <h1>Error</h1>
-        <p>{categoriesError ?? productsError}</p>
+      <section class="grid place-items-center h-full my-12">
+        <h1 class="text-xl">
+          Sitio sin conexión, no se pudieron encontrar los productos. Intente más tarde.
+        </h1>
       </section>
     ) : (
       <>
