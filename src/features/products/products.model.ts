@@ -2,6 +2,14 @@ type htmlString = {
   html: string
 }
 type ProductStatus = 'active' | 'inactive' | 'out_of_stock'
+export const HEALTH_CATEGORIES = [
+  'none',
+  'foodTraditional',
+  'cosmeticHealth',
+  'cosmeticBeauty',
+  'supplement',
+] as const
+export type HealthCategory = (typeof HEALTH_CATEGORIES)[number]
 export type Category = {
   name: string
   slug: string
@@ -22,6 +30,7 @@ export interface Product {
   weight: number
   specifications: htmlString
   benefits: string[]
+  healthCategory: HealthCategory
   tags: string[]
   categoryid: Category
   contenidoNeto: number

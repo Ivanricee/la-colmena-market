@@ -1,11 +1,13 @@
 ---
 import { Icon } from 'astro-icon/components'
 import { Product } from '../products.model'
+import { getDisclaimer } from '@/lib/utils/disclaimers'
 interface Props {
   product: Product
 }
 const { product } = Astro.props
-const { title, benefits, description } = product
+const { benefits, description, healthCategory } = product
+const disclaimer = getDisclaimer(healthCategory)
 ---
 
 <div id="accordion-card" data-accordion="collapse" x-data="{ active: 1 }">
@@ -46,7 +48,7 @@ const { title, benefits, description } = product
       ]}
       :aria-expanded="active === 2"
     >
-      <span>Beneficios</span>
+      <span>Beneficios {disclaimer ? '*' : ''} </span>
       <Icon name="lucide:chevron-down" size={20} class="transition-[rotate] duration-300" />
     </button>
   </h2>
@@ -107,3 +109,4 @@ const { title, benefits, description } = product
     </div>
   </div>
 </div>
+{disclaimer && <p class="text-muted-foreground text-xs my-4">{disclaimer}</p>}

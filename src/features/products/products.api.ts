@@ -32,6 +32,7 @@ export const getProducts = async (params?: GetProductsParams): Promise<productRe
               html
             }
             benefits
+            healthCategory
             brand
             productStatus
             weight
@@ -50,7 +51,7 @@ export const getProducts = async (params?: GetProductsParams): Promise<productRe
       {
         first,
         skip,
-        where: Object.keys(where).length > 0 ? where : null,
+        where: Object.keys(where).length > 0 ? where : {},
       }
     )
 
