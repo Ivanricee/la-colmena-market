@@ -12,7 +12,7 @@ import sitemap from '@astrojs/sitemap'
 export default defineConfig({
   site: 'https://lacolmenamarket.shop',
   output: 'static',
-
+  prefetch: true,
   adapter:
     vercel(/*{
     webAnalytics: { enabled: true },
