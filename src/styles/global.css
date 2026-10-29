@@ -4,9 +4,8 @@
 ::view-transition-group(cart-drawer-desktop),
 ::view-transition-group(cart-drawer-mobile),
 ::view-transition-group(nav) {
-
-  animation: none!important;
-  z-index: 9999!important;
+  animation: none !important;
+  z-index: 9999 !important;
 }
 
 ::view-transition-group(*) {
@@ -15,16 +14,15 @@
 }
 @layer base {
   * {
-      @apply border-border;
+    @apply border-border;
 
-      [x-cloak] {
-        display: none !important;
-      }
+    [x-cloak] {
+      display: none !important;
     }
-    body {
-      @apply bg-background text-foreground;
-    }
-
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 
   :root {
     /* Solo los valores de los canales para permitir opacidad */
@@ -159,5 +157,3 @@
 @utility gradient-warm {
   background-image: var(--gradient-warm);
 }
-
-
