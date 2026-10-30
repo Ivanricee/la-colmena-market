@@ -1,0 +1,255 @@
+---
+import { Icon } from 'astro-icon/components'
+import Button from '../ui/Button.astro'
+import type { Category } from '@/features/categories/categories.api'
+
+interface Props {
+  categories: Category[]
+  interval?: number
+}
+// transition-[opacity,visibility] duration-500 ease-out delay-500
+const { categories, interval = 4500 } = Astro.props
+const getImageUrl = (category: Category) => {
+  return category.image?.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/')
+}
+const total = categories.length
+const hasAutoplay = interval > 0 && total > 1
+const labels = categories.map((c) => `${c.heroTitle} ${c.heroTitleStrong}`.trim())
+---
+
+<div
+  class="group/carousel relative"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Categorías de productos"
+  x-data={`carousel(${JSON.stringify(labels)}, { interval: ${hasAutoplay ? interval : 0} })`}
+  x-on:keydown.arrow-left="prev()"
+  x-on:keydown.arrow-right="next()"
+  x-on:touchstart.passive="onTouchStart($event)"
+  x-on:touchend.passive="onTouchEnd($event)"
+  x-on:pointerenter="onPointerEnter($event)"
+  x-on:pointerleave="onPointerLeave($event)"
+  x-on:focusin="onFocusIn($event)"
+  x-on:focusout="onFocusOut($event)"
+  x-on:visibilitychange.window="schedule()"
+>
+  <p
+    class="sr-only"
+    aria-live={hasAutoplay ? 'off' : 'polite'}
+    x-bind:aria-live="running ? 'off' : 'polite'"
+    aria-atomic="true"
+    x-text="announcement"
+  >
+  </p>
+
+  <div class="grid">
+    {
+      categories.map((category, index) => (
+        <div
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${index + 1} de ${total}: ${labels[index]}`}
+          data-active={index === 0 ? '' : undefined}
+          inert={index !== 0}
+          x-bind:data-active={`current === ${index}`}
+          x-bind:inert={`current !== ${index}`}
+          class="
+            group col-start-1 row-start-1 invisible z-0 opacity-0
+
+            data-[active]:visible data-[active]:z-10 data-[active]:opacity-100 data-[active]:delay-0
+            motion-reduce:transition-none
+          "
+        >
+          <section class="relative h-[600px] overflow-hidden">
+            <div class="absolute inset-0 bg-background">
+              {getImageUrl(category) && (
+                <img
+                  src={getImageUrl(category)}
+                  alt=""
+                  class="absolute inset-0 h-full w-full object-cover object-center"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                />
+              )}
+              <div class="absolute inset-0 bg-gradient-to-r from-background/95 to-background/60" />
+            </div>
+
+            <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+              <div
+                class="
+                  max-w-2xl space-y-6 opacity-0 translate-y-4
+                  transition duration-200 ease-in
+                  group-data-[active]:opacity-100 group-data-[active]:translate-y-0
+                  group-data-[active]:duration-700 group-data-[active]:delay-200 group-data-[active]:ease-out
+                  motion-reduce:transition-none motion-reduce:translate-y-0
+                "
+              >
+                <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
+                  {category.heroTitle}{' '}
+                  <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
+                    {category.heroTitleStrong}
+                  </span>
+                </h1>
+                <p class="text-xl text-muted-foreground max-w-md">{category.heroDescription}</p>
+                <div class="flex gap-4">
+                  <Button
+                    href={`/product/${category.slug}`}
+                    size="lg"
+                    class="bg-primary hover:bg-primary/90"
+                  >
+                    Explorar la tienda
+                    <Icon name="lucide:arrow-right" size={20} />
+                  </Button>
+                </div>
+                <p class="text-sm text-muted-foreground font-semibold">
+                  <Icon name="lucide:map-pin" size={16} class="inline" />
+                  Entregas en Valle de Chalco y alrededores
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="py-16 border-y border-border bg-gradient-warm">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div
+                class="
+                  grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 translate-y-3
+                  transition duration-200 ease-in
+                  group-data-[active]:opacity-100 group-data-[active]:translate-y-0
+                  group-data-[active]:duration-700 group-data-[active]:delay-[350ms]
+                  group-data-[active]:ease-out
+                  motion-reduce:transition-none motion-reduce:translate-y-0
+                "
+              >
+                {category.trustBadges.map((trustBadge) => (
+                  <div class="flex flex-col items-center text-center space-y-3">
+                    <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon name={trustBadge.icon} size={20} />
+                    </div>
+                    <h2 class="text-lg font-semibold text-foreground">{trustBadge.title}</h2>
+                    <p class="text-muted-foreground">{trustBadge.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    total > 1 && (
+      <div x-cloak class="pointer-events-none absolute inset-x-0 top-0 z-20 h-[600px]">
+        <div
+          class="
+            absolute inset-0 opacity-0 transition-opacity duration-300
+            group-hover/carousel:opacity-100 group-focus-within/carousel:opacity-100
+          "
+        >
+          <button
+            type="button"
+            x-ref="prev"
+            x-transition.opacity.duration.200ms
+            x-on:click="prev()"
+            aria-label="Categoría anterior"
+            class="
+              group/arrow pointer-events-auto absolute left-3 sm:left-6 bottom-0 -translate-y-1/2
+              inline-flex size-16 items-center justify-center rounded-full
+              border border-border/60 bg-background/50 text-foreground/70 shadow-sm backdrop-blur-sm
+              transition duration-300 ease-out
+              hover:border-border hover:bg-background hover:text-foreground hover:shadow-md
+              active:scale-95
+              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+            "
+          >
+            <Icon
+              name="lucide:chevron-left"
+              size={40}
+              class="transition-transform duration-300 group-hover/arrow:-translate-x-0.5"
+            />
+          </button>
+
+          <button
+            type="button"
+            x-ref="next"
+            x-transition.opacity.duration.200ms
+            x-on:click="next()"
+            aria-label="Categoría siguiente"
+            class="
+              group/arrow pointer-events-auto absolute right-3 sm:right-6 bottom-0 -translate-y-1/2
+              inline-flex size-16 items-center justify-center rounded-full
+              border border-border/60 bg-background/50 text-foreground/70 shadow-sm backdrop-blur-sm
+              transition duration-300 ease-out
+              hover:border-border hover:bg-background hover:text-foreground hover:shadow-md
+              active:scale-95
+              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+            "
+          >
+            <Icon
+              name="lucide:chevron-right"
+              size={40}
+              class="transition-transform duration-300 group-hover/arrow:translate-x-0.5"
+            />
+          </button>
+        </div>
+
+        <div
+          role="group"
+          aria-label="Controles del carousel"
+          class="pointer-events-auto absolute inset-x-0 bottom-6 flex justify-center"
+        >
+          <div class="flex items-center rounded-full bg-background/50 px-2 backdrop-blur-sm">
+            {hasAutoplay && (
+              <>
+                <button
+                  type="button"
+                  x-on:click="toggle()"
+                  aria-label="Pausar rotación automática"
+                  x-bind:aria-label="playing ? 'Pausar rotación automática' : 'Reanudar rotación automática'"
+                  class="
+                    flex size-6 items-center justify-center rounded-full
+                    text-foreground/60 transition-colors duration-300
+                    hover:bg-foreground/10 hover:text-foreground
+                    focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
+                  "
+                >
+                  <span x-show="playing" class="flex">
+                    <Icon name="lucide:pause" size={14} />
+                  </span>
+                  <span x-show="!playing" class="flex">
+                    <Icon name="lucide:play" size={14} />
+                  </span>
+                </button>
+                <span aria-hidden="true" class="mx-1.5 h-4 w-px bg-foreground/20" />
+              </>
+            )}
+
+            {categories.map((_, index) => (
+              <button
+                type="button"
+                aria-label={`Ir a ${labels[index]}`}
+                aria-current={index === 0 ? 'true' : undefined}
+                x-bind:aria-current={`current === ${index} ? 'true' : false`}
+                x-on:click={`goTo(${index})`}
+                class="
+                  group/dot flex h-6 min-w-6 items-center justify-center rounded-full
+                  focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
+                "
+              >
+                <span
+                  class="
+                    block h-2 w-2 rounded-full bg-foreground/30
+                    transition-all duration-300 ease-out
+                    group-hover/dot:bg-foreground/60
+                    group-aria-[current=true]/dot:w-6 group-aria-[current=true]/dot:bg-primary
+                  "
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>

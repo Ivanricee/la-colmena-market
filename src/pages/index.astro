@@ -2,10 +2,9 @@
 import { getCategories } from '@/features/categories/categories.api'
 import Layout from '../layouts/Layout.astro'
 
-import Button from '@/components/ui/Button.astro'
-import { Icon } from 'astro-icon/components'
 import { getProducts } from '@/features/products/products.api'
 import ProductCard from '@/features/products/components/ProductCard.astro'
+import Category from '@/components/category/index.astro'
 
 const [categoriesData, productsData] = await Promise.all([
   getCategories(),
@@ -13,6 +12,7 @@ const [categoriesData, productsData] = await Promise.all([
 ])
 const { categories, errorMessage: categoriesError } = categoriesData
 const { productos, errorMessage: productsError } = productsData
+console.log(categories)
 ---
 
 <Layout title="La Colmena Market">
@@ -25,58 +25,7 @@ const { productos, errorMessage: productsError } = productsData
       </section>
     ) : (
       <>
-        {/* Hero Section */}
-        {categories.map((category) => (
-          <>
-            <section class="relative h-[600px] overflow-hidden">
-              <div class="absolute inset-0 bg-cover bg-center bg-[url('../assets/hero-honey.jpg')]">
-                <div class="absolute inset-0 bg-gradient-to-r from-background/95 to-background/60" />
-              </div>
-
-              <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-                <div class="max-w-2xl space-y-6 animate-fade-in-up  animate-duration-300">
-                  <h1 class="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-                    {category.heroTitle}{' '}
-                    <span class="from-primary bg-linear-to-r to-orange-400 bg-clip-text text-transparent">
-                      {category.heroTitleStrong}
-                    </span>
-                  </h1>
-                  <p class="text-xl text-muted-foreground max-w-md">{category.heroDescription}</p>
-                  <div class="flex gap-4">
-                    <Button
-                      href={`/product/${category.slug}`}
-                      size="lg"
-                      class="bg-primary hover:bg-primary/90"
-                    >
-                      Explorar la tienda
-                      <Icon name="lucide:arrow-right" size={20} />
-                    </Button>
-                  </div>
-                  <p class="text-sm text-muted-foreground font-semibold">
-                    <Icon name="lucide:map-pin" size={16} class="inline" />
-                    Entregas en Valle de Chalco y alrededores
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            <section class="py-16 border-y border-border bg-gradient-warm ">
-              <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-up animate-delay-150 animate-duration-300">
-                  {category.trustBadges.map((trustBadge) => (
-                    <div class="flex flex-col items-center text-center space-y-3">
-                      <div class="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Icon name={trustBadge.icon} size={20} />
-                      </div>
-                      <h2 class="text-lg font-semibold text-foreground">{trustBadge.title}</h2>
-                      <p class="text-muted-foreground">{trustBadge.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          </>
-        ))}
+        <Category categories={categories} />
         {/* Featured Products */}
         <section class="py-20">
           <div class=" mx-auto px-4 sm:px-6 lg:px-8">
