@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro'
 interface Props {
   title: string
-  description: { html: string }
+  description: string
 }
 
 const { title, description } = Astro.props
@@ -14,7 +14,7 @@ const { title, description } = Astro.props
       <h1 class="text-4xl font-bold text-foreground mb-2 animate-fade-in-up animate-duration-300">
         {title}
       </h1>
-      <div class="text-lg text-muted-foreground" set:html={description.html} />
+      <div class="text-lg text-muted-foreground" set:text={description} />
       <slot />
     </div>
   </div>
