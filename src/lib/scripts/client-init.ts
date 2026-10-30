@@ -1,3 +1,4 @@
+/* global window, document */
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
 import intersect from '@alpinejs/intersect'
@@ -6,7 +7,7 @@ import { $cart, addItem, removeItem } from '@/store/cartStore'
 import { $themeStore, type ThemeType } from '@/store/themeStore'
 import { Product } from '@/features/products/products.model'
 import { setupCartHandler } from '@/lib/scripts/cart'
-
+import heroCarousel from '@/lib/scripts/heroCarousel'
 export default function initClientUI(): void {
   if (!window.AlpineInstance) {
     Alpine.plugin(collapse)
@@ -18,6 +19,7 @@ export default function initClientUI(): void {
     setupCatalogHandler()
     setupInputNumberHandler()
     setupCartHandler(Alpine)
+    setupCategoryCarousel()
     window.AlpineInstance = Alpine
   }
 }
@@ -194,4 +196,8 @@ const setupInputNumberHandler = () => {
     state: { show: false },
     anchorRef: null,
   }))
+}
+
+const setupCategoryCarousel = () => {
+  Alpine.data('carousel', heroCarousel)
 }
