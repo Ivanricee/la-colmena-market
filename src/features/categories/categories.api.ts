@@ -15,7 +15,7 @@ export interface Category {
   heroTitle: string
   heroTitleStrong: string
   heroDescription: string // si es Rich Text, sería { html: string }
-  image: Image[] | []
+  image: Image | null
   isActive: boolean
   trustBadges: TrustBadge[]
 }
@@ -45,7 +45,7 @@ export const getCategories = async (): Promise<categoriesResponse> => {
         }
       }
     `)
-    console.log(categories)
+
     return { categories }
   } catch (error) {
     console.error('fallo al obtener las categorias', error)
