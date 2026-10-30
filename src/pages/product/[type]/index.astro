@@ -13,9 +13,9 @@ export async function getStaticPaths() {
   }))
 }
 const { category } = Astro.props
-const { slug, name, description } = category
+const { name, heroDescription } = category
 ---
 
-<ProductsLayout title={name} {description}>
+<ProductsLayout title={name} description={heroDescription}>
   <Products />
 </ProductsLayout>
