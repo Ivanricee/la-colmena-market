@@ -134,19 +134,27 @@ const setupAlpineCartUIStore = () => {
   }
 }
 const setupCatalogHandler = () => {
-  Alpine.data('catalogHandler', (totalCount: number) => ({
-    limit: 12,
-    search: '',
-    totalCount,
-    shouldShow(index: number, title: string) {
-      const matchesSearch = title.toLowerCase().includes(this.search.toLowerCase())
-      const isWithinLimit = index < this.limit
-      return matchesSearch && isWithinLimit
-    },
-    loadMore() {
-      this.limit += 12
-    },
-  }))
+  Alpine.data('catalogHandler', (totalCount: number, pathname: string) => {
+    const storageKey = `catalog-limit:${pathname}`
+    const savedLimit = Number(window.sessionStorage.getItem(storageKey))
+    const initialLimit =
+      Number.isInteger(savedLimit) && savedLimit > 0 ? Math.min(savedLimit, totalCount) : 12
+
+    return {
+      limit: initialLimit,
+      search: '',
+      totalCount,
+      shouldShow(index: number, title: string) {
+        const matchesSearch = title.toLowerCase().includes(this.search.toLowerCase())
+        const isWithinLimit = index < this.limit
+        return matchesSearch && isWithinLimit
+      },
+      loadMore() {
+        this.limit = Math.min(this.limit + 12, this.totalCount)
+        window.sessionStorage.setItem(storageKey, String(this.limit))
+      },
+    }
+  })
 }
 const setupInputNumberHandler = () => {
   Alpine.data('inputNumberHandler', (id: string, purchaseLimit: number, scope = '') => ({

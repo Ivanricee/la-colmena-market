@@ -17,7 +17,10 @@ const { productos, errorMessage } = (await getProducts()) as {
       <p>{errorMessage}</p>
     </section>
   ) : (
-    <section x-data={`catalogHandler(${productos.length})`} class="space-y-8">
+    <section
+      x-data={`catalogHandler(${productos.length}, ${JSON.stringify(Astro.url.pathname)})`}
+      class="space-y-8"
+    >
       <div class="relative max-w-7xl mx-auto px-0 sm:px-6 py-8">
         <div class="relative">
           <div class="absolute inset-0 bg-gradient-to-r from-honey-dark/35 to-honey-medium/15 blur-2xl opacity-50 rounded-2xl" />
