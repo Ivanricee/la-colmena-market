@@ -62,6 +62,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
       document.addEventListener('astro:before-swap', (ev) => {
         const theme = getTheme()
         ev.newDocument.documentElement.classList.toggle('dark', theme === 'dark')
+
+        const transitionReturn = sessionStorage.getItem('product-transition-return')
+        if (transitionReturn) {
+          const [productId, source, destination] = transitionReturn.split('|')
+          const nextUrl = new URL(ev.to)
+          const nextRoute = `${nextUrl.pathname}${nextUrl.search}`
+
+          if (productId && source && destination && nextRoute === source) {
+            const productCard = Array.from(
+              ev.newDocument.querySelectorAll('[data-transition-product-id]')
+            ).find((card) => card.getAttribute('data-transition-product-id') === productId)
+
+            productCard?.setAttribute('data-transition-selected', '')
+            sessionStorage.removeItem('product-transition-return')
+          } else if (!destination || nextRoute !== destination) {
+            sessionStorage.removeItem('product-transition-return')
+          }
+        }
       })
       // Sincronizar tema después de navegación SPA para Alpine
       document.addEventListener('astro:after-swap', () => {

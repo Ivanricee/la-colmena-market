@@ -1,4 +1,4 @@
-/* global window, document, Element, HTMLAnchorElement, HTMLElement */
+/* global window, document, Element, Event, HTMLAnchorElement, HTMLElement, MouseEvent */
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
 import intersect from '@alpinejs/intersect'
@@ -8,6 +8,9 @@ import { $themeStore, type ThemeType } from '@/store/themeStore'
 import { Product } from '@/features/products/products.model'
 import { setupCartHandler } from '@/lib/scripts/cart'
 import heroCarousel from '@/lib/scripts/heroCarousel'
+
+const productTransitionReturnKey = 'product-transition-return'
+
 export default function initClientUI(): void {
   if (!window.AlpineInstance) {
     Alpine.plugin(collapse)
@@ -26,24 +29,40 @@ export default function initClientUI(): void {
 }
 
 const setupProductTransitionSelection = () => {
+  const selectProductCard = (event: Event) => {
+    if (!(event.target instanceof Element)) return
+
+    const link = event.target.closest('a[href]')
+    if (!(link instanceof HTMLAnchorElement)) return
+
+    const pathSegments = link.pathname.split('/').filter(Boolean)
+    if (pathSegments.length !== 3 || pathSegments[0] !== 'product') return
+
+    const selectedCard = link.closest<HTMLElement>('.product-transition-scope')
+    if (!selectedCard) return
+
+    document
+      .querySelectorAll<HTMLElement>('.product-transition-scope[data-transition-selected]')
+      .forEach((card) => card.removeAttribute('data-transition-selected'))
+    selectedCard.setAttribute('data-transition-selected', '')
+
+    const productId = selectedCard.dataset.transitionProductId
+    if (productId) {
+      const source = `${window.location.pathname}${window.location.search}`
+      const destination = `${link.pathname}${link.search}`
+      window.sessionStorage.setItem(
+        productTransitionReturnKey,
+        `${productId}|${source}|${destination}`
+      )
+    }
+  }
+
+  document.addEventListener('pointerdown', selectProductCard, true)
   document.addEventListener(
     'click',
     (event) => {
-      if (!(event.target instanceof Element)) return
-
-      const link = event.target.closest('a[href]')
-      if (!(link instanceof HTMLAnchorElement)) return
-
-      const pathSegments = link.pathname.split('/').filter(Boolean)
-      if (pathSegments.length !== 3 || pathSegments[0] !== 'product') return
-
-      const selectedCard = link.closest<HTMLElement>('.product-transition-scope')
-      if (!selectedCard) return
-
-      document
-        .querySelectorAll<HTMLElement>('.product-transition-scope[data-transition-selected]')
-        .forEach((card) => card.removeAttribute('data-transition-selected'))
-      selectedCard.setAttribute('data-transition-selected', '')
+      if (event instanceof MouseEvent && event.detail > 0) return
+      selectProductCard(event)
     },
     true
   )
