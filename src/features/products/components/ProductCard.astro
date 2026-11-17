@@ -23,7 +23,7 @@ const productJson = JSON.stringify({
 })
 const getImg = (image: Image) => {
   const { version, public_id } = image
-  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_300/v${version}/${public_id}.webp`
+  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_600/v${version}/${public_id}.webp`
   return url
 }
 //transition:name={`bg-img-${id}`}
@@ -31,7 +31,7 @@ const getImg = (image: Image) => {
 
 <Card
   data-astro-prefetch
-  class="from-card relative flex h-full flex-col bg-linear-to-t to-transparent"
+  class="product-transition-scope from-card relative flex h-full flex-col bg-linear-to-t to-transparent"
   transition:name={`card-img-${id}`}
   transition:animate="none"
 >
@@ -61,10 +61,11 @@ const getImg = (image: Image) => {
           <img
             class:list={[
               'drop-shadow-honey-dark/50 group-hover:drop-shadow-honey-dark/90 relative h-full w-full -translate-y-3',
-              'object-contain object-top drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
+              'object-contain object-top text-transparent drop-shadow-lg transition-[shadow_transform] duration-300 group-hover:scale-105 group-hover:drop-shadow-xl',
             ]}
             src={getImg(image[0])}
             loading="lazy"
+            decoding="async"
             alt={title}
             width="300"
             height="400"

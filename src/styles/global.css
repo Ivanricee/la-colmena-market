@@ -12,6 +12,14 @@
   /*animation-duration: 1s !important;*/
   z-index: 1;
 }
+
+@media (max-width: 767px) {
+  .product-transition-scope,
+  .product-transition-scope * {
+    view-transition-name: none !important;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
