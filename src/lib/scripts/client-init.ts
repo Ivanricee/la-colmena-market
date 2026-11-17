@@ -1,4 +1,4 @@
-/* global window, document */
+/* global window, document, Element, HTMLAnchorElement, HTMLElement */
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
 import intersect from '@alpinejs/intersect'
@@ -18,10 +18,35 @@ export default function initClientUI(): void {
     setupAlpineCartUIStore()
     setupCatalogHandler()
     setupInputNumberHandler()
+    setupProductTransitionSelection()
     setupCartHandler(Alpine)
     setupCategoryCarousel()
     window.AlpineInstance = Alpine
   }
+}
+
+const setupProductTransitionSelection = () => {
+  document.addEventListener(
+    'click',
+    (event) => {
+      if (!(event.target instanceof Element)) return
+
+      const link = event.target.closest('a[href]')
+      if (!(link instanceof HTMLAnchorElement)) return
+
+      const pathSegments = link.pathname.split('/').filter(Boolean)
+      if (pathSegments.length !== 3 || pathSegments[0] !== 'product') return
+
+      const selectedCard = link.closest<HTMLElement>('.product-transition-scope')
+      if (!selectedCard) return
+
+      document
+        .querySelectorAll<HTMLElement>('.product-transition-scope[data-transition-selected]')
+        .forEach((card) => card.removeAttribute('data-transition-selected'))
+      selectedCard.setAttribute('data-transition-selected', '')
+    },
+    true
+  )
 }
 
 // Theme Store

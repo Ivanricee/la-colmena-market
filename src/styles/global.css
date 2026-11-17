@@ -13,11 +13,9 @@
   z-index: 1;
 }
 
-@media (max-width: 767px) {
-  .product-transition-scope,
-  .product-transition-scope * {
-    view-transition-name: none !important;
-  }
+.product-transition-scope:not([data-transition-selected]),
+.product-transition-scope:not([data-transition-selected]) * {
+  view-transition-name: none !important;
 }
 
 @layer base {
