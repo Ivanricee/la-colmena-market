@@ -165,8 +165,8 @@ export default defineConfig({
         short_name: 'La Colmena',
         start_url: '/',
         display: 'standalone',
-        background_color: '#fcfbf8',
-        theme_color: '#9c6b16',
+        background_color: '#19140F',
+        theme_color: '#19140E',
         lang: 'es-MX',
         icons: [
           {
