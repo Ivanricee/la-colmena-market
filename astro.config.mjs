@@ -1,5 +1,8 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config'
+import { copyFile, readFile, readdir, writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vercel from '@astrojs/vercel'
 
@@ -7,6 +10,44 @@ import icon from 'astro-icon'
 
 import alpinejs from '@astrojs/alpinejs'
 import sitemap from '@astrojs/sitemap'
+import { AstroPWAIntegration } from '@vite-pwa/astro'
+
+/** @type {import('astro').AstroIntegration} */
+const vercelPwaAssets = {
+  name: 'vercel-pwa-assets',
+  hooks: {
+    'astro:build:done': async ({ dir }) => {
+      const staticDir = fileURLToPath(dir)
+      const buildDir = resolve(staticDir, '..')
+      const files = await readdir(buildDir)
+      const workboxFiles = files.filter((file) => /^workbox-.*\.js$/.test(file))
+
+      if (!files.includes('sw.js') || workboxFiles.length === 0) {
+        throw new Error('Expected generated PWA service worker and Workbox assets')
+      }
+
+      let adjustedEntries = 0
+      const serviceWorker = (await readFile(resolve(buildDir, 'sw.js'), 'utf8'))
+        .replace(/url:`client\/([^`]+)`/g, (_, url) => {
+          adjustedEntries += 1
+          return 'url:`' + url + '`'
+        })
+        .replace(/url:`client`/g, () => {
+          adjustedEntries += 1
+          return 'url:`/`'
+        })
+
+      if (adjustedEntries === 0) {
+        throw new Error('Expected client-prefixed PWA precache entries')
+      }
+
+      await writeFile(resolve(staticDir, 'sw.js'), serviceWorker)
+      await Promise.all(
+        workboxFiles.map((file) => copyFile(resolve(buildDir, file), resolve(staticDir, file)))
+      )
+    },
+  },
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -112,5 +153,52 @@ export default defineConfig({
     },
   },
 
-  integrations: [icon(), alpinejs(), sitemap()],
+  integrations: [
+    icon(),
+    alpinejs(),
+    sitemap(),
+    AstroPWAIntegration({
+      injectRegister: 'script',
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'La Colmena Market',
+        short_name: 'La Colmena',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#fcfbf8',
+        theme_color: '#9c6b16',
+        lang: 'es-MX',
+        icons: [
+          {
+            src: '/icons/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/icons/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: '/icons/maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+      },
+      pwaAssets: {
+        disabled: true,
+        injectThemeColor: false,
+      },
+      includeManifestIcons: false,
+      generateSW: {
+        // Empty disables Astro's default "/" navigation fallback.
+        navigateFallback: '',
+        globPatterns: ['**/*.{html,js,css,svg,ico,png,jpg,jpeg,webp,avif,woff,woff2,ttf,otf,txt}'],
+        globIgnores: ['**/api/**'],
+      },
+    }),
+    vercelPwaAssets,
+  ],
 })
