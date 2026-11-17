@@ -9,7 +9,7 @@ interface Props {
 const { images, productName } = Astro.props
 const getImg = (image: Image) => {
   const { version, public_id } = image
-  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_700/v${version}/${public_id}.webp`
+  const url = `https://res.cloudinary.com/ivanrice-c/image/upload/ar_3:4,c_pad,dpr_1.0,g_center,q_auto,b_auto,f_auto,w_600/v${version}/${public_id}.webp`
   return url
 }
 const getImageClass = (index: number) => {
