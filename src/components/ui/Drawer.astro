@@ -43,8 +43,8 @@ const { showDrawer = true } = Astro.props
         x-show="$store.cartUI.open"
       >
         <span
-          x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-          >Pagar</span
+          x-text="'Ir al pago '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+          >Ir al pago</span
         >
         <Icon name="lucide:arrow-right" size={15} />
       </Button>
@@ -119,8 +119,8 @@ const { showDrawer = true } = Astro.props
         x-show="$store.cartUI.open"
       >
         <span
-          x-text="'Pagar '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-          >Pagar</span
+          x-text="'Ir al pago '+'$' + Number($store.cartStore?.data?.total ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+          >Ir al pago</span
         >
         <Icon name="lucide:arrow-right" size={15} />
       </Button>
