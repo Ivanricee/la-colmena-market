@@ -185,10 +185,15 @@ const normalizeCatalogText = (value: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\uE000/g, 'ñ')
 
+type CatalogSearchProduct = {
+  title: string
+  tags: string[]
+}
+
 const setupCatalogHandler = () => {
   Alpine.data(
     'catalogHandler',
-    (searchableProducts: { title: string; tags: string[] }[], pathname: string) => {
+    (searchableProducts: CatalogSearchProduct[], pathname: string) => {
       const storageKey = `catalog-limit:${pathname}`
       const savedLimit = Number(window.sessionStorage.getItem(storageKey))
       const initialLimit =
@@ -199,11 +204,12 @@ const setupCatalogHandler = () => {
       return {
         limit: initialLimit,
         search: '',
+        activeQuickFilter: '',
         searchableProducts,
         get totalCount() {
-          return this.searchableProducts.filter((product) => this.matchesSearch(product)).length
+          return this.searchableProducts.filter((product) => this.matchesProduct(product)).length
         },
-        matchesSearch(product: { title: string; tags: string[] }) {
+        matchesSearch(product: CatalogSearchProduct) {
           const searchTerm = normalizeCatalogText(this.search)
 
           return (
@@ -211,15 +217,28 @@ const setupCatalogHandler = () => {
             product.tags.some((tag) => normalizeCatalogText(tag).includes(searchTerm))
           )
         },
+        matchesQuickFilter(product: CatalogSearchProduct) {
+          if (!this.activeQuickFilter) return true
+
+          const quickFilterTag = normalizeCatalogText(this.activeQuickFilter)
+          return product.tags.some((tag) => normalizeCatalogText(tag) === quickFilterTag)
+        },
+        matchesProduct(product: CatalogSearchProduct) {
+          return this.matchesSearch(product) && this.matchesQuickFilter(product)
+        },
         shouldShow(index: number) {
           const product = this.searchableProducts[index]
-          if (!product || !this.matchesSearch(product)) return false
+          if (!product || !this.matchesProduct(product)) return false
 
           const matchesBefore = this.searchableProducts
             .slice(0, index)
-            .filter((candidateProduct) => this.matchesSearch(candidateProduct)).length
+            .filter((candidateProduct) => this.matchesProduct(candidateProduct)).length
 
           return matchesBefore < this.limit
+        },
+        selectQuickFilter(tag: string) {
+          this.activeQuickFilter = this.activeQuickFilter === tag ? '' : tag
+          this.resetLimit()
         },
         loadMore() {
           this.limit = Math.min(this.limit + 12, this.totalCount)
@@ -231,6 +250,11 @@ const setupCatalogHandler = () => {
         },
         clearSearch() {
           this.search = ''
+          this.resetLimit()
+        },
+        clearFilters() {
+          this.search = ''
+          this.activeQuickFilter = ''
           this.resetLimit()
         },
       }

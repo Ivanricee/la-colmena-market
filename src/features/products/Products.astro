@@ -8,6 +8,14 @@ const { productos, errorMessage } = (await getProducts()) as {
   productos: Product[]
   errorMessage: string
 }
+
+const QUICK_FILTERS = [
+  { label: 'Miel', tag: 'miel' },
+  { label: 'Cosméticos', tag: 'cosmeticos' },
+  { label: 'Dulces', tag: 'dulces' },
+  { label: 'Propóleo', tag: 'propoleo' },
+  { label: 'Jarabes', tag: 'jarabes' },
+]
 ---
 
 {
@@ -54,6 +62,29 @@ const { productos, errorMessage } = (await getProducts()) as {
               </button>
             </div>
           </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pt-4" role="group" aria-label="Filtros rápidos de productos">
+          <button
+            type="button"
+            x-on:click="clearFilters()"
+            x-bind:aria-pressed="!activeQuickFilter"
+            x-bind:class="!activeQuickFilter ? 'border-primary bg-primary text-secondary' : 'border-border bg-transparent text-foreground hover:bg-primary/10'"
+            class="rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            Todos
+          </button>
+          {QUICK_FILTERS.map((filter) => (
+            <button
+              type="button"
+              x-on:click={`selectQuickFilter(${JSON.stringify(filter.tag)})`}
+              x-bind:aria-pressed={`activeQuickFilter === ${JSON.stringify(filter.tag)}`}
+              x-bind:class={`activeQuickFilter === ${JSON.stringify(filter.tag)} ? 'border-primary bg-primary text-secondary' : 'border-border bg-transparent text-foreground hover:bg-primary/10'`}
+              class="rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {filter.label}
+            </button>
+          ))}
         </div>
       </div>
 
