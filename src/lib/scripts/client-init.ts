@@ -177,28 +177,65 @@ const setupAlpineCartUIStore = () => {
     } as CartUIStore)
   }
 }
-const setupCatalogHandler = () => {
-  Alpine.data('catalogHandler', (totalCount: number, pathname: string) => {
-    const storageKey = `catalog-limit:${pathname}`
-    const savedLimit = Number(window.sessionStorage.getItem(storageKey))
-    const initialLimit =
-      Number.isInteger(savedLimit) && savedLimit > 0 ? Math.min(savedLimit, totalCount) : 12
+const normalizeCatalogText = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/ñ/g, '\uE000')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\uE000/g, 'ñ')
 
-    return {
-      limit: initialLimit,
-      search: '',
-      totalCount,
-      shouldShow(index: number, title: string) {
-        const matchesSearch = title.toLowerCase().includes(this.search.toLowerCase())
-        const isWithinLimit = index < this.limit
-        return matchesSearch && isWithinLimit
-      },
-      loadMore() {
-        this.limit = Math.min(this.limit + 12, this.totalCount)
-        window.sessionStorage.setItem(storageKey, String(this.limit))
-      },
+const setupCatalogHandler = () => {
+  Alpine.data(
+    'catalogHandler',
+    (searchableProducts: { title: string; tags: string[] }[], pathname: string) => {
+      const storageKey = `catalog-limit:${pathname}`
+      const savedLimit = Number(window.sessionStorage.getItem(storageKey))
+      const initialLimit =
+        Number.isInteger(savedLimit) && savedLimit > 0
+          ? Math.min(savedLimit, searchableProducts.length)
+          : 12
+
+      return {
+        limit: initialLimit,
+        search: '',
+        searchableProducts,
+        get totalCount() {
+          return this.searchableProducts.filter((product) => this.matchesSearch(product)).length
+        },
+        matchesSearch(product: { title: string; tags: string[] }) {
+          const searchTerm = normalizeCatalogText(this.search)
+
+          return (
+            normalizeCatalogText(product.title).includes(searchTerm) ||
+            product.tags.some((tag) => normalizeCatalogText(tag).includes(searchTerm))
+          )
+        },
+        shouldShow(index: number) {
+          const product = this.searchableProducts[index]
+          if (!product || !this.matchesSearch(product)) return false
+
+          const matchesBefore = this.searchableProducts
+            .slice(0, index)
+            .filter((candidateProduct) => this.matchesSearch(candidateProduct)).length
+
+          return matchesBefore < this.limit
+        },
+        loadMore() {
+          this.limit = Math.min(this.limit + 12, this.totalCount)
+          window.sessionStorage.setItem(storageKey, String(this.limit))
+        },
+        resetLimit() {
+          this.limit = 12
+          window.sessionStorage.setItem(storageKey, String(this.limit))
+        },
+        clearSearch() {
+          this.search = ''
+          this.resetLimit()
+        },
+      }
     }
-  })
+  )
 }
 const setupInputNumberHandler = () => {
   Alpine.data('inputNumberHandler', (id: string, purchaseLimit: number, scope = '') => ({

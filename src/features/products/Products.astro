@@ -18,7 +18,7 @@ const { productos, errorMessage } = (await getProducts()) as {
     </section>
   ) : (
     <section
-      x-data={`catalogHandler(${productos.length}, ${JSON.stringify(Astro.url.pathname)})`}
+      x-data={`catalogHandler(${JSON.stringify(productos.map(({ title, tags }) => ({ title, tags })))}, ${JSON.stringify(Astro.url.pathname)})`}
       class="space-y-8"
     >
       <div class="relative max-w-7xl mx-auto px-0 sm:px-6 py-8">
@@ -39,9 +39,19 @@ const { productos, errorMessage } = (await getProducts()) as {
                 id="product-search"
                 type="text"
                 x-model="search"
+                x-on:input="resetLimit()"
                 placeholder="Buscar..."
                 class="flex-1 bg-transparent text-honey-light placeholder-text-muted-foreground outline-none text-lg"
               />
+              <button
+                type="button"
+                x-show="search.length > 0"
+                x-on:click="clearSearch()"
+                aria-label="Limpiar búsqueda"
+                class="rounded-full p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <Icon name="lucide:x" size={20} class="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -51,7 +61,7 @@ const { productos, errorMessage } = (await getProducts()) as {
         {productos.map((product, index) => (
           <li
             class="h-full"
-            x-show={`shouldShow(${index}, ${JSON.stringify(product.title)})`}
+            x-show={`shouldShow(${index})`}
             x-transition:enter="transition ease-in-out duration-200"
             x-transition:enter-start="opacity-5 transform scale-95"
             x-transition:enter-end="opacity-100 transform scale-100"
