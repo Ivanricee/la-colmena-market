@@ -3,10 +3,36 @@ import Badge from '@/components/ui/Badge.astro'
 
 interface Props {
   tags: string[]
+  scroll?: boolean
 }
-const { tags } = Astro.props
+const { tags, scroll = false } = Astro.props
 ---
 
-<div class="flex w-full gap-1.5">
-  {tags.map((tag) => <Badge>{tag}</Badge>)}
+<div
+  class:list={['relative w-full', scroll && 'min-w-0']}
+>
+  <div
+    class:list={[
+      'w-full',
+      scroll
+        ? 'min-w-0 touch-pan-x overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+        : 'flex gap-1.5',
+    ]}
+    x-ref={scroll ? 'tags' : undefined}
+    style={scroll
+      ? 'mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.75rem), transparent)'
+      : undefined}
+    aria-label={scroll ? 'Etiquetas del producto' : undefined}
+    tabindex={scroll ? 0 : undefined}
+  >
+    {
+      scroll ? (
+        <div class="flex w-max min-w-full flex-nowrap gap-1.5">
+          {tags.map((tag) => <Badge>{tag}</Badge>)}
+        </div>
+      ) : (
+        tags.map((tag) => <Badge>{tag}</Badge>)
+      )
+    }
+  </div>
 </div>
