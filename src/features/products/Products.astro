@@ -14,7 +14,8 @@ const QUICK_FILTERS = [
   { label: 'Cosméticos', tag: 'cosmeticos' },
   { label: 'Dulces', tag: 'dulces' },
   { label: 'Propóleo', tag: 'propoleo' },
-  { label: 'Jarabes', tag: 'jarabes' },
+  { label: 'Jarabes', tag: 'jarabe' },
+  { label: 'Naturista', tag: 'naturista' },
 ]
 ---
 
@@ -64,7 +65,11 @@ const QUICK_FILTERS = [
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 pt-4" role="group" aria-label="Filtros rápidos de productos">
+        <div
+          class="flex flex-wrap gap-2 pt-4"
+          role="group"
+          aria-label="Filtros rápidos de productos"
+        >
           <button
             type="button"
             x-on:click="clearFilters()"
